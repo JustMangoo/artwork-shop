@@ -18,9 +18,44 @@ const props = defineProps({
     },
 });
 
-const classes = computed(() =>
-    props.active
-        ? "inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 text-sm font-medium leading-5 text-gray-900 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
-        : "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out"
-);
+const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
 </script>
+
+<style lang="scss">
+.activeLink {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.25rem;
+    border-bottom: 3px solid var(--primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: #1a202c;
+    &:focus {
+        outline: none;
+        border-color: var();
+    }
+    transition: all 0.15s ease-in-out;
+}
+
+.inactiveLink {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.25rem;
+    border-bottom: 2px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: #a0aec0;
+    &:hover {
+        color: #4a5568;
+        border-color: #e2e8f0;
+    }
+    &:focus {
+        outline: none;
+        color: #4a5568;
+        border-color: #e2e8f0;
+        transition: all 0.15s ease-in-out;
+    }
+}
+</style>

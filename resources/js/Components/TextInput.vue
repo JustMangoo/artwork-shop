@@ -1,6 +1,6 @@
 <template>
     <input
-        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+        class="textInput"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
         ref="input"
@@ -29,3 +29,16 @@ onMounted(() => {
 
 defineExpose({ focus: () => input.value.focus() });
 </script>
+
+<style lang="scss">
+.textInput {
+    padding: 0.8rem;
+    width: 100%;
+    outline: 1px solid #ddd;
+    border-radius: 4px;
+    &:focus {
+        outline: 1px solid var(--primary);
+        box-shadow: none;
+    }
+}
+</style>

@@ -1,3 +1,85 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+
+/*---------Color Palette---------*/
+
+:root {
+    --neutral-one: #f8f8f8;
+    --neutral-two: #4e4e4e;
+    --primary: #abb491;
+    --secondary: #ebeee3;
+}
+
+/*---------Setup---------*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: normal;
+    box-shadow: none;
+}
+
+/*---------Scroll Bar---------*/
+
+::-webkit-scrollbar {
+    width: 1rem;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgb(233, 233, 233);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7e836f;
+}
+
+/*---------Quick Styles---------*/
+
+.w-full {
+    width: 100%;
+}
+
+/*---------Elements---------*/
+
+.link {
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.link:hover {
+    color: #1f2937;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    color: #0000001e;
+    margin: 1rem;
+}
+
+.divider::before,
+.divider::after {
+    flex: 1;
+    content: "";
+    padding: 0.5px;
+    background-color: #0000001e;
+    margin: 5px;
+}

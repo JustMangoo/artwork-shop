@@ -3,7 +3,7 @@
         type="checkbox"
         :value="value"
         v-model="proxyChecked"
-        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+        class="checkboxInput"
     />
 </template>
 
@@ -32,3 +32,14 @@ const proxyChecked = computed({
     },
 });
 </script>
+
+<style lang="scss">
+.checkboxInput {
+    color: var(--primary);
+    border-color: #d2d6dc;
+    border-radius: 0.25rem;
+    &:active {
+        box-shadow: none;
+    }
+}
+</style>
