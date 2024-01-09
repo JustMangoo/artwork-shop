@@ -30,7 +30,7 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.25;
-    color: #1a202c;
+    color: var(--neutral-two);
     &:focus {
         outline: none;
         border-color: var();
@@ -46,15 +46,13 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.25;
-    color: #a0aec0;
+    color: var(--neutral-two);
     &:hover {
-        color: #4a5568;
-        border-color: #e2e8f0;
+        border-color: var(--primary);
     }
     &:focus {
         outline: none;
-        color: #4a5568;
-        border-color: #e2e8f0;
+        border-color: var(--primary);
         transition: all 0.15s ease-in-out;
     }
 }

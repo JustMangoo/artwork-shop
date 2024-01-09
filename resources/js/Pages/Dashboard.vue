@@ -3,9 +3,7 @@
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Panelis
-            </h2>
+            <h1>Panelis</h1>
         </template>
 
         <div class="py-12">
