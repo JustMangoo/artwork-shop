@@ -1,6 +1,7 @@
 <template>
     <Head title="Welcome" />
 
+    <Navigation />
     <div class="page">
         <div v-if="canLogin" class="p-6 sm:fixed sm:top-0 sm:right-0 text-end">
             <Link
@@ -27,6 +28,7 @@
 
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
+import Navigation from "@/Components/Navigation.vue";
 
 defineProps({
     canLogin: {
@@ -49,9 +51,10 @@ defineProps({
 <style lang="scss" scoped>
 .page {
     position: relative;
-    min-height: 100vh;
     background-color: #f3f4f6;
     background-position: center;
+    display: flex;
+    flex-direction: column;
 
     .link {
         font-weight: 600;

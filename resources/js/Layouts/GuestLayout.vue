@@ -1,24 +1,19 @@
 <template>
-    <div class="guestContainer">
+    <div class="guest-container">
         <Navigation />
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="logo" />
-            </Link>
-        </div>
 
-        <div class="content">
+        <div class="container"></div>
+        <div class="box">
             <slot />
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.guestContainer {
+.guest-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
     padding-top: 1.5rem;
     background-color: #f7fafc;
 
@@ -26,14 +21,7 @@
         justify-content: center;
         padding-top: 0;
     }
-
-    .logo {
-        width: 5rem;
-        height: 5rem;
-        color: #a0aec0;
-    }
-
-    .content {
+    .box {
         width: 100%;
         padding: 1.5rem;
         margin-top: 1.5rem;
@@ -50,7 +38,5 @@
 </style>
 
 <script setup>
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import { Link } from "@inertiajs/vue3";
 import Navigation from "@/Components/Navigation.vue";
 </script>

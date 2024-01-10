@@ -14,6 +14,12 @@
                     <!-- Navigation Links -->
                     <div class="nav-link">
                         <NavLink
+                            :href="route('home')"
+                            :active="route().current('home')"
+                        >
+                            Sākums
+                        </NavLink>
+                        <NavLink
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
@@ -82,10 +88,12 @@ import { Link } from "@inertiajs/vue3";
 .navigation {
     background-color: var(--secondary);
     border-bottom: 1px solid #f3f4f6;
+    width: 100%;
     .nav-link {
         display: none;
         @media (min-width: 640px) {
             display: flex;
+            gap: 1rem;
             margin-top: -1px;
             margin-bottom: -1px;
             margin-inline-start: 2.5rem;

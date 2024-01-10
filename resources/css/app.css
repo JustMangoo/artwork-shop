@@ -30,6 +30,7 @@ html {
     font-weight: 500;
     font-style: normal;
     box-shadow: none;
+    transition: all 280ms ease-in-out;
 }
 
 /*---------Scroll Bar---------*/
@@ -91,4 +92,14 @@ h1 {
     padding: 0.5px;
     background-color: #0000001e;
     margin: 5px;
+}
+
+.link-basic {
+    margin: 0;
+    padding: 0;
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: normal;
+    box-shadow: none;
 }

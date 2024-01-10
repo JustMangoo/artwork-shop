@@ -1,8 +1,5 @@
 <template>
-    <button
-        :type="type"
-        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150"
-    >
+    <button :type="type" class="secondary-btn">
         <slot />
     </button>
 </template>
@@ -15,3 +12,49 @@ defineProps({
     },
 });
 </script>
+
+<style lang="scss" scoped>
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    text-transform: uppercase;
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    transition: all 0.15s ease-in-out;
+
+    &::before,
+    &::after {
+        border-top: 0.5px solid rgba(#abb491, 0);
+        bottom: 0px;
+        content: " ";
+        display: block;
+        margin: 0 auto;
+        width: 0;
+        transition: all 280ms ease-in-out;
+        margin: 0 6rem;
+    }
+
+    &:hover {
+        letter-spacing: 4px;
+    }
+
+    &:hover:before,
+    &:hover:after {
+        border-top: 0.5px solid rgba(#abb491, 1);
+        bottom: 0px;
+        content: " ";
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        transition: width 350ms ease-in-out;
+        margin: 0 1rem;
+    }
+}
+</style>

@@ -38,7 +38,7 @@
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4">
+            <div class="options-container">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
                     <span class="text-sm text-gray-600 ms-2"
@@ -66,7 +66,15 @@
             </div>
         </form>
         <div class="divider">Vai</div>
-        <Link :href="route('register')" class="link">Reģisterējies</Link>
+        <Link :href="route('register')">
+            <SecondaryButton
+                class="w-full"
+                :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing"
+            >
+                Reģisterējies
+            </SecondaryButton>
+        </Link>
     </GuestLayout>
 </template>
 
@@ -78,6 +86,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineProps({
     canResetPassword: {
@@ -101,4 +110,11 @@ const submit = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.options-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+</style>

@@ -19,10 +19,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import Navigation from "@/Components//Navigation.vue";
-
-const showingNavigationDropdown = ref(false);
 </script>
 
 <style lang="scss" scoped>
