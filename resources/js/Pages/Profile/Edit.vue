@@ -20,7 +20,7 @@ defineProps({
 
     <AuthenticatedLayout>
         <template #header>
-            <h1 class="">Prolifs</h1>
+            <h1 class="">Profils</h1>
         </template>
 
         <div class="py-12">

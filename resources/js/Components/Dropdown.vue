@@ -1,54 +1,47 @@
 <template>
-    <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" />
+    <div @click="open = !open">
+        <div class="inline-flex">
+            <button type="button" class="label">
+                <!-- {{ $page.props.auth.user.name }} -->
+                LV
+                <img class="dropdown-arrow" src="../Assets/arrow.svg" alt="" />
+            </button>
         </div>
+    </div>
 
-        <!-- Full Screen Dropdown Overlay -->
+    <!-- Full Screen Dropdown Overlay -->
+    <div v-show="open" class="fixed inset-0 z-40" @click="open = false"></div>
+
+    <Transition>
         <div
             v-show="open"
-            class="fixed inset-0 z-40"
+            class="boxs"
+            :class="[alignmentClasses]"
+            style="display: none"
             @click="open = false"
-        ></div>
-
-        <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="scale-95 opacity-0"
-            enter-to-class="scale-100 opacity-100"
-            leave-active-class="transition duration-75 ease-in"
-            leave-from-class="scale-100 opacity-100"
-            leave-to-class="scale-95 opacity-0"
         >
-            <div
-                v-show="open"
-                class="absolute z-50 w-48 mt-2 bg-white rounded-md shadow-lg"
-                :class="[alignmentClasses]"
-                style="display: none"
-                @click="open = false"
-            >
-                <div
-                    class="rounded-md ring-1 ring-black ring-opacity-5"
-                    :class="contentClasses"
-                >
-                    <slot name="content" />
-                </div>
+            <div class="link-container">
+                <DropdownLink :href="route('profile.edit')">
+                    Profils
+                </DropdownLink>
+                <DropdownLink :href="route('logout')" method="post" as="button">
+                    Iziet
+                </DropdownLink>
             </div>
-        </Transition>
-    </div>
+        </div>
+    </Transition>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import DropdownLink from "./DropdownLink.vue";
 
 const props = defineProps({
     align: {
         type: String,
         default: "right",
     },
-    width: {
-        type: String,
-        default: "48",
-    },
+
     contentClasses: {
         type: String,
         default: "py-1 bg-white",
@@ -82,3 +75,56 @@ const alignmentClasses = computed(() => {
 
 const open = ref(false);
 </script>
+
+<style lang="scss" scoped>
+.label {
+    .dropdown-arrow {
+        transform: rotate(180deg);
+    }
+    &:hover,
+    &:focus {
+        .dropdown-arrow {
+            transform: rotate(0);
+        }
+    }
+}
+.v-enter-active {
+    transition: all 200ms ease-out;
+}
+
+.v-leave-active {
+    transition: all 75ms ease-in;
+}
+
+.v-enter-from,
+.v-leave-to {
+    transform: scale(0.95);
+    opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+    transform: scale(1);
+    opacity: 100;
+}
+
+.boxs {
+    position: absolute;
+    z-index: 50;
+    width: 12rem; // Assuming 1rem = 4px, so w-48 = 48 / 4 = 12rem
+    margin-top: 0.5rem; // mt-2 = 0.5rem
+    background-color: #ffffff; // bg-white
+    border-radius: 0.375rem; // rounded-md
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.05); // shadow-lg
+}
+
+.link-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0;
+    background-color: #fff;
+}
+</style>

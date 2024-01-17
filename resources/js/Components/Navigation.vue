@@ -1,74 +1,66 @@
 <template>
-    <nav class="navigation">
-        <!-- Primary Navigation Menu -->
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <!-- Logo -->
-                    <div class="logo-container">
-                        <Link href="/">
-                            <ApplicationLogo class="logo" />
-                        </Link>
-                    </div>
+    <nav class="nav-container">
+        <div class="top-navigation">
+            <!-- Top Navigation Menu -->
+            <div class="outer-container">
+                <div class="inner-container">
+                    <div class="social-container"></div>
 
-                    <!-- Navigation Links -->
-                    <div class="nav-link">
-                        <NavLink
-                            :href="route('home')"
-                            :active="route().current('home')"
-                        >
-                            Sākums
-                        </NavLink>
-                        <NavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
-                            Panelis
-                        </NavLink>
+                    <div class="menu">
+                        <!-- Settings Dropdown -->
+                        <div class="dropdown-container">
+                            <Dropdown align="right" width="48" class="">
+                            </Dropdown>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="bot-navigation">
+            <!-- Bottom Navigation Menu -->
+            <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <!-- Logo -->
+                        <div class="logo-container">
+                            <Link href="/">
+                                <ApplicationLogo class="logo" />
+                            </Link>
+                        </div>
 
-                <div class="hidden sm:flex sm:items-center sm:ms-6">
-                    <!-- Settings Dropdown -->
-                    <div class="relative ms-3">
-                        <Dropdown align="right" width="48">
-                            <template #trigger>
-                                <span class="inline-flex rounded-md">
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-transparent border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
-                                    >
-                                        <!-- {{ $page.props.auth.user.name }} -->
-                                        LV
-                                        <svg
-                                            class="ms-2 -me-0.5 h-4 w-4"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20"
-                                            fill="currentColor"
-                                        >
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clip-rule="evenodd"
-                                            />
-                                        </svg>
-                                    </button>
-                                </span>
-                            </template>
+                        <!-- Navigation Links -->
+                        <div class="nav-link">
+                            <NavLink
+                                :href="route('home')"
+                                :active="route().current('home')"
+                            >
+                                Sākums
+                            </NavLink>
+                            <NavLink
+                                :href="route('dashboard')"
+                                :active="route().current('dashboard')"
+                            >
+                                Panelis
+                            </NavLink>
+                        </div>
+                    </div>
 
-                            <template #content>
-                                <DropdownLink :href="route('profile.edit')">
-                                    Profils
-                                </DropdownLink>
-                                <DropdownLink
-                                    :href="route('logout')"
-                                    method="post"
-                                    as="button"
-                                >
-                                    Iziet
-                                </DropdownLink>
-                            </template>
-                        </Dropdown>
+                    <div v-if="canLogin" class="account-menu">
+                        <Link
+                            v-if="$page.props.auth.user"
+                            :href="route('dashboard')"
+                            class="link"
+                            >{{ $page.props.auth.user.name }}</Link
+                        >
+
+                        <template v-else>
+                            <Link :href="route('login')" class="link"
+                                >Pieslēgties</Link
+                            >
+                            <Link :href="route('login')" class="link"
+                                >Grozs</Link
+                            >
+                        </template>
                     </div>
                 </div>
             </div>
@@ -79,36 +71,110 @@
 <script setup>
 import ApplicationLogo from "./ApplicationLogo.vue";
 import Dropdown from "./Dropdown.vue";
-import DropdownLink from "./DropdownLink.vue";
+
 import NavLink from "./NavLink.vue";
 import { Link } from "@inertiajs/vue3";
+
+defineProps({
+    canLogin: {
+        type: Boolean,
+        default: true,
+    },
+    canRegister: {
+        type: Boolean,
+        default: false,
+    },
+});
 </script>
 
 <style lang="scss" scoped>
-.navigation {
-    background-color: var(--secondary);
+.inner-container {
+    display: flex;
+    justify-content: space-between;
+    height: 2rem;
+}
+.nav-container {
     border-bottom: 1px solid #f3f4f6;
     width: 100%;
-    .nav-link {
-        display: none;
-        @media (min-width: 640px) {
-            display: flex;
-            gap: 1rem;
-            margin-top: -1px;
-            margin-bottom: -1px;
-            margin-inline-start: 2.5rem;
+    .top-navigation {
+        background-color: var(--primary);
+        width: 100%;
+
+        .outer-container {
+            padding: 0 1rem;
+            margin: 0 auto;
+            max-width: 80rem;
+
+            @media (min-width: 640px) {
+                padding: 0 1.5rem;
+            }
+
+            @media (min-width: 1024px) {
+                padding: 0 2rem;
+            }
+
+            .social-container {
+                display: flex;
+            }
+
+            .menu {
+                display: none;
+
+                @media (min-width: 640px) {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 1.5rem;
+                }
+
+                .dropdown-container {
+                    position: relative;
+                    margin-left: 0.75rem;
+                }
+            }
         }
     }
-    .logo-container {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-        .logo {
-            display: block;
-            width: auto;
-            color: var(--neutral-two);
-            fill: currentColor;
-            height: 2.25rem;
+    .bot-navigation {
+        background-color: var(--secondary);
+        width: 100%;
+        .nav-link {
+            display: none;
+            @media (min-width: 640px) {
+                display: flex;
+                gap: 1rem;
+                margin-top: -1px;
+                margin-bottom: -1px;
+                margin-inline-start: 2.5rem;
+            }
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 1rem;
+            .logo {
+                display: block;
+                width: auto;
+                color: var(--neutral-two);
+                fill: currentColor;
+                height: 2.25rem;
+            }
+        }
+        .account-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            @media (max-width: 640px) {
+                display: none;
+            }
+            .link {
+                display: inline-flex;
+                align-items: center;
+                font-size: 0.875rem;
+                font-weight: 500;
+                line-height: 1.25;
+                color: var(--neutral-two);
+            }
         }
     }
 }
