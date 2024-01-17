@@ -35,7 +35,6 @@ defineProps({
         bottom: 0px;
         content: " ";
         display: block;
-        margin: 0 auto;
         width: 0;
         transition: all 280ms ease-in-out;
         margin: 0 6rem;

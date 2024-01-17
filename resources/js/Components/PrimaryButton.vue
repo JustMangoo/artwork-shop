@@ -1,5 +1,5 @@
 <template>
-    <button class="primary-btn btn-2">
+    <button class="primary-btn">
         <slot />
     </button>
 </template>
@@ -18,6 +18,7 @@
     border: 1px solid transparent;
     border-radius: 4px;
     transition: all 0.15s ease-in-out;
+    width: 100%;
 
     &::before,
     &::after {
@@ -25,7 +26,6 @@
         bottom: 0px;
         content: " ";
         display: block;
-        margin: 0 auto;
         width: 0;
         transition: all 280ms ease-in-out;
         margin: 0 6rem;
