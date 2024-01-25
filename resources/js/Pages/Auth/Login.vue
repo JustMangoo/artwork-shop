@@ -118,7 +118,7 @@ const submit = () => {
 .box {
     width: 100%;
     padding: 1.5rem;
-    margin-top: 1.5rem;
+    margin: 3rem 0;
     background-color: #fff;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 

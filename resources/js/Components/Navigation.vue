@@ -18,8 +18,8 @@
         </div>
         <div class="bot-navigation">
             <!-- Bottom Navigation Menu -->
-            <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
+            <div class="outer-container">
+                <div class="inner-container">
                     <div class="flex">
                         <!-- Logo -->
                         <div class="logo-container">
@@ -54,12 +54,26 @@
                         >
 
                         <template v-else>
-                            <Link :href="route('login')" class="link"
-                                >Pieslēgties</Link
-                            >
-                            <Link :href="route('login')" class="link"
-                                >Grozs</Link
-                            >
+                            <div class="link-icon">
+                                <Link :href="route('login')" class="link"
+                                    >Pieslēgties</Link
+                                >
+                                <img
+                                    src="../Assets/user.svg"
+                                    alt="lietotajs"
+                                    class="icon"
+                                />
+                            </div>
+                            <div class="link-icon">
+                                <Link :href="route('login')" class="link"
+                                    >Grozs</Link
+                                >
+                                <img
+                                    src="../Assets/cart.svg"
+                                    alt="rati"
+                                    class="icon"
+                                />
+                            </div>
                         </template>
                     </div>
                 </div>
@@ -93,6 +107,20 @@ defineProps({
     justify-content: space-between;
     height: 2rem;
 }
+
+.outer-container {
+    padding: 0 1rem;
+    margin: 0 auto;
+    max-width: 90rem;
+
+    @media (min-width: 640px) {
+        padding: 0 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        padding: 0 2rem;
+    }
+}
 .nav-container {
     border-bottom: 1px solid #f3f4f6;
     width: 100%;
@@ -101,18 +129,6 @@ defineProps({
         width: 100%;
 
         .outer-container {
-            padding: 0 1rem;
-            margin: 0 auto;
-            max-width: 80rem;
-
-            @media (min-width: 640px) {
-                padding: 0 1.5rem;
-            }
-
-            @media (min-width: 1024px) {
-                padding: 0 2rem;
-            }
-
             .social-container {
                 display: flex;
             }
@@ -136,44 +152,56 @@ defineProps({
     .bot-navigation {
         background-color: var(--secondary);
         width: 100%;
-        .nav-link {
-            display: none;
-            @media (min-width: 640px) {
-                display: flex;
-                gap: 1rem;
-                margin-top: -1px;
-                margin-bottom: -1px;
-                margin-inline-start: 2.5rem;
-            }
-        }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            gap: 1rem;
-            .logo {
-                display: block;
-                width: auto;
-                color: var(--neutral-two);
-                fill: currentColor;
-                height: 2.25rem;
-            }
-        }
-        .account-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .inner-container {
+            height: 4rem;
 
-            @media (max-width: 640px) {
+            .nav-link {
                 display: none;
+                @media (min-width: 640px) {
+                    display: flex;
+                    gap: 1rem;
+                    margin-top: -1px;
+                    margin-bottom: -1px;
+                    margin-inline-start: 2.5rem;
+                }
             }
-            .link {
-                display: inline-flex;
+            .logo-container {
+                display: flex;
                 align-items: center;
-                font-size: 0.875rem;
-                font-weight: 500;
-                line-height: 1.25;
-                color: var(--neutral-two);
+                flex-shrink: 0;
+                gap: 1rem;
+                .logo {
+                    display: block;
+                    width: auto;
+                    color: var(--neutral-two);
+                    fill: currentColor;
+                    height: 2.25rem;
+                }
+            }
+            .account-menu {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                @media (max-width: 640px) {
+                    display: none;
+                }
+                .link-icon {
+                    display: flex;
+                    flex-direction: row;
+                    .link {
+                        display: inline-flex;
+                        align-items: center;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        line-height: 1.25;
+                        color: var(--neutral-two);
+                    }
+                    .icon {
+                        aspect-ratio: 1 / 1;
+                        width: 1rem;
+                    }
+                }
             }
         }
     }

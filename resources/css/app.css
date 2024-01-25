@@ -11,6 +11,9 @@
     --neutral-two: #4e4e4e;
     --primary: #abb491;
     --secondary: #ebeee3;
+    --swiper-navigation-color: #abb491;
+    --swiper-pagination-color: #abb491;
+    --swiper-pagination-bullet-opacity-inactive: 0.1;
 }
 
 /*---------Setup---------*/
@@ -27,7 +30,7 @@ html {
     padding: 0;
     font-family: "Manrope", sans-serif;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 300;
     font-style: normal;
     box-shadow: none;
     transition: all 280ms ease-in-out;
@@ -40,7 +43,6 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-    border-radius: 10px;
     background: rgb(233, 233, 233);
 }
 
@@ -113,4 +115,9 @@ h1 {
     line-height: 1;
     color: var(--neutral-two);
     background-color: transparent;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 30px !important;
 }

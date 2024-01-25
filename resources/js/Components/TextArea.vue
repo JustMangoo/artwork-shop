@@ -1,10 +1,11 @@
 <template>
-    <input
-        class="textInput"
+    <textarea
+        class="textArea"
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        ref="input"
-    />
+        @textarea="$emit('update:modelValue', $event.target.value)"
+        ref="textarea"
+    >
+    </textarea>
 </template>
 
 <script setup>
@@ -19,19 +20,19 @@ defineProps({
 
 defineEmits(["update:modelValue"]);
 
-const input = ref(null);
+const textarea = ref(null);
 
 onMounted(() => {
-    if (input.value.hasAttribute("autofocus")) {
-        input.value.focus();
+    if (textarea.value.hasAttribute("autofocus")) {
+        textarea.value.focus();
     }
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose({ focus: () => textarea.value.focus() });
 </script>
 
 <style lang="scss" scoped>
-input {
+textarea {
     padding: 0.8rem;
     width: 100%;
     outline: 1px solid #ddd;

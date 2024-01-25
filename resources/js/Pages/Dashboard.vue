@@ -1,10 +1,8 @@
 <template>
     <Head title="Panelis" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h1>Panelis</h1>
-        </template>
+    <MainLayout>
+        <template #header> </template>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -13,10 +11,10 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </MainLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
 </script>

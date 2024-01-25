@@ -16,7 +16,7 @@
     text-transform: uppercase;
     background-color: var(--primary);
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 2px;
     transition: all 0.15s ease-in-out;
     width: 100%;
 
