@@ -37,6 +37,12 @@
                                 Sākums
                             </NavLink>
                             <NavLink
+                                :href="route('products.index')"
+                                :active="route().current('products.index')"
+                            >
+                                Produkti
+                            </NavLink>
+                            <NavLink
                                 :href="route('dashboard')"
                                 :active="route().current('dashboard')"
                             >
