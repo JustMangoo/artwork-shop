@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 use Inertia\Inertia;
 
 
@@ -11,8 +12,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->get();
-        return Inertia::render('Products/Index', ['products' => $products]);
+        $products = Product::with('categories')->get();
+        $categories = Category::all(); // Fetch all categories
+
+        return Inertia::render('Products/Index', [
+            'products' => $products,
+            'categories' => $categories
+        ]);
     }
 
     public function create()
@@ -27,11 +33,16 @@ class ProductController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            // Assume 'categories' is an array of category IDs
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id', // Validate each category ID exists
         ]);
 
-        Product::create($validatedData);
-        return redirect()->route('products.index');
+        $product = Product::create($validatedData);
+        $product->categories()->attach($request->input('categories'));
+
+        // Redirect back to the products index with a success message
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show(Product $product) // Use singular for the variable
@@ -46,16 +57,22 @@ class ProductController extends Controller
         return Inertia::render('Products/Edit', ['product' => $product]);
     }
 
-    public function update(Request $request, Product $product) // Use singular for the variable
+    public function update(Request $request, Product $product)
     {
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
         ]);
 
+        // Update the product
         $product->update($validatedData);
+
+        // Sync the categories to the product (detach any not in the array and attach any new ones)
+        $product->categories()->sync($request->categories);
+
         return redirect()->route('products.index');
     }
 

@@ -1,6 +1,6 @@
 <template>
     <div @click="open = !open">
-        <div class="inline-flex">
+        <div class="dropdown-container">
             <button type="button" class="label">
                 <!-- {{ $page.props.auth.user.name }} -->
                 LV
@@ -77,37 +77,39 @@ const open = ref(false);
 </script>
 
 <style lang="scss" scoped>
-.label {
-    .dropdown-arrow {
-        transform: rotate(180deg);
-    }
-    &:hover,
-    &:focus {
+.dropdown-container {
+    .label {
+        display: flex;
         .dropdown-arrow {
-            transform: rotate(0);
+            transform: rotate(180deg);
+        }
+        &:hover,
+        &:focus {
+            .dropdown-arrow {
+                transform: rotate(0);
+            }
         }
     }
-}
-.v-enter-active {
-    transition: all 200ms ease-out;
-}
+    .v-enter-active {
+        transition: all 200ms ease-out;
+    }
 
-.v-leave-active {
-    transition: all 75ms ease-in;
-}
+    .v-leave-active {
+        transition: all 75ms ease-in;
+    }
 
-.v-enter-from,
-.v-leave-to {
-    transform: scale(0.95);
-    opacity: 0;
-}
+    .v-enter-from,
+    .v-leave-to {
+        transform: scale(0.95);
+        opacity: 0;
+    }
 
-.v-enter-to,
-.v-leave-from {
-    transform: scale(1);
-    opacity: 100;
+    .v-enter-to,
+    .v-leave-from {
+        transform: scale(1);
+        opacity: 100;
+    }
 }
-
 .boxs {
     position: absolute;
     z-index: 50;

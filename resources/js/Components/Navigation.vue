@@ -115,17 +115,9 @@ defineProps({
 }
 
 .outer-container {
-    padding: 0 1rem;
     margin: 0 auto;
-    max-width: 90rem;
-
-    @media (min-width: 640px) {
-        padding: 0 1.5rem;
-    }
-
-    @media (min-width: 1024px) {
-        padding: 0 2rem;
-    }
+    max-width: 95rem;
+    padding-inline: 0.5rem;
 }
 .nav-container {
     border-bottom: 1px solid #f3f4f6;
@@ -140,7 +132,7 @@ defineProps({
             }
 
             .menu {
-                display: none;
+                display: flex;
 
                 @media (min-width: 640px) {
                     display: flex;

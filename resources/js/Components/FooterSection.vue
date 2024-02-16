@@ -35,9 +35,8 @@
                             v-model="form.message"
                             required
                             autocomplete="off"
-                            rows="20"
                             placeholder="Jūsu ziņa"
-                        />
+                        ></TextArea>
 
                         <InputError
                             class="mt-2"
@@ -59,15 +58,15 @@
                 <h3>Kontakti</h3>
                 <div class="info">
                     <p>
-                        <ion-icon name="mail-outline"></ion-icon>
+                        <img src="../Assets/mail.svg" alt="" />
                         Example@example.com
                     </p>
                     <p>
-                        <ion-icon name="call-outline"></ion-icon>
+                        <img src="../Assets/phone.svg" alt="" />
                         123-456-7890
                     </p>
                     <p>
-                        <ion-icon name="location-outline"></ion-icon>
+                        <img src="../Assets/location.svg" alt="" />
                         123 Vue Street, JavaScript City
                     </p>
                 </div>
@@ -77,15 +76,19 @@
             <div class="socials">
                 <h3>Sociālie tīkli</h3>
                 <div class="links">
-                    <a class="icon" href="https://instagram.com" target="_blank"
-                        ><ion-icon name="logo-instagram"></ion-icon
-                    ></a>
-                    <a class="icon" href="https://tiktok.com" target="_blank"
-                        ><ion-icon name="logo-tiktok"></ion-icon
-                    ></a>
-                    <a class="icon" href="https://facebook.com" target="_blank"
-                        ><ion-icon name="logo-facebook"></ion-icon
-                    ></a>
+                    <a
+                        class="icon"
+                        href="https://instagram.com"
+                        target="_blank"
+                    >
+                        <img src="" alt="" />
+                    </a>
+                    <a class="icon" href="https://tiktok.com" target="_blank">
+                        <img src="" alt="" />
+                    </a>
+                    <a class="icon" href="https://facebook.com" target="_blank">
+                        <img src="" alt="" />
+                    </a>
                 </div>
             </div>
         </div>
@@ -138,7 +141,8 @@ footer {
     width: 100%;
 
     .container {
-        max-width: 90rem;
+        max-width: 95rem;
+        padding-inline: 0.5rem;
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: 1fr 0.5fr;
@@ -153,14 +157,6 @@ footer {
         }
         .socials {
             grid-area: 2 / 1 / 3 / 3;
-        }
-
-        @media (min-width: 640px) {
-            padding: 0 1.5rem;
-        }
-
-        @media (min-width: 1024px) {
-            padding: 0 2rem;
         }
     }
     .form-container,
@@ -221,10 +217,9 @@ footer {
                 align-items: center;
                 user-select: text;
 
-                ion-icon {
-                    font-size: 1.6rem;
-                    color: var(--primary);
-                    margin-right: 0.6rem;
+                img {
+                    height: 1.2rem;
+                    margin-right: 0.5rem;
                 }
             }
         }

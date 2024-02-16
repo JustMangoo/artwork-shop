@@ -67,7 +67,8 @@ img {
     .product-showcase {
         min-width: 10rem;
         width: 100%;
-        max-width: 90rem;
+        max-width: 95rem;
+        padding-inline: 0.5rem;
         height: 100%;
         background-color: var(--secondary);
 

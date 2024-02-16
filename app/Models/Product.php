@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -11,7 +10,7 @@ class Product extends Model
         'title',
         'description',
         'price',
-        'category_id',
+        // 'category_id', // Remove this line
     ];
 
     public function images()
@@ -19,8 +18,9 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function category()
+    // Change this method to reflect the many-to-many relationship
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 }
