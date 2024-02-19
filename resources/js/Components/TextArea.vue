@@ -2,7 +2,7 @@
     <textarea
         class="textArea"
         :value="modelValue"
-        @textarea="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', $event.target.value)"
         ref="textarea"
     >
     </textarea>

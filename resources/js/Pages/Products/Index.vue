@@ -25,21 +25,29 @@
                         <!-- (input fields) -->
                         <div>
                             <InputLabel for="title">Nosaukums:</InputLabel>
-                            <TextInput id="title" v-model="newProduct.title" />
+                            <TextInput id="title" v-model="form.title" />
+                            <InputError
+                                :message="form.errors.title"
+                                class="mt-2"
+                            />
                         </div>
                         <div>
                             <InputLabel for="description">Apraksts:</InputLabel>
                             <TextArea
                                 id="description"
-                                v-model="newProduct.description"
+                                v-model="form.description"
                             ></TextArea>
+                            <InputError
+                                :message="form.errors.description"
+                                class="mt-2"
+                            />
                         </div>
                         <div>
                             <InputLabel for="price">Cena:</InputLabel>
-                            <TextInput
-                                id="price"
-                                type="number"
-                                v-model.number="newProduct.price"
+                            <TextInput id="price" v-model="form.price" />
+                            <InputError
+                                :message="form.errors.price"
+                                class="mt-2"
                             />
                         </div>
                         <div>
@@ -56,7 +64,7 @@
                                         type="checkbox"
                                         :id="'category-' + category.id"
                                         :value="category.id"
-                                        v-model="newProduct.categories"
+                                        v-model="form.categories"
                                     />
                                     <label
                                         :for="'category-' + category.id"
@@ -66,14 +74,22 @@
                                     </label>
                                 </div>
                             </div>
+                            <InputError
+                                :message="form.errors.categories"
+                                class="mt-2"
+                            />
                         </div>
+                        <TextInput id="id" v-model="form.id" />
                     </template>
 
                     <template #footer>
                         <!-- Modal footer content -->
                         <BasicButton
                             class="cancel-btn"
-                            @click="isAddProductModalOpen = false"
+                            @click="
+                                isAddProductModalOpen = false;
+                                resetForm();
+                            "
                         >
                             Atcelt
                         </BasicButton>
@@ -92,6 +108,7 @@
                             <th>Apraksts</th>
                             <th>Cena</th>
                             <th>Kategorīja</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,18 +119,30 @@
                             <td>
                                 {{ product.description }}
                             </td>
-                            <td>
-                                {{ product.price }}
-                            </td>
+                            <td>{{ product.price }}&euro;</td>
                             <td>
                                 <ul>
                                     <li
                                         v-for="category in product.categories"
                                         :key="category.id"
                                     >
-                                        {{ category.name }}<br />
+                                        {{ category.name }},<br />
                                     </li>
                                 </ul>
+                            </td>
+                            <td>
+                                <img
+                                    class="action-icon"
+                                    src="../../Assets/pen.svg"
+                                    alt="edit-icon"
+                                    @click="editProduct(product)"
+                                />
+                                <img
+                                    class="action-icon"
+                                    src="../../Assets/trash.svg"
+                                    alt="delete-icon"
+                                    @click="deleteProduct(product)"
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -132,6 +161,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import { Head } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
 export default {
     components: {
@@ -148,36 +178,68 @@ export default {
         products: Array,
         categories: Array,
     },
-    data() {
-        return {
-            isAddProductModalOpen: false,
-            newProduct: {
-                title: "",
-                description: "",
-                price: null,
-                categories: [],
-            },
-        };
+    setup() {
+        const form = useForm({
+            id: null,
+            title: "",
+            description: "",
+            price: null,
+            categories: [],
+        });
+
+        return { form };
     },
     methods: {
         addProduct() {
-            // Ensure you are calling the correct endpoint and passing the necessary data
-            this.$inertia.post("/products", {
-                ...this.newProduct,
-                // Assuming 'categories' needs to be an array of category IDs
-                categories: [
-                    /* Category IDs here */
-                ],
-            });
+            console.log(this.es);
+            const url = this.form.id
+                ? route("products.update", this.form.id)
+                : route("products.store");
+            const method = this.form.id ? "put" : "post";
 
-            // After submitting, reset the newProduct data and close the modal
-            this.resetForm();
-            this.isAddProductModalOpen = false;
+            this.form[method](url, {
+                onSuccess: () => {
+                    this.isAddProductModalOpen = false;
+                    this.form.reset();
+                    console.log("success");
+                },
+            });
         },
         resetForm() {
-            this.newProduct = { title: "", description: "", price: null };
-            // Reset other fields as necessary
+            this.form.reset(); // Resets the entire form
         },
+        editProduct(product) {
+            this.form.reset();
+            this.form.id = product.id;
+            this.form.title = product.title;
+            this.form.description = product.description;
+            this.form.price = product.price;
+            this.form.categories = product.categories.map(
+                (category) => category.id
+            );
+            this.isAddProductModalOpen = true;
+        },
+        deleteProduct(product) {
+            if (confirm(`Are you sure you want to delete ${product.title}?`)) {
+                this.$inertia.delete(route("products.destroy", product.id), {
+                    onSuccess: () => {
+                        // Optionally refresh the list or remove the item from the local list
+                        this.products = this.products.filter(
+                            (p) => p.id !== product.id
+                        );
+                        console.log("Product deleted successfully");
+                    },
+                    onError: (errors) => {
+                        console.error("Error deleting product", errors);
+                    },
+                });
+            }
+        },
+    },
+    data() {
+        return {
+            isAddProductModalOpen: false,
+        };
     },
 };
 </script>
@@ -185,7 +247,7 @@ export default {
 <style lang="scss" scoped>
 .container {
     max-width: 95rem;
-    padding-inline: 0.5rem;
+    padding: 1rem 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -241,6 +303,16 @@ export default {
                 td {
                     color: var(--neutral-two);
                     padding: 0.5rem;
+
+                    .action-icon {
+                        display: inline;
+                        margin-right: 0.5rem;
+                        border-radius: 2px;
+                        height: 2rem;
+                        padding: 0.3rem;
+                        background: var(--primary);
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -259,7 +331,7 @@ export default {
             .tag-label {
                 background-color: var(--secondary);
                 padding: 5px 10px;
-                border-radius: 15px;
+                border-radius: 2px;
                 display: block;
                 cursor: pointer;
                 user-select: none;
@@ -267,14 +339,33 @@ export default {
                 &:hover {
                     background-color: var(--secondary);
                 }
+                &::before {
+                    content: url(../../Assets/check.svg);
+                    display: inline-block;
+                    width: 0;
+                    height: 100%;
+                    margin-right: 0;
+                    transition: all 0.5s;
+                    transform: translate(0, 2px);
+                }
             }
 
             input[type="checkbox"] {
                 display: none;
 
                 &:checked + .tag-label {
+                    box-sizing: border-box;
                     background-color: var(--primary);
                     color: white;
+                    text-align: center;
+
+                    &::before {
+                        content: url(../../Assets/check.svg);
+                        display: inline-block;
+                        width: 1rem;
+                        height: 100%;
+                        margin-right: 0.2rem;
+                    }
                 }
             }
         }

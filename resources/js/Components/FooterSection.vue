@@ -81,13 +81,13 @@
                         href="https://instagram.com"
                         target="_blank"
                     >
-                        <img src="" alt="" />
+                        <img src="../Assets/socials/instagram.svg" alt="" />
                     </a>
                     <a class="icon" href="https://tiktok.com" target="_blank">
-                        <img src="" alt="" />
+                        <img src="../Assets/socials/tiktok.svg" alt="" />
                     </a>
                     <a class="icon" href="https://facebook.com" target="_blank">
-                        <img src="" alt="" />
+                        <img src="../Assets/socials/facebook.svg" alt="" />
                     </a>
                 </div>
             </div>
@@ -244,9 +244,9 @@ footer {
                 background-color: var(--primary);
                 border-radius: 50%;
 
-                ion-icon {
-                    font-size: 1.6rem;
-                    color: var(--neutral-two);
+                img {
+                    height: 100%;
+                    padding: 0.3rem;
                 }
             }
 

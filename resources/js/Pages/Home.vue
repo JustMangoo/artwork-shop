@@ -8,7 +8,7 @@
             <div class="product-showcase">
                 <img class="left" src="../Assets/Images/foto1.webp" alt="" />
                 <img class="middle" src="../Assets/Images/foto2.webp" alt="" />
-                <img class="right" src="../Assets/Images/foto1.webp" alt="" />
+                <img class="right" src="../Assets/Images/foto3.png" alt="" />
             </div>
         </div>
         <CarouselProducts />
