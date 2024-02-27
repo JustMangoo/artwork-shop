@@ -79,7 +79,35 @@
                                 class="mt-2"
                             />
                         </div>
-                        <TextInput id="id" v-model="form.id" />
+                        <div>
+                            <InputLabel for="image">Product Image:</InputLabel>
+                            <input
+                                type="file"
+                                id="image"
+                                @change="handleImageUpload"
+                            />
+                            <!-- Image preview -->
+                            <div class="image-preview-container">
+                                <img
+                                    v-if="imagePreviewUrl"
+                                    :src="imagePreviewUrl"
+                                    alt="Image preview"
+                                    class="image-preview"
+                                />
+                                <img
+                                    v-if="imagePreviewUrl"
+                                    :src="imagePreviewUrl"
+                                    alt="Image preview"
+                                    class="image-preview"
+                                />
+                                <img
+                                    v-if="imagePreviewUrl"
+                                    :src="imagePreviewUrl"
+                                    alt="Image preview"
+                                    class="image-preview"
+                                />
+                            </div>
+                        </div>
                     </template>
 
                     <template #footer>
@@ -108,6 +136,7 @@
                             <th>Apraksts</th>
                             <th>Cena</th>
                             <th>Kategorīja</th>
+                            <th>Bilde</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -129,6 +158,13 @@
                                         {{ category.name }},<br />
                                     </li>
                                 </ul>
+                            </td>
+                            <td>
+                                <img
+                                    :src="productImagePath(product.image_path)"
+                                    alt="Product Image"
+                                    class="product-image"
+                                />
                             </td>
                             <td>
                                 <img
@@ -185,13 +221,29 @@ export default {
             description: "",
             price: null,
             categories: [],
+            image: null,
         });
 
         return { form };
     },
     methods: {
+        productImagePath(path) {
+            return path
+                ? "/storage/" + path.replace("public/", "")
+                : "/images/default-product.jpg";
+        },
+        handleImageUpload(event) {
+            const file = event.target.files[0];
+            this.form.image = file;
+            if (file && file.type.match("image.*")) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.imagePreviewUrl = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        },
         addProduct() {
-            console.log(this.es);
             const url = this.form.id
                 ? route("products.update", this.form.id)
                 : route("products.store");
@@ -223,10 +275,6 @@ export default {
             if (confirm(`Are you sure you want to delete ${product.title}?`)) {
                 this.$inertia.delete(route("products.destroy", product.id), {
                     onSuccess: () => {
-                        // Optionally refresh the list or remove the item from the local list
-                        this.products = this.products.filter(
-                            (p) => p.id !== product.id
-                        );
                         console.log("Product deleted successfully");
                     },
                     onError: (errors) => {
@@ -239,6 +287,7 @@ export default {
     data() {
         return {
             isAddProductModalOpen: false,
+            imagePreviewUrl: null,
         };
     },
 };
@@ -272,12 +321,13 @@ export default {
     }
 
     .table-container {
-        border-radius: 2px;
+        border-radius: var(--border-rad);
         overflow: hidden;
 
         table {
             width: 100%;
-            table-layout: auto;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
         thead {
@@ -299,15 +349,31 @@ export default {
 
             tr {
                 border-bottom: 0.1rem solid var(--neutral-one);
+                border-left: 2px solid transparent;
+
+                &:hover {
+                    box-sizing: border-box;
+                    border-left: 2px solid var(--primary);
+                }
 
                 td {
                     color: var(--neutral-two);
                     padding: 0.5rem;
+                    vertical-align: middle;
+
+                    .product-image {
+                        aspect-ratio: 3 / 4;
+                        width: 20%;
+                        object-fit: cover;
+                        margin: 0 auto;
+                        display: block;
+                        border-radius: var(--border-rad);
+                    }
 
                     .action-icon {
                         display: inline;
                         margin-right: 0.5rem;
-                        border-radius: 2px;
+                        border-radius: var(--border-rad);
                         height: 2rem;
                         padding: 0.3rem;
                         background: var(--primary);
@@ -331,7 +397,7 @@ export default {
             .tag-label {
                 background-color: var(--secondary);
                 padding: 5px 10px;
-                border-radius: 2px;
+                border-radius: var(--border-rad);
                 display: block;
                 cursor: pointer;
                 user-select: none;
@@ -368,6 +434,19 @@ export default {
                     }
                 }
             }
+        }
+    }
+
+    .image-preview-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .image-preview {
+            max-width: 30%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            margin-top: 10px; /* Adjust spacing as needed */
+            border-radius: var(--border-rad);
         }
     }
 }

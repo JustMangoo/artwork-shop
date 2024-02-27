@@ -26,7 +26,7 @@ defineProps({
     text-transform: uppercase;
     background-color: transparent;
     border: 1px solid var(--primary);
-    border-radius: 2px;
+    border-radius: var(--border-rad);
     transition: all 0.15s ease-in-out;
 
     &::before,

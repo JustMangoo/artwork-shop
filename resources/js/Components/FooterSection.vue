@@ -94,7 +94,7 @@
         </div>
 
         <!-- Copyright -->
-        <p class="copyright">© 2023 Aleksis Daugats</p>
+        <p class="copyright">© 2024 Aleksis Daugats</p>
     </footer>
 </template>
 

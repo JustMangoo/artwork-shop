@@ -36,7 +36,7 @@ textarea {
     padding: 0.8rem;
     width: 100%;
     outline: 1px solid #ddd;
-    border-radius: 2px;
+    border-radius: var(--border-rad);
     &:focus {
         outline: 1px solid var(--primary);
         box-shadow: none;

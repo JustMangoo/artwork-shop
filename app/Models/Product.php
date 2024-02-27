@@ -10,7 +10,7 @@ class Product extends Model
         'title',
         'description',
         'price',
-        // 'category_id', // Remove this line
+        'image_path',
     ];
 
     public function images()

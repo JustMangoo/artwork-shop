@@ -55,8 +55,9 @@ export default {
     background: white;
     padding: 1.5rem;
     border-radius: 4px;
-    max-width: 500px;
+    max-width: 40rem;
     width: 100%;
+    max-height: 100vh;
 }
 
 .modal-header {
