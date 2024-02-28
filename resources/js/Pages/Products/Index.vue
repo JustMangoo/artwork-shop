@@ -79,34 +79,37 @@
                                 class="mt-2"
                             />
                         </div>
-                        <div>
-                            <InputLabel for="image">Product Image:</InputLabel>
+                        <div class="image-upload-container">
+                            <!-- Multiple image previews (you might want to create a sub-component for this) -->
+                            <div
+                                v-for="(imageSrc, index) in imagePreviewUrls"
+                                :key="index"
+                                class="image-preview-container"
+                            >
+                                <img :src="imageSrc" class="image-preview" />
+                                <button @click="removeImage(index)">
+                                    Remove
+                                </button>
+                                <!-- Implement removeImage method to remove images -->
+                            </div>
+                            <div
+                                @click="() => $refs.fileInput.click()"
+                                class="image-upload-placeholder"
+                            >
+                                <img
+                                    src="../../Assets/upload.svg"
+                                    alt="upload"
+                                />
+                                <span>+</span>
+                            </div>
                             <input
                                 type="file"
                                 id="image"
+                                ref="fileInput"
                                 @change="handleImageUpload"
+                                class="hidden"
+                                multiple
                             />
-                            <!-- Image preview -->
-                            <div class="image-preview-container">
-                                <img
-                                    v-if="imagePreviewUrl"
-                                    :src="imagePreviewUrl"
-                                    alt="Image preview"
-                                    class="image-preview"
-                                />
-                                <img
-                                    v-if="imagePreviewUrl"
-                                    :src="imagePreviewUrl"
-                                    alt="Image preview"
-                                    class="image-preview"
-                                />
-                                <img
-                                    v-if="imagePreviewUrl"
-                                    :src="imagePreviewUrl"
-                                    alt="Image preview"
-                                    class="image-preview"
-                                />
-                            </div>
                         </div>
                     </template>
 
@@ -160,11 +163,15 @@
                                 </ul>
                             </td>
                             <td>
-                                <img
-                                    :src="productImagePath(product.image_path)"
-                                    alt="Product Image"
-                                    class="product-image"
-                                />
+                                <div>
+                                    <img
+                                        v-for="image in product.images"
+                                        :key="image.id"
+                                        :src="productImagePath(image)"
+                                        alt="Product Image"
+                                        class="product-image"
+                                    />
+                                </div>
                             </td>
                             <td>
                                 <img
@@ -221,26 +228,34 @@ export default {
             description: "",
             price: null,
             categories: [],
-            image: null,
+            images: [],
         });
 
         return { form };
     },
     methods: {
-        productImagePath(path) {
-            return path
-                ? "/storage/" + path.replace("public/", "")
+        productImagePath(image) {
+            return image.image // Ensure 'image' field is the one storing the file path
+                ? "/storage/" + image.image.replace("public/", "")
                 : "/images/default-product.jpg";
         },
         handleImageUpload(event) {
-            const file = event.target.files[0];
-            this.form.image = file;
-            if (file && file.type.match("image.*")) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.imagePreviewUrl = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            const files = event.target.files;
+            this.form.images = []; // Reset the form images
+            this.imagePreviewUrls = []; // Reset the preview URLs
+
+            if (files) {
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].type.match("image.*")) {
+                        this.form.images.push(files[i]); // Push each file to the form images
+
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imagePreviewUrls.push(e.target.result); // Push each new image URL for preview
+                        };
+                        reader.readAsDataURL(files[i]); // Read the file to create a data URL for preview
+                    }
+                }
             }
         },
         addProduct() {
@@ -258,7 +273,11 @@ export default {
             });
         },
         resetForm() {
-            this.form.reset(); // Resets the entire form
+            this.form.reset();
+            this.imagePreviewUrls = [];
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = null;
+            }
         },
         editProduct(product) {
             this.form.reset();
@@ -269,6 +288,22 @@ export default {
             this.form.categories = product.categories.map(
                 (category) => category.id
             );
+
+            // Ensure `product.images` is defined and is an array before calling `map`
+            if (Array.isArray(product.images)) {
+                this.imagePreviewUrls = product.images.map((image) => {
+                    return image.path
+                        ? "/storage/" + image.path.replace("public/", "")
+                        : "/images/default-product.jpg";
+                });
+            } else {
+                this.imagePreviewUrls = []; // If `product.images` is not an array, set `imagePreviewUrls` to an empty array
+            }
+
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = null;
+            }
+
             this.isAddProductModalOpen = true;
         },
         deleteProduct(product) {
@@ -287,7 +322,7 @@ export default {
     data() {
         return {
             isAddProductModalOpen: false,
-            imagePreviewUrl: null,
+            imagePreviewUrls: [],
         };
     },
 };
@@ -437,17 +472,41 @@ export default {
         }
     }
 
-    .image-preview-container {
+    .image-upload-container {
+        width: 150px;
+        height: 150px;
+        border: 2px dashed #ccc;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .image-upload-placeholder {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        .image-preview {
-            max-width: 30%;
-            aspect-ratio: 3 / 4;
-            object-fit: cover;
-            margin-top: 10px; /* Adjust spacing as needed */
-            border-radius: var(--border-rad);
-        }
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .image-upload-placeholder img {
+        max-width: 50%;
+        max-height: 50%;
+    }
+
+    .image-upload-placeholder span {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        font-size: 24px;
+    }
+
+    .image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hidden {
+        display: none;
     }
 }
 </style>

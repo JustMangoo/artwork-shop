@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Image;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,12 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('categories')->get();
-        $categories = Category::all(); // Fetch all categories
+        $products = Product::with(['categories', 'images'])->get();
+        $categories = Category::all();
+        $images = Image::all();
 
         return Inertia::render('Products/Index', [
             'products' => $products,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -33,30 +35,31 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id', // Validate each category ID exists
-            'image' => 'nullable|image|max:2048', // 2MB Max
+            'categories.*' => 'exists:categories,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|max:2048',
         ]);
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/products');
-            $validatedData['image_path'] = $path;
-        }
 
         $product = Product::create($validatedData);
         $product->categories()->attach($request->input('categories'));
 
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('public/products');
+                $product->images()->create(['image' => $path]);
+            }
+        }
+
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function show(Product $product) // Use singular for the variable
+    public function show(Product $product)
     {
-        // If using Inertia, return an Inertia response instead
         return Inertia::render('Products/Show', ['product' => $product]);
     }
 
-    public function edit(Product $product) // Use singular for the variable
+    public function edit(Product $product)
     {
-        // If using Inertia, return an Inertia response instead
         return Inertia::render('Products/Edit', ['product' => $product]);
     }
 
@@ -68,28 +71,44 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'categories' => 'required|array',
             'categories.*' => 'exists:categories,id',
+            'images' => 'nullable|array',
+            'images.*' => 'image|max:2048',
+
         ]);
 
         // Update the product
         $product->update($validatedData);
-
-        // Sync the categories to the product (detach any not in the array and attach any new ones)
         $product->categories()->sync($request->categories);
 
-        return redirect()->route('products.index');
+        if ($request->hasFile('images')) {
+            $product->images()->each(function($image) { Storage::delete($image->image); });
+            $product->images()->delete();
+
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('public/products');
+                $product->images()->create(['image' => $path]);
+            }
+        }
+
+    return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product)
     {
-        // Delete the image file from storage
-        if ($product->image_path && Storage::exists($product->image_path)) {
-            Storage::delete($product->image_path);
+        // Fetch all associated images
+        $images = $product->images;
+
+        // Delete the image files from storage
+        foreach ($images as $image) {
+            if (Storage::exists($image->image)) {
+                Storage::delete($image->image);
+            }
         }
 
-        // Delete the product record
+        $product->images()->delete();
+        $product->categories()->detach();
         $product->delete();
 
-        // Return a response or redirect
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
