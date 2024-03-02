@@ -86,6 +86,7 @@
                                 :key="index"
                                 class="image-preview-container"
                             >
+                                <p>{{ imageSrc }}</p>
                                 <img :src="imageSrc" class="image-preview" />
                                 <button @click="removeImage(index)">
                                     Remove
@@ -235,9 +236,13 @@ export default {
     },
     methods: {
         productImagePath(image) {
-            return image.image // Ensure 'image' field is the one storing the file path
+            console.log(`Processing image ID: ${image.id}`);
+            const imagePath = image.image
                 ? "/storage/" + image.image.replace("public/", "")
-                : "/images/default-product.jpg";
+                : "resources/js/Assets/Images/Image1.png";
+
+            console.log(`Image path for ${image.image}: ${imagePath}`);
+            return imagePath;
         },
         handleImageUpload(event) {
             const files = event.target.files;
@@ -247,13 +252,13 @@ export default {
             if (files) {
                 for (let i = 0; i < files.length; i++) {
                     if (files[i].type.match("image.*")) {
-                        this.form.images.push(files[i]); // Push each file to the form images
+                        this.form.images.push(files[i]);
 
                         const reader = new FileReader();
                         reader.onload = (e) => {
-                            this.imagePreviewUrls.push(e.target.result); // Push each new image URL for preview
+                            this.imagePreviewUrls.push(e.target.result);
                         };
-                        reader.readAsDataURL(files[i]); // Read the file to create a data URL for preview
+                        reader.readAsDataURL(files[i]);
                     }
                 }
             }
@@ -294,7 +299,7 @@ export default {
                 this.imagePreviewUrls = product.images.map((image) => {
                     return image.path
                         ? "/storage/" + image.path.replace("public/", "")
-                        : "/images/default-product.jpg";
+                        : "resources/js/Assets/Images/Image1.png";
                 });
             } else {
                 this.imagePreviewUrls = []; // If `product.images` is not an array, set `imagePreviewUrls` to an empty array
