@@ -80,20 +80,24 @@
                             />
                         </div>
                         <div class="image-upload-container">
-                            <!-- Multiple image previews (you might want to create a sub-component for this) -->
                             <div
                                 v-for="(imageSrc, index) in imagePreviewUrls"
                                 :key="index"
                                 class="image-preview-container"
                             >
-                                <p>{{ imageSrc }}</p>
                                 <img :src="imageSrc" class="image-preview" />
-                                <button @click="removeImage(index)">
-                                    Remove
+                                <button
+                                    @click="removeImage(index)"
+                                    class="remove-iamge-btn"
+                                >
+                                    <img
+                                        src="../../Assets/xmark.svg"
+                                        alt="close-icon"
+                                    />
                                 </button>
-                                <!-- Implement removeImage method to remove images -->
                             </div>
                             <div
+                                v-if="!imagePreviewUrls.length"
                                 @click="() => $refs.fileInput.click()"
                                 class="image-upload-placeholder"
                             >
@@ -104,6 +108,7 @@
                                 <span>+</span>
                             </div>
                             <input
+                                v-if="!imagePreviewUrls.length"
                                 type="file"
                                 id="image"
                                 ref="fileInput"
@@ -235,6 +240,9 @@ export default {
         return { form };
     },
     methods: {
+        removeImage(index) {
+            this.imagePreviewUrls.splice(index, 1);
+        },
         productImagePath(image) {
             console.log(`Processing image ID: ${image.id}`);
             const imagePath = image.image
@@ -349,14 +357,9 @@ export default {
         .add-button,
         .search-button {
             width: fit-content;
-
             img {
                 height: 1.5rem;
             }
-        }
-
-        #categories {
-            width: 100%;
         }
     }
 
@@ -368,56 +371,56 @@ export default {
             width: 100%;
             table-layout: fixed;
             border-collapse: collapse;
-        }
 
-        thead {
-            background-color: var(--primary);
-            border-bottom: 0.3rem solid var(--neutral-one);
+            thead {
+                background-color: var(--primary);
+                border-bottom: 0.3rem solid var(--neutral-one);
 
-            tr {
-                th {
-                    color: var(--neutral-one);
-                    text-align: left;
-                    padding: 0.5rem;
-                    font-weight: 500;
+                tr {
+                    th {
+                        color: var(--neutral-one);
+                        text-align: left;
+                        padding: 0.5rem;
+                        font-weight: 500;
+                    }
                 }
             }
-        }
 
-        tbody {
-            background-color: var(--secondary);
+            tbody {
+                background-color: var(--secondary);
 
-            tr {
-                border-bottom: 0.1rem solid var(--neutral-one);
-                border-left: 2px solid transparent;
+                tr {
+                    border-bottom: 0.1rem solid var(--neutral-one);
+                    border-left: 2px solid transparent;
 
-                &:hover {
-                    box-sizing: border-box;
-                    border-left: 2px solid var(--primary);
-                }
-
-                td {
-                    color: var(--neutral-two);
-                    padding: 0.5rem;
-                    vertical-align: middle;
-
-                    .product-image {
-                        aspect-ratio: 3 / 4;
-                        width: 20%;
-                        object-fit: cover;
-                        margin: 0 auto;
-                        display: block;
-                        border-radius: var(--border-rad);
+                    &:hover {
+                        box-sizing: border-box;
+                        border-left: 2px solid var(--primary);
                     }
 
-                    .action-icon {
-                        display: inline;
-                        margin-right: 0.5rem;
-                        border-radius: var(--border-rad);
-                        height: 2rem;
-                        padding: 0.3rem;
-                        background: var(--primary);
-                        cursor: pointer;
+                    td {
+                        color: var(--neutral-two);
+                        padding: 0.5rem;
+                        vertical-align: middle;
+
+                        .product-image {
+                            aspect-ratio: 3 / 4;
+                            width: 20%;
+                            object-fit: cover;
+                            margin: 0 auto;
+                            display: block;
+                            border-radius: var(--border-rad);
+                        }
+
+                        .action-icon {
+                            display: inline;
+                            margin-right: 0.5rem;
+                            border-radius: var(--border-rad);
+                            height: 2rem;
+                            padding: 0.3rem;
+                            background: var(--primary);
+                            cursor: pointer;
+                        }
                     }
                 }
             }
@@ -445,6 +448,7 @@ export default {
                 &:hover {
                     background-color: var(--secondary);
                 }
+
                 &::before {
                     content: url(../../Assets/check.svg);
                     display: inline-block;
@@ -460,7 +464,6 @@ export default {
                 display: none;
 
                 &:checked + .tag-label {
-                    box-sizing: border-box;
                     background-color: var(--primary);
                     color: white;
                     text-align: center;
@@ -478,36 +481,48 @@ export default {
     }
 
     .image-upload-container {
-        width: 150px;
-        height: 150px;
+        width: 30%;
+        aspect-ratio: 3 / 4;
         border: 2px dashed #ccc;
+        border-radius: var(--border-rad);
         position: relative;
         cursor: pointer;
-    }
 
-    .image-upload-placeholder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
+        .image-upload-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
 
-    .image-upload-placeholder img {
-        max-width: 50%;
-        max-height: 50%;
-    }
+            img {
+                max-width: 50%;
+                max-height: 50%;
+                object-fit: cover;
+            }
 
-    .image-upload-placeholder span {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        font-size: 24px;
-    }
+            span {
+                position: absolute;
+                bottom: 15px;
+                right: 15px;
+                font-size: 24px;
+            }
+        }
 
-    .image-preview {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        .image-preview {
+            object-fit: cover;
+            aspect-ratio: 3/ 4;
+        }
+        .remove-iamge-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+
+            img {
+                width: 20px;
+                background-color: var(--primary);
+                border-radius: 50%;
+            }
+        }
     }
 
     .hidden {
