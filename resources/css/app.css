@@ -12,6 +12,9 @@
     --primary: #abb491;
     --secondary: #ebeee3;
     --border-rad: 3px;
+    --success-msg: #abb491;
+    --error-msg: #f8bcbc;
+    --warning-msg: #f9e0b2;
     --swiper-navigation-color: #abb491;
     --swiper-pagination-color: #abb491;
     --swiper-pagination-bullet-opacity-inactive: 0.1;
@@ -75,7 +78,7 @@ h1 {
     text-transform: uppercase;
 }
 
-h2 {
+h3 {
     font-family: "Ibarra Real Nova", serif;
     padding: 0;
     margin: 0;

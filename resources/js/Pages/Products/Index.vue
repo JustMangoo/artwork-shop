@@ -2,6 +2,7 @@
     <Head title="Produkti" />
 
     <MainLayout>
+        <SystemMessage :message="systemMessage" :type="messageType" />
         <div class="container">
             <div class="option-container">
                 <BasicButton class="search-button">
@@ -79,44 +80,11 @@
                                 class="mt-2"
                             />
                         </div>
-                        <div class="image-upload-container">
-                            <div
-                                v-for="(imageSrc, index) in imagePreviewUrls"
-                                :key="index"
-                                class="image-preview-container"
-                            >
-                                <img :src="imageSrc" class="image-preview" />
-                                <button
-                                    @click="removeImage(index)"
-                                    class="remove-iamge-btn"
-                                >
-                                    <img
-                                        src="../../Assets/xmark.svg"
-                                        alt="close-icon"
-                                    />
-                                </button>
-                            </div>
-                            <div
-                                v-if="!imagePreviewUrls.length"
-                                @click="() => $refs.fileInput.click()"
-                                class="image-upload-placeholder"
-                            >
-                                <img
-                                    src="../../Assets/upload.svg"
-                                    alt="upload"
-                                />
-                                <span>+</span>
-                            </div>
-                            <input
-                                v-if="!imagePreviewUrls.length"
-                                type="file"
-                                id="image"
-                                ref="fileInput"
-                                @change="handleImageUpload"
-                                class="hidden"
-                                multiple
-                            />
-                        </div>
+                        <ImageUploadComponent
+                            :initial-image="initialImage"
+                            @image-added="handleImageAdded"
+                            @image-removed="handleImageRemoved"
+                        />
                     </template>
 
                     <template #footer>
@@ -209,6 +177,8 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
+import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
+import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 
@@ -222,6 +192,8 @@ export default {
         InputLabel,
         TextInput,
         TextArea,
+        ImageUploadComponent,
+        SystemMessage,
     },
     props: {
         products: Array,
@@ -234,42 +206,27 @@ export default {
             description: "",
             price: null,
             categories: [],
-            images: [],
+            image: null,
         });
 
         return { form };
     },
     methods: {
+        handleImageAdded(imageData) {
+            console.log("imageData: " + imageData);
+            this.form.image = imageData;
+        },
+        handleImageRemoved() {
+            this.form.image = null;
+        },
         removeImage(index) {
             this.imagePreviewUrls.splice(index, 1);
         },
         productImagePath(image) {
-            console.log(`Processing image ID: ${image.id}`);
             const imagePath = image.image
                 ? "/storage/" + image.image.replace("public/", "")
                 : "resources/js/Assets/Images/Image1.png";
-
-            console.log(`Image path for ${image.image}: ${imagePath}`);
             return imagePath;
-        },
-        handleImageUpload(event) {
-            const files = event.target.files;
-            this.form.images = []; // Reset the form images
-            this.imagePreviewUrls = []; // Reset the preview URLs
-
-            if (files) {
-                for (let i = 0; i < files.length; i++) {
-                    if (files[i].type.match("image.*")) {
-                        this.form.images.push(files[i]);
-
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.imagePreviewUrls.push(e.target.result);
-                        };
-                        reader.readAsDataURL(files[i]);
-                    }
-                }
-            }
         },
         addProduct() {
             const url = this.form.id
@@ -281,18 +238,34 @@ export default {
                 onSuccess: () => {
                     this.isAddProductModalOpen = false;
                     this.form.reset();
-                    console.log("success");
+                    this.setSystemMessage(
+                        this.isEditMode
+                            ? "Product updated successfully"
+                            : "Product added successfully",
+                        "success"
+                    );
+                    this.isEditMode = false;
+                },
+                onError: () => {
+                    this.setSystemMessage(
+                        "An error occurred while saving the product",
+                        "error"
+                    );
                 },
             });
         },
         resetForm() {
             this.form.reset();
             this.imagePreviewUrls = [];
+            this.isEditMode = false;
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = null;
             }
+            this.initialImage = null;
         },
         editProduct(product) {
+            this.isEditMode = true;
+
             this.form.reset();
             this.form.id = product.id;
             this.form.title = product.title;
@@ -302,16 +275,25 @@ export default {
                 (category) => category.id
             );
 
-            // Ensure `product.images` is defined and is an array before calling `map`
-            if (Array.isArray(product.images)) {
-                this.imagePreviewUrls = product.images.map((image) => {
-                    return image.path
-                        ? "/storage/" + image.path.replace("public/", "")
-                        : "resources/js/Assets/Images/Image1.png";
-                });
+            // Check if images array is present and has at least one image.
+            if (Array.isArray(product.images) && product.images.length > 0) {
+                const firstImagePath = product.images[0].image;
+                this.initialImage = firstImagePath
+                    ? "/storage/" + firstImagePath.replace("public/", "")
+                    : "resources/js/Assets/Images/Image2.png";
             } else {
-                this.imagePreviewUrls = []; // If `product.images` is not an array, set `imagePreviewUrls` to an empty array
+                // Default image if no image is associated with the product
+                this.initialImage = "resources/js/Assets/Images/Image2.png";
             }
+
+            // Assuming product.images is the array containing image objects
+            this.imagePreviewUrls = product.images
+                .map((image) => {
+                    return image.image
+                        ? "/storage/" + image.image.replace("public/", "")
+                        : null;
+                })
+                .filter((url) => url !== null);
 
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = null;
@@ -323,19 +305,33 @@ export default {
             if (confirm(`Are you sure you want to delete ${product.title}?`)) {
                 this.$inertia.delete(route("products.destroy", product.id), {
                     onSuccess: () => {
-                        console.log("Product deleted successfully");
+                        this.setSystemMessage(
+                            "Product deleted successfully",
+                            "success"
+                        );
                     },
                     onError: (errors) => {
-                        console.error("Error deleting product", errors);
+                        this.setSystemMessage(
+                            "An error occurred while deleting the product",
+                            "error"
+                        );
                     },
                 });
             }
+        },
+        setSystemMessage(message, type = "info") {
+            this.systemMessage = message;
+            this.messageType = type;
         },
     },
     data() {
         return {
             isAddProductModalOpen: false,
             imagePreviewUrls: [],
+            initialImage: null,
+            isEditMode: false,
+            systemMessage: "",
+            messageType: "info",
         };
     },
 };
@@ -476,51 +472,6 @@ export default {
                         margin-right: 0.2rem;
                     }
                 }
-            }
-        }
-    }
-
-    .image-upload-container {
-        width: 30%;
-        aspect-ratio: 3 / 4;
-        border: 2px dashed #ccc;
-        border-radius: var(--border-rad);
-        position: relative;
-        cursor: pointer;
-
-        .image-upload-placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-
-            img {
-                max-width: 50%;
-                max-height: 50%;
-                object-fit: cover;
-            }
-
-            span {
-                position: absolute;
-                bottom: 15px;
-                right: 15px;
-                font-size: 24px;
-            }
-        }
-
-        .image-preview {
-            object-fit: cover;
-            aspect-ratio: 3/ 4;
-        }
-        .remove-iamge-btn {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-
-            img {
-                width: 20px;
-                background-color: var(--primary);
-                border-radius: 50%;
             }
         }
     }

@@ -43,11 +43,9 @@ class ProductController extends Controller
         $product = Product::create($validatedData);
         $product->categories()->attach($request->input('categories'));
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('public/products');
-                $product->images()->create(['image' => $path]);
-            }
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/products');
+            $product->images()->create(['image' => $path]);
         }
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
