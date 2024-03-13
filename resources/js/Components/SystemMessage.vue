@@ -58,8 +58,10 @@ export default {
 }
 .message.error {
     background-color: var(--error-msg);
+    color: black;
 }
 .message.warning {
     background-color: var(--warning-msg);
+    color: black;
 }
 </style>

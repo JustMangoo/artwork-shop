@@ -19,6 +19,7 @@
                 <FormModalLayout
                     v-model:showModal="isAddProductModalOpen"
                     @submit="addProduct"
+                    @reset-form="resetForm"
                 >
                     <template #header><h2>Pievienot Produktu</h2></template>
 
@@ -55,7 +56,7 @@
                             <InputLabel for="categories"
                                 >Kategorijas:</InputLabel
                             >
-                            <div class="categories-container">
+                            <div class="categories-input">
                                 <div
                                     v-for="category in categories"
                                     :key="category.id"
@@ -80,11 +81,24 @@
                                 class="mt-2"
                             />
                         </div>
-                        <ImageUploadComponent
-                            :initial-image="initialImage"
-                            @image-added="handleImageAdded"
-                            @image-removed="handleImageRemoved"
-                        />
+                        <div class="images-input">
+                            <ImageUploadComponent
+                                :initial-image="initialImage"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                            <ImageUploadComponent
+                                :initial-image="initialImage"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                            <ImageUploadComponent
+                                :initial-image="initialImage"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                        </div>
+                        <InputError :message="form.images.price" class="mt-2" />
                     </template>
 
                     <template #footer>
@@ -128,12 +142,15 @@
                             <td>{{ product.price }}&euro;</td>
                             <td>
                                 <ul>
-                                    <li
-                                        v-for="category in product.categories"
-                                        :key="category.id"
-                                    >
-                                        {{ category.name }},<br />
-                                    </li>
+                                    <div class="category-field">
+                                        <li
+                                            v-for="category in product.categories"
+                                            :key="category.id"
+                                            class="single-category"
+                                        >
+                                            {{ category.name }}
+                                        </li>
+                                    </div>
                                 </ul>
                             </td>
                             <td>
@@ -206,18 +223,24 @@ export default {
             description: "",
             price: null,
             categories: [],
-            image: null,
+            images: [],
         });
 
         return { form };
     },
     methods: {
         handleImageAdded(imageData) {
-            console.log("imageData: " + imageData);
-            this.form.image = imageData;
+            console.log("Attempting to add image data:", imageData);
+            console.log(
+                "Current form images before pushing:",
+                this.form.images
+            );
+            this.form.images.push(imageData);
+            console.log("Current form images after pushing:", this.form.images);
         },
-        handleImageRemoved() {
-            this.form.image = null;
+
+        handleImageRemoved(index) {
+            this.form.images.splice(index, 1);
         },
         removeImage(index) {
             this.imagePreviewUrls.splice(index, 1);
@@ -229,30 +252,53 @@ export default {
             return imagePath;
         },
         addProduct() {
-            const url = this.form.id
-                ? route("products.update", this.form.id)
-                : route("products.store");
-            const method = this.form.id ? "put" : "post";
+            const formData = new FormData();
 
-            this.form[method](url, {
-                onSuccess: () => {
+            // Append text fields to formData
+            formData.append("title", this.form.title);
+            formData.append("description", this.form.description);
+            formData.append("price", this.form.price);
+            this.form.categories.forEach((category, index) =>
+                formData.append(`categories[${index}]`, category)
+            );
+
+            // Append image files to formData
+            this.form.images.forEach((imageData, index) => {
+                formData.append(`images[${index}]`, imageData.file);
+            });
+
+            // Use formData in your request instead of this.form
+            axios
+                .post(
+                    this.form.id
+                        ? route("products.update", this.form.id)
+                        : route("products.store"),
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                )
+                .then((response) => {
+                    // Handle success
                     this.isAddProductModalOpen = false;
-                    this.form.reset();
+                    this.resetForm();
                     this.setSystemMessage(
                         this.isEditMode
-                            ? "Product updated successfully"
-                            : "Product added successfully",
+                            ? "Produkts atjaunināts veiksmīgi"
+                            : "Produkts pievienots veiksmīgi",
                         "success"
                     );
                     this.isEditMode = false;
-                },
-                onError: () => {
+                })
+                .catch((error) => {
+                    // Handle error
                     this.setSystemMessage(
                         "An error occurred while saving the product",
                         "error"
                     );
-                },
-            });
+                });
         },
         resetForm() {
             this.form.reset();
@@ -275,7 +321,7 @@ export default {
                 (category) => category.id
             );
 
-            // Check if images array is present and has at least one image.
+            //if images array is present and has at least one image.
             if (Array.isArray(product.images) && product.images.length > 0) {
                 const firstImagePath = product.images[0].image;
                 this.initialImage = firstImagePath
@@ -286,7 +332,6 @@ export default {
                 this.initialImage = "resources/js/Assets/Images/Image2.png";
             }
 
-            // Assuming product.images is the array containing image objects
             this.imagePreviewUrls = product.images
                 .map((image) => {
                     return image.image
@@ -306,7 +351,7 @@ export default {
                 this.$inertia.delete(route("products.destroy", product.id), {
                     onSuccess: () => {
                         this.setSystemMessage(
-                            "Product deleted successfully",
+                            "Produkts dzēsts veiksmīgi",
                             "success"
                         );
                     },
@@ -399,6 +444,21 @@ export default {
                         padding: 0.5rem;
                         vertical-align: middle;
 
+                        .category-field {
+                            display: flex;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                            gap: 0.4rem;
+                            justify-content: left;
+                            align-items: center;
+
+                            .single-category {
+                                padding: 0.1rem 0.4rem;
+                                border: 1px solid var(--primary);
+                                border-radius: var(--border-rad);
+                            }
+                        }
+
                         .product-image {
                             aspect-ratio: 3 / 4;
                             width: 20%;
@@ -423,7 +483,13 @@ export default {
         }
     }
 
-    .categories-container {
+    .images-input {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .categories-input {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;

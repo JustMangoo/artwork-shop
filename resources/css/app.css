@@ -70,21 +70,29 @@ html {
 
 h1 {
     font-family: "Ibarra Real Nova", serif;
-    padding: 0;
+    padding: 0 0.5rem;
     margin: 0;
     font-size: 3rem;
     font-weight: 600;
     color: var(--neutral-two);
     text-transform: uppercase;
+    display: inline;
+    background-image: linear-gradient(
+        transparent 40%,
+        var(--secondary) 40%,
+        var(--secondary) 80%,
+        transparent 80%
+    );
 }
 
 h3 {
     font-family: "Ibarra Real Nova", serif;
     padding: 0;
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 500;
     color: var(--neutral-two);
+    text-transform: uppercase;
 }
 
 .link {

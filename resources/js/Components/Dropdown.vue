@@ -1,5 +1,5 @@
 <template>
-    <div @click="open = !open">
+    <div @click="open = !open" v-bind="$attrs">
         <div class="dropdown-container">
             <button type="button" class="label">
                 <!-- {{ $page.props.auth.user.name }} -->
@@ -40,6 +40,11 @@ const props = defineProps({
     align: {
         type: String,
         default: "right",
+    },
+
+    width: {
+        type: String,
+        default: "48",
     },
 
     contentClasses: {

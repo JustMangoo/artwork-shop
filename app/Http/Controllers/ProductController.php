@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Image;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -30,6 +31,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Store method called');
+        try {
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
@@ -40,14 +44,26 @@ class ProductController extends Controller
             'images.*' => 'image|max:2048',
         ]);
 
+        Log::info('After validation');
+
         $product = Product::create($validatedData);
         $product->categories()->attach($request->input('categories'));
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/products');
-            $product->images()->create(['image' => $path]);
+        
+        if ($request->hasFile('images')) {
+            Log::info('Has images');
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('public/products');
+                $product->images()->create(['image' => $path]);
+            }
         }
+        Log::info('Store method completed');
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            Log::error('Validation failed: ' . $e->getMessage());
+            // Optionally, return a response or redirect here
+        }
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 

@@ -2,7 +2,7 @@
     <div v-if="showModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <slot name="header"><h2>Add new Product</h2></slot>
+                <slot name="header"><h2>Title Placeholder</h2></slot>
                 <button class="close-btn" @click="closeModal">
                     <img src="../Assets/xmark.svg" alt="close-icon" />
                 </button>
@@ -30,15 +30,17 @@ export default {
     methods: {
         closeModal() {
             this.$emit("update:showModal", false);
+            this.$emit("reset-form");
         },
         submit() {
             this.$emit("submit");
+            this.$emit("reset-form");
         },
     },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -49,46 +51,46 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-.modal {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 4px;
-    max-width: 40rem;
-    width: 100%;
-    max-height: 100vh;
-}
+    .modal {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 4px;
+        max-width: 40rem;
+        width: 100%;
+        max-height: 100vh;
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
 
-.close-btn {
-    background: var(--primary);
-    border: none;
-    font-size: 1.5rem;
-    border-radius: 50%;
-    padding: 2px;
-}
+            .close-btn {
+                background: var(--primary);
+                border: none;
+                font-size: 1.5rem;
+                border-radius: 50%;
+                padding: 2px;
 
-.close-btn img {
-    height: 1.5rem;
-}
+                img {
+                    height: 1.5rem;
+                }
+            }
+        }
 
-.modal-body {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+        .modal-body {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-.modal-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+        .modal-footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
 }
 </style>

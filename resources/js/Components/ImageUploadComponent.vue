@@ -24,6 +24,7 @@ export default {
     data() {
         return {
             imagePreviewUrl: null,
+            componentId: this.generateUniqueId(), // Add a unique identifier for the component
         };
     },
     props: {
@@ -44,14 +45,22 @@ export default {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     this.imagePreviewUrl = e.target.result;
-                    this.$emit("image-added", file);
+                    // Emit the file and the unique identifier
+                    this.$emit("image-added", { file, id: this.componentId });
                 };
                 reader.readAsDataURL(file);
             }
         },
         removeImage() {
             this.imagePreviewUrl = null;
-            this.$emit("image-removed");
+            // Emit the unique identifier with the removal event
+            this.$emit("image-removed", this.componentId);
+        },
+        generateUniqueId() {
+            // A simple method to generate a unique identifier
+            return `image-upload-${Date.now()}-${Math.random()
+                .toString(36)
+                .substr(2, 9)}`;
         },
     },
 };
