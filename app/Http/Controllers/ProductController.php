@@ -18,7 +18,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $images = Image::all();
 
-        return Inertia::render('Products/Index', [
+        return Inertia::render('Admin/Products/Index', [
             'products' => $products,
             'categories' => $categories,
         ]);
@@ -26,13 +26,12 @@ class ProductController extends Controller
 
     public function create()
     {
-        return Inertia::render('Products/Create');
+        return Inertia::render('Admin/Products/Create');
     }
 
     public function store(Request $request)
     {
-        Log::info('Store method called');
-        try {
+        Log::info('Store method called with request data:', $request->all());
 
         $validatedData = $request->validate([
             'title' => 'required|max:255',
@@ -49,7 +48,7 @@ class ProductController extends Controller
         $product = Product::create($validatedData);
         $product->categories()->attach($request->input('categories'));
 
-        
+
         if ($request->hasFile('images')) {
             Log::info('Has images');
             foreach ($request->file('images') as $image) {
@@ -59,26 +58,25 @@ class ProductController extends Controller
         }
         Log::info('Store method completed');
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        $product->load('categories', 'images');
 
-            Log::error('Validation failed: ' . $e->getMessage());
-            // Optionally, return a response or redirect here
-        }
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show(Product $product)
     {
-        return Inertia::render('Products/Show', ['product' => $product]);
+        return Inertia::render('Admin/Products/Show', ['product' => $product]);
     }
 
     public function edit(Product $product)
     {
-        return Inertia::render('Products/Edit', ['product' => $product]);
+        return Inertia::render('Admin/Products/Edit', ['product' => $product]);
     }
 
     public function update(Request $request, Product $product)
     {
+        Log::info('Update method called with request data:', $request->all());
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
@@ -87,24 +85,34 @@ class ProductController extends Controller
             'categories.*' => 'exists:categories,id',
             'images' => 'nullable|array',
             'images.*' => 'image|max:2048',
-
+            'removedImages.*' => 'exists:images,id',
         ]);
+
+        Log::info('Update method validationd completed');
 
         // Update the product
         $product->update($validatedData);
         $product->categories()->sync($request->categories);
 
-        if ($request->hasFile('images')) {
-            $product->images()->each(function($image) { Storage::delete($image->image); });
-            $product->images()->delete();
-
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('public/products');
-                $product->images()->create(['image' => $path]);
+        if ($request->has('removedImages')) {
+            foreach ($request->removedImages as $imageId) {
+                $image = Image::find($imageId);
+                if ($image) {
+                    Storage::delete($image->image);
+                    $image->delete();
+                }
             }
         }
 
-    return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        if ($request->hasFile('images')) {
+            // Optionally, remove existing images here if that's the intended behavior
+            foreach ($request->file('images') as $image) {
+                $image = $image->store('public/products');
+                $product->images()->create(['image' => $image]);
+            }
+        }
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product)

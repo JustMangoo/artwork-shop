@@ -6,14 +6,14 @@
         <div class="container">
             <div class="option-container">
                 <BasicButton class="search-button">
-                    <img src="../../Assets/plus.svg" alt="plus icon" />
+                    <img src="@/Assets/plus.svg" alt="plus icon" />
                     Meklēt
                 </BasicButton>
                 <BasicButton
                     class="add-button"
                     @click="isAddProductModalOpen = true"
                 >
-                    <img src="../../Assets/plus.svg" alt="plus icon" />
+                    <img src="@/Assets/plus.svg" alt="plus icon" />
                     Jauns
                 </BasicButton>
                 <FormModalLayout
@@ -83,17 +83,23 @@
                         </div>
                         <div class="images-input">
                             <ImageUploadComponent
-                                :initial-image="initialImage"
+                                :initial-image="initialImages[0]"
+                                :image-id="initialImagesId[0]"
+                                :index="0"
                                 @image-added="handleImageAdded"
                                 @image-removed="handleImageRemoved"
                             />
                             <ImageUploadComponent
-                                :initial-image="initialImage"
+                                :initial-image="initialImages[1]"
+                                :image-id="initialImagesId[1]"
+                                :index="1"
                                 @image-added="handleImageAdded"
                                 @image-removed="handleImageRemoved"
                             />
                             <ImageUploadComponent
-                                :initial-image="initialImage"
+                                :initial-image="initialImages[2]"
+                                :image-id="initialImagesId[2]"
+                                :index="2"
                                 @image-added="handleImageAdded"
                                 @image-removed="handleImageRemoved"
                             />
@@ -167,13 +173,13 @@
                             <td>
                                 <img
                                     class="action-icon"
-                                    src="../../Assets/pen.svg"
+                                    src="@/Assets/pen.svg"
                                     alt="edit-icon"
                                     @click="editProduct(product)"
                                 />
                                 <img
                                     class="action-icon"
-                                    src="../../Assets/trash.svg"
+                                    src="@/Assets/trash.svg"
                                     alt="delete-icon"
                                     @click="deleteProduct(product)"
                                 />
@@ -224,6 +230,7 @@ export default {
             price: null,
             categories: [],
             images: [],
+            removedImages: [],
         });
 
         return { form };
@@ -235,15 +242,38 @@ export default {
                 "Current form images before pushing:",
                 this.form.images
             );
-            this.form.images.push(imageData);
+            this.form.images.push(imageData.file);
             console.log("Current form images after pushing:", this.form.images);
         },
 
-        handleImageRemoved(index) {
-            this.form.images.splice(index, 1);
+        handleImageRemoved(imageData) {
+            // If it's a newly added image (not saved), remove it from the array
+            if (!imageData.id) {
+                const index = this.form.images.indexOf(imageData.file);
+                if (index !== -1) {
+                    this.form.images.splice(index, 1);
+                }
+            } else {
+                // If it's an existing image, mark it for removal
+                this.form.removedImages.push(imageData.id);
+            }
         },
-        removeImage(index) {
-            this.imagePreviewUrls.splice(index, 1);
+        removeImage(imageData) {
+            console.log("Attempting to remove image:", imageData);
+            const { id, index } = imageData;
+
+            if (index !== undefined) {
+                console.log(
+                    `Removing image at index ${index} from preview URLs.`
+                );
+                this.imagePreviewUrls.splice(index, 1);
+                this.form.images.splice(index, 1);
+            }
+
+            if (id) {
+                console.log(`Marking image with ID ${id} for deletion.`);
+                this.form.removedImages.push(id);
+            }
         },
         productImagePath(image) {
             const imagePath = image.image
@@ -252,36 +282,18 @@ export default {
             return imagePath;
         },
         addProduct() {
-            const formData = new FormData();
+            const method = this.form.id ? "patch" : "post";
+            const url = this.form.id
+                ? route("products.update", this.form.id)
+                : route("products.store");
 
-            // Append text fields to formData
-            formData.append("title", this.form.title);
-            formData.append("description", this.form.description);
-            formData.append("price", this.form.price);
-            this.form.categories.forEach((category, index) =>
-                formData.append(`categories[${index}]`, category)
-            );
-
-            // Append image files to formData
-            this.form.images.forEach((imageData, index) => {
-                formData.append(`images[${index}]`, imageData.file);
-            });
-
-            // Use formData in your request instead of this.form
-            axios
-                .post(
-                    this.form.id
-                        ? route("products.update", this.form.id)
-                        : route("products.store"),
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                )
-                .then((response) => {
+            // Submit the form
+            this.form[method](url, {
+                forceFormData: true, // Needed for file uploads
+                onSuccess: () => {
                     // Handle success
+                    this.products.push(response.data.product);
+
                     this.isAddProductModalOpen = false;
                     this.resetForm();
                     this.setSystemMessage(
@@ -291,23 +303,25 @@ export default {
                         "success"
                     );
                     this.isEditMode = false;
-                })
-                .catch((error) => {
-                    // Handle error
-                    this.setSystemMessage(
-                        "An error occurred while saving the product",
-                        "error"
+                },
+                onError: () => {
+                    console.error(
+                        "There was an error updating the product: ",
+                        error
                     );
-                });
+                },
+            });
         },
         resetForm() {
             this.form.reset();
-            this.imagePreviewUrls = [];
+            this.initialImages = [null, null, null];
+            this.initialImagesId = [null, null, null];
             this.isEditMode = false;
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = null;
             }
             this.initialImage = null;
+            this.initialImageId = null;
         },
         editProduct(product) {
             this.isEditMode = true;
@@ -321,27 +335,15 @@ export default {
                 (category) => category.id
             );
 
-            //if images array is present and has at least one image.
-            if (Array.isArray(product.images) && product.images.length > 0) {
-                const firstImagePath = product.images[0].image;
-                this.initialImage = firstImagePath
-                    ? "/storage/" + firstImagePath.replace("public/", "")
-                    : "resources/js/Assets/Images/Image2.png";
-            } else {
-                // Default image if no image is associated with the product
-                this.initialImage = "resources/js/Assets/Images/Image2.png";
-            }
+            // Preparing initial images for edit mode by directly using product images
+            this.initialImages = product.images.map(
+                (image) => "/storage/" + image.image.replace("public/", "")
+            );
+            this.initialImagesId = product.images.map((image) => image.id);
 
-            this.imagePreviewUrls = product.images
-                .map((image) => {
-                    return image.image
-                        ? "/storage/" + image.image.replace("public/", "")
-                        : null;
-                })
-                .filter((url) => url !== null);
-
-            if (this.$refs.fileInput) {
-                this.$refs.fileInput.value = null;
+            // Handle case where less than 3 images exist
+            while (this.initialImages.length < 3) {
+                this.initialImages.push(null);
             }
 
             this.isAddProductModalOpen = true;
@@ -373,7 +375,8 @@ export default {
         return {
             isAddProductModalOpen: false,
             imagePreviewUrls: [],
-            initialImage: null,
+            initialImages: [null, null, null],
+            initialImagesId: [null, null, null],
             isEditMode: false,
             systemMessage: "",
             messageType: "info",

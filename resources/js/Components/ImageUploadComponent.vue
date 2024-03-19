@@ -21,18 +21,32 @@
 <script>
 export default {
     name: "ImageUploadComponent",
+    props: {
+        initialImage: String,
+        imageId: [String, Number], // Image ID (if editing)
+        index: Number, // Image index (for new images)
+    },
     data() {
         return {
             imagePreviewUrl: null,
-            componentId: this.generateUniqueId(), // Add a unique identifier for the component
+            componentId: this.generateUniqueId(),
         };
     },
-    props: {
-        initialImage: String,
+    created() {
+        console.log(
+            `Component created with imageId: ${this.imageId}, index: ${this.index}, initialImage: ${this.initialImage}`
+        );
+        // This will log the `imageId` and `index` when the component is created
     },
     mounted() {
         if (this.initialImage) {
             this.imagePreviewUrl = this.initialImage;
+            // Emit an event right away for initial images so they're included in the form submission
+            this.$emit("image-loaded", {
+                imagePreviewUrl: this.initialImage,
+                id: this.componentId,
+                index: this.index,
+            });
         }
     },
     methods: {
@@ -45,19 +59,23 @@ export default {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     this.imagePreviewUrl = e.target.result;
-                    // Emit the file and the unique identifier
-                    this.$emit("image-added", { file, id: this.componentId });
+                    this.$emit("image-added", {
+                        file,
+                        id: this.componentId,
+                        index: this.index,
+                    });
                 };
                 reader.readAsDataURL(file);
             }
         },
         removeImage() {
+            this.$emit("image-removed", {
+                id: this.imageId, // Pass the existing image ID, if any
+                index: this.index,
+            });
             this.imagePreviewUrl = null;
-            // Emit the unique identifier with the removal event
-            this.$emit("image-removed", this.componentId);
         },
         generateUniqueId() {
-            // A simple method to generate a unique identifier
             return `image-upload-${Date.now()}-${Math.random()
                 .toString(36)
                 .substr(2, 9)}`;
