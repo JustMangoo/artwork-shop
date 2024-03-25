@@ -132,6 +132,7 @@
                             <th>Produkta nosaukums</th>
                             <th>Apraksts</th>
                             <th>Cena</th>
+                            <th>Tips</th>
                             <th>Kategorīja</th>
                             <th>Bilde</th>
                             <th></th>
@@ -146,6 +147,7 @@
                                 {{ product.description }}
                             </td>
                             <td>{{ product.price }}&euro;</td>
+                            <td></td>
                             <td>
                                 <ul>
                                     <div class="category-field">
@@ -534,7 +536,7 @@ export default {
                     text-align: center;
 
                     &::before {
-                        content: url(../../Assets/check.svg);
+                        content: url(@/Assets/check.svg);
                         display: inline-block;
                         width: 1rem;
                         height: 100%;

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -9,21 +10,34 @@
 :root {
     --neutral-one: #f8f8f8;
     --neutral-two: #4e4e4e;
-    --primary: #abb491;
+    --primary: #9aa283;
     --secondary: #ebeee3;
-    --border-rad: 3px;
-    --success-msg: #abb491;
+    --border-rad: 2px;
+    --success-msg: #9aa283;
     --error-msg: #f8bcbc;
     --warning-msg: #f9e0b2;
-    --swiper-navigation-color: #abb491;
-    --swiper-pagination-color: #abb491;
+    --swiper-navigation-color: #9aa283;
+    --swiper-pagination-color: #9aa283;
     --swiper-pagination-bullet-opacity-inactive: 0.1;
+    --selection-text: var(--neutral-one);
+    --selection-background: #787e66;
 }
 
 /*---------Setup---------*/
 
 html {
     scroll-behavior: smooth;
+}
+
+::-moz-selection {
+    /* Code for Firefox */
+    color: var(--selection-text);
+    background: var(--selection-background);
+}
+
+::selection {
+    color: var(--selection-text);
+    background: var(--selection-background);
 }
 
 *,
@@ -34,8 +48,8 @@ html {
     -moz-box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: "Manrope", sans-serif;
-    font-size: 1rem;
+    font-family: "League Spartan", sans-serif;
+    font-size: 1.2rem;
     font-weight: 300;
     font-style: normal;
     box-shadow: none;
@@ -72,17 +86,22 @@ h1 {
     font-family: "Ibarra Real Nova", serif;
     padding: 0 0.5rem;
     margin: 0;
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 400;
     color: var(--neutral-two);
     text-transform: uppercase;
     display: inline;
-    background-image: linear-gradient(
-        transparent 40%,
-        var(--secondary) 40%,
-        var(--secondary) 80%,
-        transparent 80%
-    );
+}
+
+h1::before,
+h1::after {
+    border-top: 0.5px solid rgba(#000, 1);
+    bottom: 0px;
+    content: " ";
+    display: block;
+    margin: 0 auto;
+    width: 10rem;
+    margin: 0 1rem;
 }
 
 h3 {
@@ -136,7 +155,6 @@ h3 {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
-    line-height: 1;
     color: var(--neutral-two);
     background-color: transparent;
 }

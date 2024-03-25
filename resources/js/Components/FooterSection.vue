@@ -72,6 +72,14 @@
                 </div>
             </div>
 
+            <div class="recources">
+                <h3>Citi Resursi</h3>
+                <div class="info">
+                    <p>Privātuma politika</p>
+                    <p>Par mani</p>
+                </div>
+            </div>
+
             <!-- Social Media Links Section -->
             <div class="socials">
                 <h3>Sociālie tīkli</h3>
@@ -126,6 +134,9 @@ const form = useForm({
 .contacts {
     grid-area: contacts;
 }
+.recources {
+    grid-area: recources;
+}
 .socials {
     grid-area: socials;
 }
@@ -133,7 +144,7 @@ const form = useForm({
 footer {
     background-color: var(--secondary);
     padding: 2rem 0;
-    color: #333;
+    color: var(--neutral-two);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -144,25 +155,76 @@ footer {
         max-width: 95rem;
         padding-inline: 0.5rem;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 1fr 0.5fr;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 0.7fr);
         grid-column-gap: 2rem;
         grid-row-gap: 2rem;
 
         .form-container {
             grid-area: 1 / 1 / 2 / 2;
         }
-        .contacts {
+        .recources {
             grid-area: 1 / 2 / 2 / 3;
         }
+        .contacts {
+            grid-area: 1 / 3 / 2 / 4;
+        }
         .socials {
-            grid-area: 2 / 1 / 3 / 3;
+            grid-area: 2 / 1 / 3 / 4;
+        }
+
+        @media (max-width: 1200px) {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 0.5fr);
+            grid-column-gap: 2rem;
+            grid-row-gap: 2rem;
+
+            .form-container {
+                grid-area: 2 / 1 / 3 / 3;
+            }
+            .recources {
+                grid-area: 1 / 1 / 2 / 2;
+            }
+            .contacts {
+                grid-area: 1 / 2 / 2 / 3;
+            }
+            .socials {
+                grid-area: 3 / 1 / 4 / 3;
+            }
+        }
+        @media (max-width: 768px) {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(4, 1fr);
+            grid-column-gap: 2rem;
+            grid-row-gap: 2rem;
+
+            .form-container {
+                grid-area: 1 / 1 / 2 / 2;
+            }
+            .recources {
+                grid-area: 2 / 1 / 3 / 2;
+            }
+            .contacts {
+                grid-area: 3 / 1 / 4 / 2;
+            }
+            .socials {
+                grid-area: 4 / 1 / 5 / 2;
+            }
         }
     }
     .form-container,
+    .recources,
     .contacts {
         h3 {
             width: 100%;
+
+            @media (max-width: 1200px) {
+            }
+            @media (max-width: 768px) {
+                text-align: center;
+            }
         }
     }
 
@@ -208,7 +270,35 @@ footer {
             flex-direction: column;
             justify-content: flex-start;
             align-items: flex-start;
-            gap: 2rem;
+            gap: 1rem;
+
+            p {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                user-select: text;
+
+                img {
+                    height: 1.2rem;
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+    }
+
+    .recources {
+        display: flex;
+        flex-direction: column;
+        justify-content: baseline;
+        align-items: flex-start;
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 1rem;
 
             p {
                 display: flex;
@@ -246,7 +336,7 @@ footer {
 
                 img {
                     height: 100%;
-                    padding: 0.3rem;
+                    padding: 0.5rem;
                 }
             }
 

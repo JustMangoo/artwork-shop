@@ -44,7 +44,6 @@ defineProps({
 
 <style lang="scss" scoped>
 img {
-    border: 8px solid var(--primary);
     box-shadow: 0 10px 50px #0000002a;
     object-fit: cover;
 }
@@ -65,16 +64,14 @@ img {
     margin: 7rem 0;
 
     .product-showcase {
-        min-width: 10rem;
-        width: 100%;
-        max-width: 95rem;
+        width: 75rem;
         padding-inline: 0.5rem;
         height: 100%;
         background-color: var(--secondary);
 
         display: flex;
         flex-direction: row;
-
+        justify-content: center;
         align-items: center;
 
         @media (max-width: 768px) {
@@ -82,20 +79,20 @@ img {
         }
 
         .left {
-            transform: translate(-15%, -25%);
-            height: 35rem;
+            transform: translate(-25%, -25%);
+            height: 25em;
             aspect-ratio: 3 / 4;
         }
 
         .middle {
-            transform: translate(-20%, 15%);
-            height: 35rem;
-            aspect-ratio: 4 / 3;
+            transform: translate(-30%, 15%);
+            height: 25em;
+            aspect-ratio: 3 / 4;
         }
 
         .right {
             transform: translate(-10%, 0);
-            height: 35rem;
+            height: 25em;
             aspect-ratio: 3 / 4;
         }
     }

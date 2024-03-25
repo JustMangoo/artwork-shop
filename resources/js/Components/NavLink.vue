@@ -27,10 +27,10 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     align-items: center;
     padding: 0.25rem 0.25rem;
     border-bottom: 3px solid var(--primary);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 400;
     line-height: 1.25;
-    color: var(--neutral-two);
+    color: var(--primary);
     &:focus {
         outline: none;
         border-color: var();
@@ -43,10 +43,10 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     align-items: center;
     padding: 0.25rem 0.25rem;
     border-bottom: 2px solid transparent;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    font-weight: 300;
     line-height: 1.25;
-    color: var(--neutral-two);
+    color: var(--primary);
     &:hover {
         border-color: var(--primary);
     }

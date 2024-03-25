@@ -3,8 +3,7 @@
         <div class="dropdown-container">
             <button type="button" class="label">
                 <!-- {{ $page.props.auth.user.name }} -->
-                LV
-                <img class="dropdown-arrow" src="../Assets/arrow.svg" alt="" />
+                <slot name="dropdown-label" />
             </button>
         </div>
     </div>
@@ -20,21 +19,13 @@
             style="display: none"
             @click="open = false"
         >
-            <div class="link-container">
-                <DropdownLink :href="route('profile.edit')">
-                    Profils
-                </DropdownLink>
-                <DropdownLink :href="route('logout')" method="post" as="button">
-                    Iziet
-                </DropdownLink>
-            </div>
+            <slot name="link-container" />
         </div>
     </Transition>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import DropdownLink from "./DropdownLink.vue";
 
 const props = defineProps({
     align: {
@@ -85,8 +76,12 @@ const open = ref(false);
 .dropdown-container {
     .label {
         display: flex;
+        color: var(--primary);
+        font-weight: 300;
+        padding: 0;
         .dropdown-arrow {
             transform: rotate(180deg);
+            display: none;
         }
         &:hover,
         &:focus {
