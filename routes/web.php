@@ -5,7 +5,12 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SubscriptionController;
+use App\Mail\MyEmail;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Product;
@@ -33,8 +38,8 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/products', function () {
-    $products = Product::with(['categories', 'images'])->get();
+Route::get('/products-customer', function () {
+    $products = Product::with(['images'])->get();
     return Inertia::render('Products', [
         'products' => $products->map(function ($product) {
             return [
@@ -50,7 +55,7 @@ Route::get('/products', function () {
             ];
         }),
     ]);
-})->name('products');
+})->name('products-customer');
 
 Route::get('/about', function () {
     return Inertia::render('About');
@@ -79,8 +84,23 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::resource('products-admin', ProductController::class);
+Route::resource('products', ProductController::class);
+Route::resource('users', UserController::class);
 Route::resource('images', ImageController::class);
 Route::resource('categories', CategoryController::class);
+
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get("/testroute", function () {
+    $name = "A name";
+
+    Mail::to('daugatsa@gmail.com')->send(new MyEmail());
+});
+
+Route::post('/send-message', [ContactController::class, 'send']);
+
+Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
+
 
 require __DIR__ . '/auth.php';

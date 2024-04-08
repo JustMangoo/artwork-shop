@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('title');
             $table->text('description');
             $table->decimal('price', 8, 2);
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -24,6 +25,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('category_product');
         Schema::dropIfExists('products');
     }
 };
+
+

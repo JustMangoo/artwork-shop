@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f7f6f5;
+    background-color: var(--light-background);
     min-height: 100vh;
     width: 100%;
     justify-content: space-between;

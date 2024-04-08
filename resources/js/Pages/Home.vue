@@ -4,7 +4,7 @@
     <MainLayout>
         <CarouselHero />
         <div class="product-showcase-container">
-            <h1>Oriģināli</h1>
+            <h2>Oriģināli</h2>
             <div class="product-showcase">
                 <img class="left" src="../Assets/Images/foto1.webp" alt="" />
                 <img class="middle" src="../Assets/Images/foto2.webp" alt="" />

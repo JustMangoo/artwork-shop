@@ -1,55 +1,30 @@
 <template>
+    <SystemMessage :message="systemMessage" :type="messageType" />
     <footer>
         <div class="container">
             <!-- Form Section -->
             <div class="form-container">
-                <h3>Sazinies</h3>
+                <h3>Jaunumi</h3>
                 <form @submit.prevent="submitForm">
-                    <div class="input-name">
-                        <TextInput
-                            id="name"
-                            v-model="form.name"
-                            required
-                            autocomplete="given-name"
-                            rows="20"
-                            placeholder="Vārds"
-                        />
-
-                        <InputError class="mt-2" :name="form.errors.name" />
-                    </div>
                     <div class="input-email">
                         <TextInput
                             id="email"
                             v-model="form.email"
                             required
                             autocomplete="email"
-                            rows="20"
-                            placeholder="Epasts"
+                            placeholder="Ievadi Epastu"
                         />
 
-                        <InputError class="mt-2" :email="form.errors.email" />
+                        <InputError class="mt-2" :message="form.errors.email" />
                     </div>
-                    <div class="input-message">
-                        <TextArea
-                            id="message"
-                            v-model="form.message"
-                            required
-                            autocomplete="off"
-                            placeholder="Jūsu ziņa"
-                        ></TextArea>
-
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.message"
-                        />
+                    <div class="newsletter-btn">
+                        <PrimaryButton
+                            class="form-button"
+                            :disabled="form.processing"
+                        >
+                            Abonēt
+                        </PrimaryButton>
                     </div>
-                    <PrimaryButton
-                        class="form-button"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
-                        Nosūtīt
-                    </PrimaryButton>
                 </form>
             </div>
 
@@ -76,7 +51,8 @@
                 <h3>Citi Resursi</h3>
                 <div class="info">
                     <p>Privātuma politika</p>
-                    <p>Par mani</p>
+                    <a href="/about">Par mani</a>
+                    <a href="/about#contact-form">Sazinies</a>
                 </div>
             </div>
 
@@ -106,41 +82,73 @@
     </footer>
 </template>
 
-<script setup>
-import { Link, useForm } from "@inertiajs/vue3";
+<script>
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import TextArea from "@/Components/TextInput.vue";
+import SystemMessage from "@/Components/SystemMessage.vue";
 
-function submitForm() {
-    console.log("Form submitted:", form);
-    form.name = "";
-    form.email = "";
-    form.message = "";
-}
+export default {
+    components: {
+        InputError,
+        PrimaryButton,
+        TextInput,
+        SystemMessage,
+    },
+    setup() {
+        const form = useForm({
+            email: "",
+        });
 
-const form = useForm({
-    name: "",
-    email: "",
-    message: "",
-});
+        return { form };
+    },
+    methods: {
+        submitForm() {
+            this.form.processing = true;
+            this.$inertia.post(
+                "/subscribe",
+                {
+                    email: this.form.email,
+                },
+                {
+                    preserveState: true,
+                    onSuccess: () => {
+                        this.setSystemMessage(
+                            "Abonaments veiksmīgs",
+                            "success"
+                        );
+                        this.form.email = "";
+                        this.form.errors = {};
+                    },
+                    onError: (errors) => {
+                        this.setSystemMessage(
+                            "Abonaments nav izdevies",
+                            "error"
+                        );
+                        this.form.errors = errors;
+                    },
+                    onFinish: () => (this.form.processing = false),
+                }
+            );
+        },
+
+        setSystemMessage(message, type = "info") {
+            this.systemMessage = message;
+            this.messageType = type;
+        },
+    },
+    data() {
+        return {
+            systemMessage: "",
+            messageType: "info",
+        };
+    },
+};
 </script>
 
 <style lang="scss">
-.form-container {
-    grid-area: form;
-}
-.contacts {
-    grid-area: contacts;
-}
-.recources {
-    grid-area: recources;
-}
-.socials {
-    grid-area: socials;
-}
-
 footer {
     background-color: var(--secondary);
     padding: 2rem 0;
@@ -150,6 +158,7 @@ footer {
     align-items: center;
     justify-content: center;
     width: 100%;
+    overflow: hidden;
 
     .container {
         max-width: 95rem;
@@ -217,11 +226,10 @@ footer {
     .form-container,
     .recources,
     .contacts {
+        width: 100%;
         h3 {
             width: 100%;
 
-            @media (max-width: 1200px) {
-            }
             @media (max-width: 768px) {
                 text-align: center;
             }
@@ -229,32 +237,24 @@ footer {
     }
 
     .socials {
+        width: 100%;
         h3 {
             text-align: center;
-            width: 100%;
         }
     }
     .form-container {
-        border-radius: 5px;
-
+        width: 100%;
         form {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            grid-column-gap: 1rem;
-            grid-row-gap: 1rem;
-
-            .input-name {
-                grid-area: 1 / 1 / 2 / 2;
-            }
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 0.4rem;
+            width: 100%;
             .input-email {
-                grid-area: 1 / 2 / 2 / 3;
-            }
-            .input-message {
-                grid-area: 2 / 1 / 3 / 3;
+                width: 100%;
             }
             .form-button {
-                grid-area: 3 / 1 / 4 / 3;
+                width: 100%;
             }
         }
     }
@@ -300,13 +300,25 @@ footer {
             align-items: flex-start;
             gap: 1rem;
 
-            p {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
+            p,
+            a {
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
                 align-items: center;
-                user-select: text;
+                gap: 5px; /* Space between the lines and the text */
 
+                &::before {
+                    content: "";
+                    width: 5px; /* Fixed width of the line */
+                    height: 1px; /* Thickness of the line */
+                    background-color: var(--primary);
+                    justify-self: center;
+                    transition: all 0.3s ease-in-out;
+                }
+
+                &:hover::before {
+                    width: 10px; /* Fixed width of the line */
+                }
                 img {
                     height: 1.2rem;
                     margin-right: 0.5rem;

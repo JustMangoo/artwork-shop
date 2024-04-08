@@ -10,17 +10,15 @@ class Product extends Model
         'title',
         'description',
         'price',
-        'image_path',
+        'category_id',
     ];
 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
-
-    // Change this method to reflect the many-to-many relationship
-    public function categories()
+    public function category()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 }

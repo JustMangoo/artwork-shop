@@ -6,7 +6,7 @@
         <div class="container">
             <div class="option-container">
                 <BasicButton class="search-button">
-                    <img src="@/Assets/plus.svg" alt="plus icon" />
+                    <img src="@/Assets/search.svg" alt="plus icon" />
                     Meklēt
                 </BasicButton>
                 <BasicButton
@@ -60,13 +60,14 @@
                                 <div
                                     v-for="category in categories"
                                     :key="category.id"
-                                    class="checkbox-tag"
+                                    class="radio-tag"
                                 >
                                     <input
-                                        type="checkbox"
+                                        type="radio"
                                         :id="'category-' + category.id"
                                         :value="category.id"
-                                        v-model="form.categories"
+                                        v-model="form.category"
+                                        name="category"
                                     />
                                     <label
                                         :for="'category-' + category.id"
@@ -77,7 +78,7 @@
                                 </div>
                             </div>
                             <InputError
-                                :message="form.errors.categories"
+                                :message="form.errors.category"
                                 class="mt-2"
                             />
                         </div>
@@ -129,11 +130,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Produkta nosaukums</th>
+                            <th>Nosaukums</th>
                             <th>Apraksts</th>
                             <th>Cena</th>
                             <th>Tips</th>
-                            <th>Kategorīja</th>
                             <th>Bilde</th>
                             <th></th>
                         </tr>
@@ -147,19 +147,10 @@
                                 {{ product.description }}
                             </td>
                             <td>{{ product.price }}&euro;</td>
-                            <td></td>
                             <td>
-                                <ul>
-                                    <div class="category-field">
-                                        <li
-                                            v-for="category in product.categories"
-                                            :key="category.id"
-                                            class="single-category"
-                                        >
-                                            {{ category.name }}
-                                        </li>
-                                    </div>
-                                </ul>
+                                <div class="single-category">
+                                    {{ product.category.name }}
+                                </div>
                             </td>
                             <td>
                                 <div>
@@ -206,6 +197,7 @@ import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
 import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
+import { onMounted } from "vue";
 
 export default {
     components: {
@@ -230,7 +222,7 @@ export default {
             title: "",
             description: "",
             price: null,
-            categories: [],
+            category: "",
             images: [],
             removedImages: [],
         });
@@ -306,7 +298,7 @@ export default {
                     );
                     this.isEditMode = false;
                 },
-                onError: () => {
+                onError: (error) => {
                     console.error(
                         "There was an error updating the product: ",
                         error
@@ -333,9 +325,7 @@ export default {
             this.form.title = product.title;
             this.form.description = product.description;
             this.form.price = product.price;
-            this.form.categories = product.categories.map(
-                (category) => category.id
-            );
+            this.form.category = product.category_id;
 
             // Preparing initial images for edit mode by directly using product images
             this.initialImages = product.images.map(
@@ -449,19 +439,11 @@ export default {
                         padding: 0.5rem;
                         vertical-align: middle;
 
-                        .category-field {
-                            display: flex;
-                            flex-direction: row;
-                            flex-wrap: wrap;
-                            gap: 0.4rem;
-                            justify-content: left;
-                            align-items: center;
-
-                            .single-category {
-                                padding: 0.1rem 0.4rem;
-                                border: 1px solid var(--primary);
-                                border-radius: var(--border-rad);
-                            }
+                        .single-category {
+                            width: fit-content;
+                            padding: 0.1rem 0.4rem;
+                            border: 1px solid var(--primary);
+                            border-radius: var(--border-rad);
                         }
 
                         .product-image {
@@ -500,7 +482,7 @@ export default {
         gap: 10px;
         margin-top: 10px;
 
-        .checkbox-tag {
+        .radio-tag {
             display: flex;
             align-items: center;
 
@@ -527,7 +509,7 @@ export default {
                 }
             }
 
-            input[type="checkbox"] {
+            input[type="radio"] {
                 display: none;
 
                 &:checked + .tag-label {

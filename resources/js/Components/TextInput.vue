@@ -33,7 +33,7 @@ defineExpose({ focus: () => input.value.focus() });
 
 <style lang="scss" scoped>
 input {
-    padding: 0.8rem;
+    padding: 0.5rem;
     width: 100%;
     outline: 1px solid #ddd;
     border-radius: var(--border-rad);

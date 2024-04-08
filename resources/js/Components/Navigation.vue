@@ -55,16 +55,16 @@
             <!-- Bottom Navigation Menu -->
             <div class="outer-container">
                 <div class="inner-container">
-                    <div class="flex">
+                    <div class="flex" v-if="$page.props.auth.user">
                         <!-- Logo -->
                         <div class="logo-container">
-                            <Link href="/">
+                            <Link href="/dashboard">
                                 <ApplicationLogo class="logo" />
                             </Link>
                         </div>
 
                         <!-- Navigation Links -->
-                        <div class="nav-link" v-if="$page.props.auth.user">
+                        <div class="nav-link">
                             <NavLink
                                 :href="route('dashboard')"
                                 :active="route().current('dashboard')"
@@ -72,16 +72,27 @@
                                 Panelis
                             </NavLink>
                             <NavLink
-                                :href="route('products-admin.index')"
-                                :active="
-                                    route().current('products-admin.index')
-                                "
+                                :href="route('products.index')"
+                                :active="route().current('products.index')"
                             >
                                 Produkti
                             </NavLink>
+                            <NavLink
+                                :href="route('users.index')"
+                                :active="route().current('users.index')"
+                            >
+                                Lietotāji
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div class="flex" v-else>
+                        <div class="logo-container">
+                            <Link href="/">
+                                <ApplicationLogo class="logo" />
+                            </Link>
                         </div>
 
-                        <div class="nav-link" v-else>
+                        <div class="nav-link">
                             <NavLink
                                 :href="route('home')"
                                 :active="route().current('home')"
@@ -108,8 +119,8 @@
                                 Kokdarbi
                             </NavLink>
                             <NavLink
-                                :href="route('products')"
-                                :active="route().current('products')"
+                                :href="route('products-customer')"
+                                :active="route().current('products-customer')"
                             >
                                 Visi produkti
                             </NavLink>
@@ -258,7 +269,7 @@ defineProps({
             .menu {
                 display: flex;
 
-                @media (min-width: 640px) {
+                @media (min-width: 768px) {
                     display: flex;
                     align-items: center;
                     margin-left: 1.5rem;

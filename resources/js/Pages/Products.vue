@@ -2,7 +2,7 @@
     <Head title="Produkti" />
     <MainLayout>
         <div class="container">
-            <h1 class="products-title">Produkti</h1>
+            <h2 class="products-title">Produkti</h2>
             <div class="product-grid">
                 <div
                     v-for="product in products"
@@ -11,20 +11,25 @@
                     @mouseover="hoverImage(product)"
                     @mouseleave="unhoverImage(product)"
                 >
-                    <div v-if="product.images.length" class="product-image">
-                        <!-- Bind image source dynamically -->
-                        <img :src="getImageSrc(product)" alt="Product Image" />
-                        <div
-                            class="tag-new-release"
-                            v-if="isNewRelease(product.created_at)"
-                        >
-                            Jaunums
+                    <Link :href="`/products/${product.id}`">
+                        <div v-if="product.images.length" class="product-image">
+                            <!-- Bind image source dynamically -->
+                            <img
+                                :src="getImageSrc(product)"
+                                alt="Product Image"
+                            />
+                            <div
+                                class="tag-new-release"
+                                v-if="isNewRelease(product.created_at)"
+                            >
+                                Jaunums
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-info">
-                        <p class="product-title">{{ product.title }}</p>
-                        <p class="product-price">€{{ product.price }}</p>
-                    </div>
+                        <div class="product-info">
+                            <p class="product-title">{{ product.title }}</p>
+                            <p class="product-price">€{{ product.price }}</p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -36,6 +41,7 @@ import { ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
 
 const { products } = usePage().props;
 const hoveredProduct = ref(null);
@@ -71,75 +77,81 @@ const unhoverImage = (product) => {
     max-width: 95rem;
     margin: 0 auto;
     padding: 2rem 0.5rem;
-    text-align: center;
-}
-
-.products-title {
-    margin: 2rem 0;
-}
-
-.product-grid {
-    padding-top: 2rem;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    @media (max-width: 1200px) {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-    }
-}
+    align-items: center;
 
-.product-card {
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-
-    &:hover {
-        transform: translateY(-5px);
+    .products-title {
+        margin: 2rem 0;
+        width: fit-content;
     }
 
-    .product-image {
+    .product-grid {
+        padding-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        justify-content: center;
+        @media (max-width: 1200px) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .product-card {
         position: relative;
-        line-height: 0;
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+        text-align: center;
 
-        img {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-            border-radius: var(--border-rad);
+        &:hover {
+            transform: translateY(-5px);
         }
 
-        .tag-new-release {
-            position: absolute;
-            top: 0.3rem;
-            left: 0.3rem;
-            background-color: var(--secondary);
-            color: var(--primary);
-            padding: 0.75rem 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 300;
-            border-radius: var(--border-rad);
+        .product-image {
+            position: relative;
+            line-height: 0;
+
+            img {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 3/4;
+                object-fit: cover;
+                border-radius: var(--border-rad);
+            }
+
+            .tag-new-release {
+                position: absolute;
+                top: 0.3rem;
+                left: 0.3rem;
+                background-color: var(--secondary);
+                color: var(--primary);
+                padding: 0.75rem 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 300;
+                border-radius: var(--border-rad);
+            }
         }
-    }
 
-    .product-info {
-        padding: 0.3rem;
+        .product-info {
+            padding: 0.3rem;
 
-        .product-title {
-            margin: 0;
-            font-size: 1rem;
-            color: #333;
-            font-weight: 200;
-        }
+            .product-title {
+                margin: 0;
+                font-size: 1rem;
+                color: #333;
+                font-weight: 200;
+            }
 
-        .product-price {
-            font-size: 1rem;
-            color: #333;
-            font-weight: 200;
+            .product-price {
+                font-size: 1rem;
+                color: #333;
+                font-weight: 200;
+            }
         }
     }
 }

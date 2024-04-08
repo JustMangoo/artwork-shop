@@ -60,7 +60,6 @@
 
                 <div class="flex items-center justify-end mt-4">
                     <PrimaryButton
-                        class="w-full"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                     >
@@ -71,7 +70,6 @@
             <div class="divider">Vai</div>
             <Link :href="route('register')">
                 <SecondaryButton
-                    class="w-full"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

@@ -14,7 +14,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with(['categories', 'images'])->get();
+        $products = Product::with(['category', 'images'])->get();
         $categories = Category::all();
         $images = Image::all();
 
@@ -37,8 +37,7 @@ class ProductController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id',
+            'category' => 'required|exists:categories,id',
             'images' => 'nullable|array',
             'images.*' => 'image|max:2048',
         ]);
@@ -46,7 +45,7 @@ class ProductController extends Controller
         Log::info('After validation');
 
         $product = Product::create($validatedData);
-        $product->categories()->attach($request->input('categories'));
+        $product->category()->attach($request->input('category'));
 
 
         if ($request->hasFile('images')) {
@@ -58,15 +57,17 @@ class ProductController extends Controller
         }
         Log::info('Store method completed');
 
-        $product->load('categories', 'images');
+        $product->load('category', 'images');
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function show(Product $product)
+    public function show($productId)
     {
-        return Inertia::render('Admin/Products/Show', ['product' => $product]);
+        $product = Product::with('categories', 'images')->findOrFail($productId);
+        return Inertia::render('ProductDetails', ['product' => $product]);
     }
+
 
     public function edit(Product $product)
     {
@@ -130,6 +131,8 @@ class ProductController extends Controller
         $product->images()->delete();
         $product->categories()->detach();
         $product->delete();
+
+        Log::info('Delete method completed');
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }

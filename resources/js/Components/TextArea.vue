@@ -2,6 +2,7 @@
     <textarea
         class="textArea"
         :value="modelValue"
+        :rows="rows"
         @input="$emit('update:modelValue', $event.target.value)"
         ref="textarea"
     >
@@ -16,6 +17,10 @@ defineProps({
         type: [String, Number, null],
         default: "",
         required: true,
+    },
+    rows: {
+        type: [Number, String],
+        default: 3, // Default row count
     },
 });
 
@@ -38,6 +43,7 @@ textarea {
     width: 100%;
     outline: 1px solid #ddd;
     border-radius: var(--border-rad);
+    resize: none;
     &:focus {
         outline: 1px solid var(--primary);
         box-shadow: none;

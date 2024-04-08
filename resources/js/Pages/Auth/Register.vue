@@ -2,7 +2,7 @@
     <MainLayout>
         <Head title="Register" />
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" class="box">
             <div>
                 <InputLabel for="name" value="Name" />
 
@@ -111,3 +111,24 @@ const submit = () => {
     });
 };
 </script>
+
+<style lang="scss" scoped>
+.box {
+    width: 100%;
+    padding: 1.5rem;
+    margin: 3rem 0;
+    background-color: #fff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+    @media (min-width: 640px) {
+        max-width: 28rem;
+        border-radius: 0.5rem;
+    }
+    .options-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+}
+</style>

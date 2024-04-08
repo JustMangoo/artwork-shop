@@ -15,45 +15,43 @@ defineProps({
 
 <style lang="scss" scoped>
 .secondary-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    font-size: 1rem;
-    font-weight: 500;
+    font-weight: 300;
     letter-spacing: 0.1em;
     color: var(--primary);
     text-transform: uppercase;
     background-color: transparent;
     border: 1px solid var(--primary);
     border-radius: var(--border-rad);
-    transition: all 0.15s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px; /* Space between the lines and the text */
 
     &::before,
     &::after {
-        border-top: 0.5px solid rgba(#abb491, 0);
-        bottom: 0px;
-        content: " ";
-        display: block;
-        width: 0;
-        transition: all 280ms ease-in-out;
-        margin: 0 6rem;
+        content: "";
+        width: 0; /* Fixed width of the line */
+        height: 1px; /* Thickness of the line */
+        background-color: var(--primary); /* Color of the line */
+        transition: all 0.15s ease-in-out;
+    }
+
+    &::before {
+        justify-self: end;
     }
 
     &:hover {
-        letter-spacing: 4px;
+        letter-spacing: 0.2em;
     }
 
-    &:hover:before,
-    &:hover:after {
-        border-top: 0.5px solid rgba(#abb491, 1);
-        bottom: 0px;
-        content: " ";
-        display: block;
-        margin: 0 auto;
-        width: 100%;
-        transition: width 350ms ease-in-out;
-        margin: 0 1rem;
+    &:hover::before,
+    &:hover::after {
+        content: "";
+        width: 80%; /* Fixed width of the line */
     }
 }
 </style>

@@ -5,9 +5,9 @@
 </template>
 <style lang="scss" scoped>
 .basic-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     font-weight: 500;
