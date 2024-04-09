@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import AdminLayout from "@/Layouts/MainLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 import BasicButton from "@/Components/BasicButton.vue";
 import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
@@ -365,7 +365,7 @@ export default {
                 }
 
                 &::before {
-                    content: url(../../Assets/check.svg);
+                    content: url(@/Assets/check.svg);
                     display: inline-block;
                     width: 0;
                     height: 100%;

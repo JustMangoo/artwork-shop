@@ -47,7 +47,7 @@ Route::get('/products-customer', function () {
                 'title' => $product->title,
                 'description' => $product->description,
                 'price' => $product->price,
-                'categories' => $product->categories->toArray(),
+                'categories' => $product->category,
                 'images' => $product->images->map(function ($image) {
                     return ['url' => Storage::url($image->image)];
                 })->toArray(),
@@ -84,10 +84,12 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::resource('products', ProductController::class);
-Route::resource('users', UserController::class);
-Route::resource('images', ImageController::class);
-Route::resource('categories', CategoryController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('images', ImageController::class);
+    Route::resource('categories', CategoryController::class);
+});
 
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 

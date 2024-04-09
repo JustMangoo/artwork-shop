@@ -17,7 +17,6 @@
     background-color: var(--light-background);
     min-height: 100vh;
     width: 100%;
-    justify-content: space-between;
 
     .content {
         height: 100%;
@@ -27,6 +26,7 @@
         justify-content: center;
         gap: 3rem;
         align-items: center;
+        margin-bottom: auto;
 
         @media (min-width: 640px) {
             justify-content: center;

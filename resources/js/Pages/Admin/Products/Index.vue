@@ -1,7 +1,7 @@
 <template>
     <Head title="Produkti" />
 
-    <MainLayout>
+    <AdminLayout>
         <SystemMessage :message="systemMessage" :type="messageType" />
         <div class="container">
             <div class="option-container">
@@ -52,58 +52,63 @@
                                 class="mt-2"
                             />
                         </div>
-                        <div>
-                            <InputLabel for="categories"
-                                >Kategorijas:</InputLabel
-                            >
-                            <div class="categories-input">
-                                <div
-                                    v-for="category in categories"
-                                    :key="category.id"
-                                    class="radio-tag"
+                        <div class="image-category">
+                            <div>
+                                <InputLabel for="category"
+                                    >Kategorijas:</InputLabel
                                 >
-                                    <input
-                                        type="radio"
-                                        :id="'category-' + category.id"
-                                        :value="category.id"
-                                        v-model="form.category"
-                                        name="category"
-                                    />
-                                    <label
-                                        :for="'category-' + category.id"
-                                        class="tag-label"
+                                <div class="categories-input">
+                                    <div
+                                        v-for="category in categories"
+                                        :key="category.id"
+                                        class="radio-tag"
                                     >
-                                        {{ category.name }}
-                                    </label>
+                                        <input
+                                            type="radio"
+                                            :id="'category-' + category.id"
+                                            :value="category.id"
+                                            v-model="form.category"
+                                            name="category"
+                                        />
+                                        <label
+                                            :for="'category-' + category.id"
+                                            class="tag-label"
+                                        >
+                                            {{ category.name }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <InputError
+                                    :message="form.errors.category"
+                                    class="mt-2"
+                                />
+                            </div>
+                            <div class="images-input-box">
+                                <InputLabel for="images">Attēli:</InputLabel>
+                                <div class="images-input">
+                                    <ImageUploadComponent
+                                        :initial-image="initialImages[0]"
+                                        :image-id="initialImagesId[0]"
+                                        :index="0"
+                                        @image-added="handleImageAdded"
+                                        @image-removed="handleImageRemoved"
+                                    />
+                                    <ImageUploadComponent
+                                        :initial-image="initialImages[1]"
+                                        :image-id="initialImagesId[1]"
+                                        :index="1"
+                                        @image-added="handleImageAdded"
+                                        @image-removed="handleImageRemoved"
+                                    />
+                                    <ImageUploadComponent
+                                        :initial-image="initialImages[2]"
+                                        :image-id="initialImagesId[2]"
+                                        :index="2"
+                                        @image-added="handleImageAdded"
+                                        @image-removed="handleImageRemoved"
+                                    />
                                 </div>
                             </div>
-                            <InputError
-                                :message="form.errors.category"
-                                class="mt-2"
-                            />
-                        </div>
-                        <div class="images-input">
-                            <ImageUploadComponent
-                                :initial-image="initialImages[0]"
-                                :image-id="initialImagesId[0]"
-                                :index="0"
-                                @image-added="handleImageAdded"
-                                @image-removed="handleImageRemoved"
-                            />
-                            <ImageUploadComponent
-                                :initial-image="initialImages[1]"
-                                :image-id="initialImagesId[1]"
-                                :index="1"
-                                @image-added="handleImageAdded"
-                                @image-removed="handleImageRemoved"
-                            />
-                            <ImageUploadComponent
-                                :initial-image="initialImages[2]"
-                                :image-id="initialImagesId[2]"
-                                :index="2"
-                                @image-added="handleImageAdded"
-                                @image-removed="handleImageRemoved"
-                            />
                         </div>
                         <InputError :message="form.images.price" class="mt-2" />
                     </template>
@@ -153,7 +158,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div>
+                                <div class="product-image-field">
                                     <img
                                         v-for="image in product.images"
                                         :key="image.id"
@@ -182,11 +187,11 @@
                 </table>
             </div>
         </div>
-    </MainLayout>
+    </AdminLayout>
 </template>
 
 <script>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 import BasicButton from "@/Components/BasicButton.vue";
 import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
@@ -201,7 +206,7 @@ import { onMounted } from "vue";
 
 export default {
     components: {
-        MainLayout,
+        AdminLayout,
         Head,
         BasicButton,
         FormModalLayout,
@@ -281,21 +286,20 @@ export default {
                 ? route("products.update", this.form.id)
                 : route("products.store");
 
+            console.log("Form data before addProduct:", this.form.images);
+
             // Submit the form
             this.form[method](url, {
-                forceFormData: true, // Needed for file uploads
                 onSuccess: () => {
-                    // Handle success
-                    this.products.push(response.data.product);
-
                     this.isAddProductModalOpen = false;
-                    this.resetForm();
+
                     this.setSystemMessage(
                         this.isEditMode
                             ? "Produkts atjaunināts veiksmīgi"
                             : "Produkts pievienots veiksmīgi",
                         "success"
                     );
+                    this.resetForm();
                     this.isEditMode = false;
                 },
                 onError: (error) => {
@@ -445,14 +449,16 @@ export default {
                             border: 1px solid var(--primary);
                             border-radius: var(--border-rad);
                         }
-
-                        .product-image {
-                            aspect-ratio: 3 / 4;
-                            width: 20%;
-                            object-fit: cover;
-                            margin: 0 auto;
-                            display: block;
-                            border-radius: var(--border-rad);
+                        .product-image-field {
+                            display: flex;
+                            gap: 5px;
+                            .product-image {
+                                aspect-ratio: 3 / 4;
+                                width: 3rem;
+                                object-fit: cover;
+                                display: block;
+                                border-radius: var(--border-rad);
+                            }
                         }
 
                         .action-icon {
@@ -469,60 +475,67 @@ export default {
             }
         }
     }
+    .image-category {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
 
-    .images-input {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .categories-input {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-
-        .radio-tag {
-            display: flex;
-            align-items: center;
-
-            .tag-label {
-                background-color: var(--secondary);
-                padding: 5px 10px;
-                border-radius: var(--border-rad);
-                display: block;
-                cursor: pointer;
-                user-select: none;
-
-                &:hover {
-                    background-color: var(--secondary);
-                }
-
-                &::before {
-                    content: url(../../Assets/check.svg);
-                    display: inline-block;
-                    width: 0;
-                    height: 100%;
-                    margin-right: 0;
-                    transition: all 0.5s;
-                    transform: translate(0, 2px);
-                }
+        .images-input-box {
+            .images-input {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
             }
+        }
 
-            input[type="radio"] {
-                display: none;
+        .categories-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
 
-                &:checked + .tag-label {
-                    background-color: var(--primary);
-                    color: white;
-                    text-align: center;
+            .radio-tag {
+                display: flex;
+                align-items: center;
+
+                .tag-label {
+                    background-color: var(--secondary);
+                    padding: 5px 10px;
+                    border-radius: var(--border-rad);
+                    display: block;
+                    cursor: pointer;
+                    user-select: none;
+
+                    &:hover {
+                        background-color: var(--secondary);
+                    }
 
                     &::before {
                         content: url(@/Assets/check.svg);
                         display: inline-block;
-                        width: 1rem;
+                        width: 0;
                         height: 100%;
-                        margin-right: 0.2rem;
+                        margin-right: 0;
+                        transition: all 0.5s;
+                        transform: translate(0, 2px);
+                    }
+                }
+
+                input[type="radio"] {
+                    display: none;
+
+                    &:checked + .tag-label {
+                        background-color: var(--primary);
+                        color: white;
+                        text-align: center;
+
+                        &::before {
+                            content: url(@/Assets/check.svg);
+                            display: inline-block;
+                            width: 1rem;
+                            height: 100%;
+                            margin-right: 0.2rem;
+                        }
                     }
                 }
             }

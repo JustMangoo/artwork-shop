@@ -44,9 +44,14 @@ class ProductController extends Controller
 
         Log::info('After validation');
 
-        $product = Product::create($validatedData);
-        $product->category()->attach($request->input('category'));
+        $productData = [
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'category_id' => $validatedData['category'],
+        ];
 
+        $product = Product::create($productData);
 
         if ($request->hasFile('images')) {
             Log::info('Has images');
@@ -55,6 +60,7 @@ class ProductController extends Controller
                 $product->images()->create(['image' => $path]);
             }
         }
+
         Log::info('Store method completed');
 
         $product->load('category', 'images');
@@ -64,7 +70,7 @@ class ProductController extends Controller
 
     public function show($productId)
     {
-        $product = Product::with('categories', 'images')->findOrFail($productId);
+        $product = Product::with('category', 'images')->findOrFail($productId);
         return Inertia::render('ProductDetails', ['product' => $product]);
     }
 
@@ -82,18 +88,18 @@ class ProductController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id',
+            'category' => 'required|exists:categories,id',
             'images' => 'nullable|array',
             'images.*' => 'image|max:2048',
             'removedImages.*' => 'exists:images,id',
         ]);
 
-        Log::info('Update method validationd completed');
+        // Update the product with validated data except for 'category'
+        $product->update($request->except(['category', 'images', 'removedImages']));
 
-        // Update the product
-        $product->update($validatedData);
-        $product->categories()->sync($request->categories);
+        // Update the category separately
+        $product->category_id = $request->category;
+        $product->save();
 
         if ($request->has('removedImages')) {
             foreach ($request->removedImages as $imageId) {
@@ -129,7 +135,6 @@ class ProductController extends Controller
         }
 
         $product->images()->delete();
-        $product->categories()->detach();
         $product->delete();
 
         Log::info('Delete method completed');

@@ -34,7 +34,7 @@
                 </div>
                 <div class="box">
                     <div class="info-text">
-                        <span>0</span>
+                        <span>{{ subscriptionCount }}</span>
                         <p>Abonamenti</p>
                     </div>
                     <img
@@ -67,7 +67,7 @@ import { usePage } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head } from "@inertiajs/vue3";
 
-const { productCount, userCount } = usePage().props;
+const { productCount, userCount, subscriptionCount } = usePage().props;
 </script>
 
 <style lang="scss" scoped>

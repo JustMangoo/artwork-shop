@@ -23,8 +23,8 @@ export default {
     name: "ImageUploadComponent",
     props: {
         initialImage: String,
-        imageId: [String, Number], // Image ID (if editing)
-        index: Number, // Image index (for new images)
+        imageId: [String, Number],
+        index: Number,
     },
     data() {
         return {
@@ -36,12 +36,10 @@ export default {
         console.log(
             `Component created with imageId: ${this.imageId}, index: ${this.index}, initialImage: ${this.initialImage}`
         );
-        // This will log the `imageId` and `index` when the component is created
     },
     mounted() {
         if (this.initialImage) {
             this.imagePreviewUrl = this.initialImage;
-            // Emit an event right away for initial images so they're included in the form submission
             this.$emit("image-loaded", {
                 imagePreviewUrl: this.initialImage,
                 id: this.componentId,
@@ -70,7 +68,7 @@ export default {
         },
         removeImage() {
             this.$emit("image-removed", {
-                id: this.imageId, // Pass the existing image ID, if any
+                id: this.imageId,
                 index: this.index,
             });
             this.imagePreviewUrl = null;
