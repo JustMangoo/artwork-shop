@@ -111,6 +111,14 @@ h2::after {
     justify-self: center;
 }
 
+h2::before {
+    justify-self: end;
+}
+
+h2::after {
+    justify-self: baseline;
+}
+
 h1 {
     font-family: "Sorts+Mill+Goudy", serif;
     padding: 0;

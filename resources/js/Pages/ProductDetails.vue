@@ -17,7 +17,9 @@
                 <h1>{{ product.title }}</h1>
                 <p>&euro;{{ product.price }}</p>
                 <p>{{ product.description }}</p>
-                <PrimaryButton>Pievienot Grozam</PrimaryButton>
+                <PrimaryButton @click="addToCart"
+                    >Pievienot Grozam</PrimaryButton
+                >
                 <SecondaryButton>Pirkt Tagad</SecondaryButton>
             </div>
         </div>
@@ -36,6 +38,20 @@ const productImagePath = (image) => {
         ? "/storage/" + image.image.replace("public/", "")
         : "resources/js/Assets/Images/Image1.png";
     return imagePath;
+};
+
+const addToCart = async () => {
+    console.log("test");
+    try {
+        const response = await axios.post("/cart", {
+            product_id: product.id,
+            quantity: 1,
+        });
+        alert("Produkts pievienots grozam!");
+    } catch (error) {
+        console.error("Error adding to cart:", error);
+        alert("Kļūda pievienojot produktu grozam!");
+    }
 };
 
 const { product } = usePage().props;

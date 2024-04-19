@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\CartController;
 use App\Mail\MyEmail;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Mail;
@@ -57,17 +58,34 @@ Route::get('/products-customer', function () {
     ]);
 })->name('products-customer');
 
+Route::get('/printed', function () {
+    $products = Product::with(['images'])->get();
+    return Inertia::render('Printed', [
+        'products' => $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'title' => $product->title,
+                'description' => $product->description,
+                'price' => $product->price,
+                'categories' => $product->category,
+                'images' => $product->images->map(function ($image) {
+                    return ['url' => Storage::url($image->image)];
+                })->toArray(),
+                'created_at' => $product->created_at,
+            ];
+        }),
+    ]);
+})->name('printed');
+
 Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
-Route::get('/cart', function () {
-    return Inertia::render('User/Cart');
-})->name('cart');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart', [CartController::class, 'store']);
+Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+Route::post('/cart/clear', [CartController::class, 'clear']);
 
-Route::get('/printed', function () {
-    return Inertia::render('Printed');
-})->name('printed');
 
 Route::get('/original', function () {
     return Inertia::render('Original');

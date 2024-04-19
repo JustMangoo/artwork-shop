@@ -237,10 +237,6 @@ export default {
     methods: {
         handleImageAdded(imageData) {
             console.log("Attempting to add image data:", imageData);
-            console.log(
-                "Current form images before pushing:",
-                this.form.images
-            );
             this.form.images.push(imageData.file);
             console.log("Current form images after pushing:", this.form.images);
         },
@@ -281,18 +277,41 @@ export default {
             return imagePath;
         },
         addProduct() {
-            const method = this.form.id ? "patch" : "post";
+            // Initialize FormData object
+            let formData = new FormData();
+
+            // Append form fields to formData
+            Object.keys(this.form).forEach((key) => {
+                if (key === "images" && this.form[key]) {
+                    // Handle file inputs for 'images'
+                    for (let i = 0; i < this.form.images.length; i++) {
+                        formData.append(`images[${i}]`, this.form.images[i]);
+                    }
+                } else if (key === "removedImages" && this.form[key]) {
+                    // Handle 'removedImages' as an array of IDs
+                    this.form.removedImages.forEach((id, index) => {
+                        formData.append(`removedImages[${index}]`, id);
+                    });
+                } else {
+                    // Append other data normally
+                    formData.append(key, this.form[key]);
+                }
+            });
+
+            // Append '_method' field for PATCH requests
+            if (this.form.id) {
+                formData.append("_method", "PATCH");
+            }
+
+            // Determine the request URL
             const url = this.form.id
                 ? route("products.update", this.form.id)
                 : route("products.store");
 
-            console.log("Form data before addProduct:", this.form.images);
-
-            // Submit the form
-            this.form[method](url, {
+            // Use Inertia's post method for all requests, handling both create and update actions
+            this.$inertia.post(url, formData, {
                 onSuccess: () => {
                     this.isAddProductModalOpen = false;
-
                     this.setSystemMessage(
                         this.isEditMode
                             ? "Produkts atjaunināts veiksmīgi"
@@ -308,6 +327,7 @@ export default {
                         error
                     );
                 },
+                forceFormData: true,
             });
         },
         resetForm() {

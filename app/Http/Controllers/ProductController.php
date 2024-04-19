@@ -93,6 +93,7 @@ class ProductController extends Controller
             'images.*' => 'image|max:2048',
             'removedImages.*' => 'exists:images,id',
         ]);
+        Log::info('After update validation');
 
         // Update the product with validated data except for 'category'
         $product->update($request->except(['category', 'images', 'removedImages']));

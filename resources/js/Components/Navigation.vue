@@ -165,10 +165,9 @@
                                     class="icon"
                                 />
                             </div>
-                            <div class="link-icon">
-                                <Link :href="route('cart')" class="link"
-                                    >Grozs</Link
-                                >
+                            <div class="link-icon" @click="toggleCart($event)">
+                                <p class="link"></p>
+                                Grozs
                                 <img
                                     src="../Assets/cart.svg"
                                     alt="rati"
@@ -188,10 +187,9 @@
                                     class="icon"
                                 />
                             </div>
-                            <div class="link-icon">
-                                <Link :href="route('login')" class="link"
-                                    >Grozs</Link
-                                >
+                            <div class="link-icon" @click="toggleCart($event)">
+                                <p class="link">Grozs</p>
+
                                 <img
                                     src="../Assets/cart.svg"
                                     alt="rati"
@@ -203,26 +201,120 @@
                 </div>
             </div>
         </div>
+        <CartSidebar
+            ref="cartSidebar"
+            :cart-items="cartItems"
+            :is-visible="isCartVisible"
+            @close="toggleCart"
+            @removeItem="handleRemoveItem"
+            @clearCart="handleClearCart"
+        />
     </nav>
 </template>
 
-<script setup>
+<script>
 import ApplicationLogo from "./ApplicationLogo.vue";
 import Dropdown from "./Dropdown.vue";
 import DropdownLink from "./DropdownLink.vue";
 import NavLink from "./NavLink.vue";
 import { Link } from "@inertiajs/vue3";
+import CartSidebar from "@/Pages/User/CartSidebar.vue";
 
-defineProps({
-    canLogin: {
-        type: Boolean,
-        default: true,
+export default {
+    components: {
+        CartSidebar,
+        ApplicationLogo,
+        Dropdown,
+        DropdownLink,
+        NavLink,
+        Link,
     },
-    canRegister: {
-        type: Boolean,
-        default: false,
+    props: {
+        canLogin: {
+            type: Boolean,
+            default: true,
+        },
+        canRegister: {
+            type: Boolean,
+            default: false,
+        },
     },
-});
+    data() {
+        return {
+            isCartVisible: false,
+            cartItems: [],
+        };
+    },
+    methods: {
+        toggleCart(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+
+            this.isCartVisible = !this.isCartVisible;
+
+            if (this.isCartVisible) {
+                document.addEventListener(
+                    "click",
+                    this.handleClickOutside,
+                    true
+                );
+                this.fetchCartItems();
+            } else {
+                document.removeEventListener(
+                    "click",
+                    this.handleClickOutside,
+                    true
+                );
+            }
+
+            this.lockBodyScroll(this.isCartVisible);
+        },
+        handleClickOutside(event) {
+            if (
+                this.$refs.cartSidebar &&
+                !this.$refs.cartSidebar.$el.contains(event.target)
+            ) {
+                this.toggleCart();
+            }
+        },
+        fetchCartItems() {
+            axios
+                .get("/cart")
+                .then((response) => {
+                    this.cartItems = response.data.cartItems;
+                })
+                .catch((error) => {
+                    console.error("Error fetching cart items:", error);
+                });
+        },
+
+        handleRemoveItem(id) {
+            axios
+                .delete(`/cart/${id}`)
+                .then((response) => {
+                    this.fetchCartItems();
+                })
+                .catch((error) => {
+                    console.error("Error removing item from cart:", error);
+                });
+        },
+        handleClearCart() {
+            // clear the cart logic here or through an event
+        },
+        lockBodyScroll(lock) {
+            document.body.style.overflow = lock ? "hidden" : "";
+        },
+    },
+    watch: {
+        isCartVisible(newValue) {
+            this.lockBodyScroll(newValue);
+        },
+    },
+    beforeUnmount() {
+        document.removeEventListener("click", this.handleClickOutside);
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -233,6 +325,7 @@ defineProps({
     font-weight: 300;
     line-height: 1.25;
     color: var(--primary);
+    cursor: pointer;
 }
 .inner-container {
     display: flex;
@@ -331,7 +424,7 @@ defineProps({
 
                         .icon {
                             aspect-ratio: 1 / 1;
-                            width: 1rem;
+                            height: 1rem;
                         }
                     }
                 }
