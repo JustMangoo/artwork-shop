@@ -85,7 +85,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart', [CartController::class, 'store']);
 Route::delete('/cart/{id}', [CartController::class, 'destroy']);
 Route::post('/cart/clear', [CartController::class, 'clear']);
-
+Route::patch('/cart/item/{id}', [CartController::class, 'update']);
 
 Route::get('/original', function () {
     return Inertia::render('Original');

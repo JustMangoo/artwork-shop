@@ -208,6 +208,7 @@
             @close="toggleCart"
             @removeItem="handleRemoveItem"
             @clearCart="handleClearCart"
+            @updateQuantity="updateQuantity"
         />
     </nav>
 </template>
@@ -300,7 +301,24 @@ export default {
                 });
         },
         handleClearCart() {
-            // clear the cart logic here or through an event
+            axios
+                .post("/cart/clear")
+                .then((response) => {
+                    this.cartItems = [];
+                })
+                .catch((error) => {
+                    console.error("Error clearing the cart:", error);
+                });
+        },
+        updateQuantity(item, newQuantity) {
+            axios
+                .patch(`/cart/item/${item.id}`, { quantity: newQuantity })
+                .then((response) => {
+                    this.fetchCartItems(); // Refresh cart items to reflect the updated quantity
+                })
+                .catch((error) => {
+                    console.error("Error updating item quantity:", error);
+                });
         },
         lockBodyScroll(lock) {
             document.body.style.overflow = lock ? "hidden" : "";
