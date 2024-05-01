@@ -17,6 +17,20 @@
                 <h1>{{ product.title }}</h1>
                 <p>&euro;{{ product.price }}</p>
                 <p>{{ product.description }}</p>
+                <div class="quantity-control">
+                    <button @click="decreaseQuantity" class="quantity-btn">
+                        -
+                    </button>
+                    <input
+                        type="text"
+                        v-model="quantity"
+                        class="quantity-input"
+                        readonly
+                    />
+                    <button @click="increaseQuantity" class="quantity-btn">
+                        +
+                    </button>
+                </div>
                 <PrimaryButton @click="addToCart"
                     >Pievienot Grozam</PrimaryButton
                 >
@@ -32,6 +46,10 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import { ref } from "vue";
+
+const { product } = usePage().props;
+const quantity = ref(1);
 
 const productImagePath = (image) => {
     const imagePath = image.image
@@ -41,11 +59,10 @@ const productImagePath = (image) => {
 };
 
 const addToCart = async () => {
-    console.log("test");
     try {
         const response = await axios.post("/cart", {
             product_id: product.id,
-            quantity: 1,
+            quantity: quantity.value,
         });
         alert("Produkts pievienots grozam!");
     } catch (error) {
@@ -54,7 +71,13 @@ const addToCart = async () => {
     }
 };
 
-const { product } = usePage().props;
+const increaseQuantity = () => {
+    if (quantity.value < 5) quantity.value++;
+};
+
+const decreaseQuantity = () => {
+    if (quantity.value > 1) quantity.value--;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -82,6 +105,27 @@ const { product } = usePage().props;
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            .quantity-btn {
+                width: 25px;
+                height: 25px;
+                background-color: var(--primary);
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: var(--border-rad);
+            }
+            .quantity-input {
+                width: 50px;
+                text-align: center;
+                margin: 0 5px;
+                border: 1px solid var(--primary);
+                border-radius: var(--border-rad);
+            }
+        }
 
         h1 {
         }

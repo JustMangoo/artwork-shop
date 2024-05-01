@@ -17,28 +17,31 @@
                         :alt="item.product.title"
                         class="cart-product-image"
                     />
-                    {{ item.product.title }}
-                    <div class="quantity-control">
-                        <button
-                            @click="decreaseQuantity(item)"
-                            class="quantity-btn"
-                        >
-                            -
-                        </button>
-                        <input
-                            type="text"
-                            v-model="item.quantity"
-                            class="quantity-input"
-                            readonly
-                        />
-                        <button
-                            @click="increaseQuantity(item)"
-                            class="quantity-btn"
-                        >
-                            +
-                        </button>
+                    <div class="cart-item-info">
+                        <p>{{ item.product.title }}</p>
+                        <p>{{ itemTotalPrice(item) }}€</p>
+                        <div class="quantity-control">
+                            <button
+                                @click="decreaseQuantity(item)"
+                                class="quantity-btn"
+                            >
+                                -
+                            </button>
+                            <input
+                                type="text"
+                                v-model="item.quantity"
+                                class="quantity-input"
+                                readonly
+                            />
+                            <button
+                                @click="increaseQuantity(item)"
+                                class="quantity-btn"
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
-                    {{ itemTotalPrice(item) }}€
+
                     <button @click="removeItem(item.id)" class="delete-btn">
                         <img src="@/Assets/trash.svg" alt="delete-icon" />
                     </button>
@@ -188,28 +191,33 @@ export default {
                     margin-right: 10px;
                 }
 
-                .quantity-control {
+                .cart-item-info {
                     display: flex;
-                    align-items: center;
+                    flex-direction: column;
+                    .quantity-control {
+                        display: flex;
+                        align-items: center;
 
-                    .quantity-btn {
-                        width: 25px;
-                        height: 25px;
-                        background-color: var(--primary);
-                        color: white;
-                        border: none;
-                        cursor: pointer;
-                        border-radius: var(--border-rad);
-                    }
+                        .quantity-btn {
+                            width: 25px;
+                            height: 25px;
+                            background-color: var(--primary);
+                            color: white;
+                            border: none;
+                            cursor: pointer;
+                            border-radius: var(--border-rad);
+                        }
 
-                    .quantity-input {
-                        width: 50px;
-                        text-align: center;
-                        margin: 0 5px;
-                        border: 1px solid var(--primary);
-                        border-radius: var(--border-rad);
+                        .quantity-input {
+                            width: 50px;
+                            text-align: center;
+                            margin: 0 5px;
+                            border: 1px solid var(--primary);
+                            border-radius: var(--border-rad);
+                        }
                     }
                 }
+
                 .delete-btn {
                     background-color: var(--primary);
 

@@ -5,10 +5,26 @@
         <SystemMessage :message="systemMessage" :type="messageType" />
         <div class="container">
             <div class="option-container">
-                <BasicButton class="search-button">
-                    <img src="@/Assets/search.svg" alt="plus icon" />
-                    Meklēt
-                </BasicButton>
+                <div class="option-container-left">
+                    <div class="search-container">
+                        <input
+                            v-show="showSearch"
+                            v-model="searchTerm"
+                            type="text"
+                            class="search-input"
+                            @keyup.enter="performSearch"
+                            :class="{ 'show-search': isSearchVisible }"
+                        />
+
+                        <BasicButton
+                            class="search-button"
+                            @click="toggleSearch"
+                        >
+                            <img src="@/Assets/search.svg" alt="search icon" />
+                        </BasicButton>
+                    </div>
+                </div>
+
                 <BasicButton
                     class="add-button"
                     @click="isAddProductModalOpen = true"
@@ -221,6 +237,20 @@ export default {
         products: Array,
         categories: Array,
     },
+    data() {
+        return {
+            isAddProductModalOpen: false,
+            imagePreviewUrls: [],
+            initialImages: [null, null, null],
+            initialImagesId: [null, null, null],
+            isEditMode: false,
+            systemMessage: "",
+            messageType: "info",
+            showSearch: false,
+            isSearchVisible: false,
+            searchTerm: "",
+        };
+    },
     setup() {
         const form = useForm({
             id: null,
@@ -235,6 +265,31 @@ export default {
         return { form };
     },
     methods: {
+        toggleSearch() {
+            if (!this.showSearch) {
+                this.showSearch = true;
+                setTimeout(() => {
+                    this.isSearchVisible = true;
+                }, 1);
+            } else {
+                this.isSearchVisible = !this.isSearchVisible;
+                setTimeout(() => {
+                    this.showSearch = !this.showSearch;
+                }, 300);
+            }
+        },
+        performSearch() {
+            this.toggleSearch();
+            this.$inertia.get(
+                route("products.index"),
+                { search: this.searchTerm },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                }
+            );
+        },
         handleImageAdded(imageData) {
             console.log("Attempting to add image data:", imageData);
             this.form.images.push(imageData.file);
@@ -298,12 +353,10 @@ export default {
                 }
             });
 
-            // Append '_method' field for PATCH requests
             if (this.form.id) {
                 formData.append("_method", "PATCH");
             }
 
-            // Determine the request URL
             const url = this.form.id
                 ? route("products.update", this.form.id)
                 : route("products.store");
@@ -387,17 +440,6 @@ export default {
             this.messageType = type;
         },
     },
-    data() {
-        return {
-            isAddProductModalOpen: false,
-            imagePreviewUrls: [],
-            initialImages: [null, null, null],
-            initialImagesId: [null, null, null],
-            isEditMode: false,
-            systemMessage: "",
-            messageType: "info",
-        };
-    },
 };
 </script>
 
@@ -413,6 +455,36 @@ export default {
         max-width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+
+        .option-container-left {
+            .search-container {
+                display: flex;
+            }
+
+            .search-input {
+                border-bottom: 2px solid var(--secondary);
+                padding: 0.5rem 0;
+                max-width: 0;
+                transition: all 0.3s ease-in-out;
+                opacity: 1;
+                border-radius: var(--border-rad) 0 0 var(--border-rad);
+                outline: 0;
+
+                &:focus {
+                    border-bottom: 2px solid var(--primary);
+                }
+            }
+
+            .show-search {
+                max-width: 10rem;
+                padding: 0.5rem;
+            }
+
+            .search-button {
+                border-radius: 0 var(--border-rad) var(--border-rad) 0;
+            }
+        }
 
         .add-button,
         .search-button {

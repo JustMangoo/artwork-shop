@@ -12,15 +12,20 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'images'])->get();
+        $searchTerm = $request->input('search', '');
+
+        $products = Product::with(['category', 'images'])
+            ->where('title', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
+            ->get();
         $categories = Category::all();
-        $images = Image::all();
 
         return Inertia::render('Admin/Products/Index', [
             'products' => $products,
             'categories' => $categories,
+            'searchTerm' => $searchTerm,
         ]);
     }
 
