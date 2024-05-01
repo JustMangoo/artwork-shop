@@ -5,7 +5,7 @@
         <div class="content">
             <slot />
         </div>
-        <FooterSection />
+        <FooterSectionAdmin />
     </div>
 </template>
 
@@ -38,5 +38,5 @@
 
 <script setup>
 import Navigation from "@/Components/Navigation.vue";
-import FooterSection from "@/Components/FooterSection.vue";
+import FooterSectionAdmin from "@/Components/FooterSectionAdmin.vue";
 </script>

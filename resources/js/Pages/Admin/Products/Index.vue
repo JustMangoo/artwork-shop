@@ -276,10 +276,10 @@ export default {
                 setTimeout(() => {
                     this.showSearch = !this.showSearch;
                 }, 300);
+                this.performSearch();
             }
         },
         performSearch() {
-            this.toggleSearch();
             this.$inertia.get(
                 route("products.index"),
                 { search: this.searchTerm },
@@ -289,6 +289,10 @@ export default {
                     replace: true,
                 }
             );
+            this.isSearchVisible = false;
+            setTimeout(() => {
+                this.showSearch = false;
+            }, 300);
         },
         handleImageAdded(imageData) {
             console.log("Attempting to add image data:", imageData);
@@ -410,7 +414,6 @@ export default {
             );
             this.initialImagesId = product.images.map((image) => image.id);
 
-            // Handle case where less than 3 images exist
             while (this.initialImages.length < 3) {
                 this.initialImages.push(null);
             }
