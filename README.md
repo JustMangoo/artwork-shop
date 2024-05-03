@@ -2,7 +2,7 @@
 
 ## About The Project
 
-Welcome to the Artistic Endeavors E-commerce Platform, a comprehensive web solution designed specifically for showcasing and selling artist-created artworks. This platform not only presents these works but also simplifies the management of marketing, sales, and transactions, aiming to provide a user-friendly, visually appealing, and functionally robust online store experience.
+Welcome to the Arti Work E-commerce Platform, a comprehensive website designed specifically for showcasing and selling artist-created artworks. This platform not only presents these works but also simplifies the management of marketing, sales, and transactions, aiming to provide a user-friendly, visually appealing, and functionally robust online store experience.
 
 ### Built With
 
