@@ -42,3 +42,8 @@ npm run dev  # For development
 # or
 npm run prod  # For production
 ```
+
+7. Start the local development
+```
+php artisan serve
+```
