@@ -13,7 +13,7 @@ Briefly describe what your project does and what motivated you to create it. Exp
 ## Getting Started
 1. Clone the repo
 ```
-git clone https://github.com/your_username_/Project-Name.git
+https://github.com/JustMangoo/artwork-shop.git
 ```
 
 2. Install NPM packages
