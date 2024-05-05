@@ -23,6 +23,23 @@
                             <img src="@/Assets/search.svg" alt="search icon" />
                         </BasicButton>
                     </div>
+
+                    <div class="category-search-container">
+                        <div @click="toggleDropdown" class="dropdown-button">
+                            {{ selectedCategoryName || "Kategorijas" }}
+                            <img src="@/Assets/arrow.svg" alt="arrow-icon" />
+                        </div>
+                        <div v-if="dropdownActive" class="dropdown-content">
+                            <div
+                                v-for="category in categories"
+                                :key="category.id"
+                                @click="selectCategory(category)"
+                                class="dropdown-item"
+                            >
+                                {{ category.name }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <BasicButton
@@ -154,7 +171,7 @@
                             <th>Nosaukums</th>
                             <th>Apraksts</th>
                             <th>Cena</th>
-                            <th>Tips</th>
+                            <th>kategorija</th>
                             <th>Bilde</th>
                             <th></th>
                         </tr>
@@ -218,7 +235,6 @@ import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
 import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
-import { onMounted } from "vue";
 
 export default {
     components: {
@@ -249,6 +265,9 @@ export default {
             showSearch: false,
             isSearchVisible: false,
             searchTerm: "",
+            dropdownActive: false,
+            selectedCategory: null,
+            selectedCategoryName: "",
         };
     },
     setup() {
@@ -265,6 +284,19 @@ export default {
         return { form };
     },
     methods: {
+        toggleDropdown() {
+            this.dropdownActive = !this.dropdownActive;
+        },
+        selectCategory(category) {
+            this.selectedCategory = category.id;
+            this.selectedCategoryName = category.name;
+            this.dropdownActive = false;
+            this.filterByCategory();
+        },
+        filterByCategory() {
+            // Logic to filter products by category
+            this.performSearch();
+        },
         toggleSearch() {
             if (!this.showSearch) {
                 this.showSearch = true;
@@ -282,7 +314,10 @@ export default {
         performSearch() {
             this.$inertia.get(
                 route("products.index"),
-                { search: this.searchTerm },
+                {
+                    search: this.searchTerm,
+                    category: this.selectedCategory, // Pass the selected category ID
+                },
                 {
                     preserveState: true,
                     preserveScroll: true,
@@ -294,6 +329,7 @@ export default {
                 this.showSearch = false;
             }, 300);
         },
+
         handleImageAdded(imageData) {
             console.log("Attempting to add image data:", imageData);
             this.form.images.push(imageData.file);
@@ -453,6 +489,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    overflow: hidden;
 
     .option-container {
         max-width: 100%;
@@ -461,8 +498,48 @@ export default {
         align-items: center;
 
         .option-container-left {
+            display: flex;
+            gap: 1rem;
             .search-container {
                 display: flex;
+            }
+            .category-search-container {
+                position: relative;
+                .dropdown-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0.5rem 1rem;
+                    background-color: var(--primary);
+                    color: white;
+                    border-radius: var(--border-rad);
+                    cursor: pointer;
+                    height: 100%;
+
+                    img {
+                        height: 1.5rem;
+                    }
+                }
+
+                .dropdown-content {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--secondary);
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                    z-index: 100;
+                    border-radius: 0 0 var(--border-rad) var(--border-rad);
+                    z-index: 100;
+
+                    .dropdown-item {
+                        padding: 0.5rem 1rem;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: var(--light-primary);
+                        }
+                    }
+                }
             }
 
             .search-input {

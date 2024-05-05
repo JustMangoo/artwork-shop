@@ -11,16 +11,26 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->get();
+
+        Log::info('USERS index method:', $request->all());
+        $searchTerm = $request->input('search', '');
+
+        $users = User::with('role')
+            ->where('name', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+            ->get();
+
         $roles = Role::all();
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
             'roles' => $roles,
+            'searchTerm' => $searchTerm,
         ]);
     }
+
 
     /**
      * Show the form for editing the specified user.

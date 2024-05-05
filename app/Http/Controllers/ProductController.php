@@ -14,18 +14,36 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $searchTerm = $request->input('search', '');
+        Log::info('PRODUCTS index method:', $request->all());
 
-        $products = Product::with(['category', 'images'])
-            ->where('title', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
-            ->get();
+        $searchTerm = $request->input('search', '');
+        $categoryId = $request->input('category'); // Receive category ID from the request
+
+        $query = Product::with(['category', 'images']);
+
+        // Apply search filter if a search term is provided
+        if (!empty($searchTerm)) {
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('description', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Filter by category if a category ID is provided
+        if (!empty($categoryId)) {
+            $query->whereHas('category', function ($q) use ($categoryId) {
+                $q->where('id', $categoryId);
+            });
+        }
+
+        $products = $query->get();
         $categories = Category::all();
 
         return Inertia::render('Admin/Products/Index', [
             'products' => $products,
             'categories' => $categories,
             'searchTerm' => $searchTerm,
+            'selectedCategory' => $categoryId, // Pass the selected category back to the frontend
         ]);
     }
 
@@ -44,7 +62,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'category' => 'required|exists:categories,id',
             'images' => 'nullable|array',
-            'images.*' => 'image|max:2048',
+            'images.*' => 'image|max:1048',
         ]);
 
         Log::info('After validation');

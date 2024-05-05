@@ -5,10 +5,26 @@
         <SystemMessage :message="systemMessage" :type="messageType" />
         <div class="container">
             <div class="option-container">
-                <BasicButton class="search-button">
-                    <img src="@/Assets/search.svg" alt="plus icon" />
-                    Meklēt
-                </BasicButton>
+                <div class="option-container-left">
+                    <div class="search-container">
+                        <input
+                            v-show="showSearch"
+                            v-model="searchTerm"
+                            type="text"
+                            class="search-input"
+                            @keyup.enter="performSearch"
+                            :class="{ 'show-search': isSearchVisible }"
+                        />
+
+                        <BasicButton
+                            class="search-button"
+                            @click="toggleSearch"
+                        >
+                            <img src="@/Assets/search.svg" alt="search icon" />
+                        </BasicButton>
+                    </div>
+                </div>
+
                 <BasicButton class="add-button" @click="isAddModalOpen = true">
                     <img src="@/Assets/plus.svg" alt="plus icon" />
                     Jauns
@@ -135,7 +151,6 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
-import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
 import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
@@ -150,12 +165,22 @@ export default {
         InputLabel,
         TextInput,
         TextArea,
-        ImageUploadComponent,
         SystemMessage,
     },
     props: {
         users: Array,
         roles: Array,
+    },
+    data() {
+        return {
+            isAddModalOpen: false,
+            isEditMode: false,
+            systemMessage: "",
+            messageType: "info",
+            showSearch: false,
+            isSearchVisible: false,
+            searchTerm: "",
+        };
     },
     setup() {
         const form = useForm({
@@ -168,6 +193,37 @@ export default {
         return { form };
     },
     methods: {
+        toggleSearch() {
+            if (!this.showSearch) {
+                this.showSearch = true;
+                setTimeout(() => {
+                    this.isSearchVisible = true;
+                }, 1);
+            } else {
+                this.isSearchVisible = !this.isSearchVisible;
+                setTimeout(() => {
+                    this.showSearch = !this.showSearch;
+                }, 300);
+                this.performSearch();
+            }
+        },
+        performSearch() {
+            this.$inertia.get(
+                route("users.index"),
+                {
+                    search: this.searchTerm,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                }
+            );
+            this.isSearchVisible = false;
+            setTimeout(() => {
+                this.showSearch = false;
+            }, 300);
+        },
         addUser() {
             const method = this.form.id ? "patch" : "post";
             const url = this.form.id
@@ -179,7 +235,6 @@ export default {
             this.form[method](url, {
                 onSuccess: () => {
                     this.isAddModalOpen = false;
-                    console.log(this.isEditMode);
                     this.setSystemMessage(
                         this.isEditMode
                             ? "Lietotājs veiksmīgi rediģēts"
@@ -189,7 +244,6 @@ export default {
                     this.resetForm();
                 },
                 onError: (error) => {
-                    // Handle errors
                     console.error("There was an error:", error);
                 },
             });
@@ -220,7 +274,7 @@ export default {
                     },
                     onError: (errors) => {
                         this.setSystemMessage(
-                            "An error occurred while deleting the product",
+                            "An error occurred while deleting the user",
                             "error"
                         );
                     },
@@ -231,14 +285,6 @@ export default {
             this.systemMessage = message;
             this.messageType = type;
         },
-    },
-    data() {
-        return {
-            isEditMode: false,
-            systemMessage: "",
-            messageType: "info",
-            isAddModalOpen: false,
-        };
     },
 };
 </script>
@@ -255,6 +301,37 @@ export default {
         max-width: 100%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+
+        .option-container-left {
+            display: flex;
+            gap: 1rem;
+            .search-container {
+                display: flex;
+            }
+            .search-input {
+                border-bottom: 2px solid var(--secondary);
+                padding: 0.5rem 0;
+                max-width: 0;
+                transition: all 0.3s ease-in-out;
+                opacity: 1;
+                border-radius: var(--border-rad) 0 0 var(--border-rad);
+                outline: 0;
+
+                &:focus {
+                    border-bottom: 2px solid var(--primary);
+                }
+            }
+
+            .show-search {
+                max-width: 10rem;
+                padding: 0.5rem;
+            }
+
+            .search-button {
+                border-radius: 0 var(--border-rad) var(--border-rad) 0;
+            }
+        }
 
         .add-button,
         .search-button {
@@ -312,15 +389,6 @@ export default {
                             border-radius: var(--border-rad);
                         }
 
-                        .product-image {
-                            aspect-ratio: 3 / 4;
-                            width: 20%;
-                            object-fit: cover;
-                            margin: 0 auto;
-                            display: block;
-                            border-radius: var(--border-rad);
-                        }
-
                         .action-icon {
                             display: inline;
                             margin-right: 0.5rem;
@@ -334,12 +402,6 @@ export default {
                 }
             }
         }
-    }
-
-    .images-input {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
     }
 
     .roles-input {

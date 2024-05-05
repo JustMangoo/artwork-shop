@@ -59,7 +59,10 @@
                         <!-- Logo -->
                         <div class="logo-container">
                             <Link href="/dashboard">
-                                <ApplicationLogo class="logo" />
+                                <img
+                                    src="@\Assets\Images\logo.svg"
+                                    alt="website logo"
+                                />
                             </Link>
                         </div>
 
@@ -88,7 +91,10 @@
                     <div class="flex" v-else>
                         <div class="logo-container">
                             <Link href="/">
-                                <ApplicationLogo class="logo" />
+                                <img
+                                    src="@\Assets\Images\logo.svg"
+                                    alt="website logo"
+                                />
                             </Link>
                         </div>
 
@@ -414,12 +420,12 @@ export default {
                 align-items: center;
                 flex-shrink: 0;
                 gap: 1rem;
-                .logo {
+                img {
                     display: block;
                     width: auto;
                     color: var(--primary);
                     fill: currentColor;
-                    height: 2.25rem;
+                    height: 3rem;
                 }
             }
             .account-menu {
