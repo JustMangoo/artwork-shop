@@ -49,9 +49,11 @@
             </ul>
             <div class="bottom-box">
                 <p>Kopā: {{ orderTotalPrice }}€</p>
-                <PrimaryButton class="clear-cart">Pirkt</PrimaryButton>
+                <PrimaryButton @click="checkout" class="clear-cart"
+                    >Pirkt</PrimaryButton
+                >
                 <SecondaryButton @click="clearCart" class="clear-cart"
-                    >Notitīt Grozu</SecondaryButton
+                    >Notīrīt Grozu</SecondaryButton
                 >
             </div>
         </div>
@@ -62,6 +64,7 @@
 </template>
 
 <script>
+import { useForm } from "@inertiajs/vue3";
 import { nextTick } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
@@ -80,9 +83,24 @@ export default {
     data() {
         return {
             isSidebarVisible: false,
+            form: useForm({
+                cartItems: [],
+            }),
         };
     },
     methods: {
+        checkout() {
+            axios
+                .post(route("checkout"), { cartItems: this.cartItems })
+                .then((response) => {
+                    // Redirect to Stripe checkout page
+                    window.location.href = response.data.url;
+                })
+                .catch((error) => {
+                    console.error("Checkout error:", error.response.data);
+                });
+        },
+
         close() {
             this.$emit("close");
         },

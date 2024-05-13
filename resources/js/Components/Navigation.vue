@@ -176,7 +176,7 @@
                                 Grozs
                                 <img
                                     src="../Assets/cart.svg"
-                                    alt="rati"
+                                    alt="raati"
                                     class="icon"
                                 />
                             </div>

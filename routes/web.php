@@ -85,7 +85,9 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart', [CartController::class, 'store']);
 Route::delete('/cart/{id}', [CartController::class, 'destroy']);
 Route::post('/cart/clear', [CartController::class, 'clear']);
-Route::patch('/cart/item/{id}', [CartController::class, 'update']);
+
+
+Route::post('/cart/item/{id}', [CartController::class, 'update']);
 
 Route::get('/original', function () {
     return Inertia::render('Original');
@@ -110,6 +112,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+Route::middleware(['cors'])->group(function () {
+    Route::post('/checkout', [ProductController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout/success', [ProductController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
+});
 
 Route::get("/testroute", function () {
     $name = "A name";

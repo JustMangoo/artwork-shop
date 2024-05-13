@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\Cart;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Stripe\Stripe;
+use Stripe\Checkout\Session as CheckoutSession;
 
 class ProductController extends Controller
 {
@@ -165,4 +168,59 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+
+    public function checkout(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        Log::info('PRODUCT checkout method called: ', $request->all());
+        Log::info('Headers', $request->headers->all());
+
+        $lineItems = [];
+        $cartItems = $request->input('cartItems', []);
+        $totalPrice = 0;
+
+        foreach ($cartItems as $item) {
+
+            $product = Product::find($item['product']['id']);
+            $totalPrice += $product->price;
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $product->title,
+                    ],
+                    'unit_amount' => $product->price * 100,
+                ],
+                'quantity' => $item['quantity'],
+            ];
+        }
+
+        $session = CheckoutSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $lineItems,
+            'mode' => 'payment',
+            'success_url' => route('checkout.success'),
+            'cancel_url' => route('checkout.cancel'),
+        ]);
+
+        /* $order = new Order();
+        $order->status = 'unpaid';
+        $order->total_price = $totalPrice;
+        $order->session_id = $session->id;
+        $order->save90; */
+
+        return response()->json(['url' => $session->url]);
+    }
+
+    public function success()
+    {
+        return Inertia::render('CheckoutSuccess');
+    }
+
+    public function cancel()
+    {
+        return Inertia::render('CheckoutCancel');
+    }
+
 }
