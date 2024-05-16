@@ -123,10 +123,18 @@ const submit = () => {
     }
     .about-image {
         max-width: 40%;
-        padding: 0 5rem;
+        padding: 0 4rem;
         @media (max-width: 768px) {
             max-width: 100%;
         }
+        background: url("@/Assets/brush-strokes/brush-stroke-1.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        aspect-ratio: 1/1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         img {
             width: 100%;

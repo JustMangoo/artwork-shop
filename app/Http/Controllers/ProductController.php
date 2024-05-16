@@ -215,12 +215,12 @@ class ProductController extends Controller
 
     public function success()
     {
-        return Inertia::render('CheckoutSuccess');
+        return Inertia::render('User/CheckoutSuccess');
     }
 
     public function cancel()
     {
-        return Inertia::render('CheckoutCancel');
+        return Inertia::render('User/CheckoutCancel');
     }
 
 }

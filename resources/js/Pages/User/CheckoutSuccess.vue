@@ -1,20 +1,26 @@
 <template>
-    <div class="success-container">
-        <h1>Thank You!</h1>
-        <p>
-            Your payment was successfully processed. You will receive an email
-            confirmation shortly.
-        </p>
-        <PrimaryButton @click="goToHome">Return to Homepage</PrimaryButton>
-    </div>
+    <MainLayout>
+        <div class="success-container">
+            <h1>Paldies Jums!</h1>
+            <p>
+                Jūsu maksājums tika veiksmīgi apstrādāts. Drīzumā saņemsit
+                apstiprinājuma e-pasta ziņojumu.
+            </p>
+            <PrimaryButton @click="goToHome"
+                >Atgriezties uz sākumlapu</PrimaryButton
+            >
+        </div>
+    </MainLayout>
 </template>
 
 <script>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
 export default {
     components: {
         PrimaryButton,
+        MainLayout,
     },
     methods: {
         goToHome() {
@@ -31,11 +37,11 @@ export default {
     text-align: center;
     padding: 20px;
     border-radius: 8px;
-    background-color: #f0f4f8;
+    background-color: var(--light);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     h1 {
-        color: #4caf50;
+        color: var(--dark);
     }
 
     p {

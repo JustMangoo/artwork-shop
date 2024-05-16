@@ -3,17 +3,102 @@
 
     <MainLayout>
         <CarouselHero />
-        <div class="product-showcase-container">
+        <div class="originals-showcase-container">
             <h2>Oriģināli</h2>
             <div class="product-showcase">
-                <img class="left" src="../Assets/Images/foto1.webp" alt="" />
-                <img class="middle" src="../Assets/Images/foto2.webp" alt="" />
-                <img class="right" src="../Assets/Images/foto3.png" alt="" />
+                <div class="showcase-text">
+                    <h4>Stāsts</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Deserunt, quas corrupti modi dolor, dicta iure earum
+                        eaque beatae totam ullam sequi nemo cum harum iusto.
+                        Esse temporibus sunt similique dolor.
+                    </p>
+                </div>
+                <div class="showcase-images">
+                    <img
+                        class="showcase-image-1"
+                        src="../Assets/Images/foto1.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-2"
+                        src="../Assets/Images/foto2.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-3"
+                        src="../Assets/Images/foto3.png"
+                        alt=""
+                    />
+                </div>
             </div>
         </div>
         <CarouselProducts />
-        <div class="tools" hidden>
-            Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
+        <div class="originals-showcase-container">
+            <h2>Oriģināli</h2>
+            <div class="product-showcase">
+                <div class="showcase-images">
+                    <img
+                        class="showcase-image-1"
+                        src="../Assets/Images/foto1.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-2"
+                        src="../Assets/Images/foto2.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-3"
+                        src="../Assets/Images/foto3.png"
+                        alt=""
+                    />
+                </div>
+                <div class="showcase-text">
+                    <h4>Stāsts</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Deserunt, quas corrupti modi dolor, dicta iure earum
+                        eaque beatae totam ullam sequi nemo cum harum iusto.
+                        Esse temporibus sunt similique dolor.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="banner-image">
+            <img src="@\Assets\Images\Image1.png" alt="hero image" />
+        </div>
+        <div class="originals-showcase-container">
+            <h2>Oriģināli</h2>
+            <div class="product-showcase">
+                <div class="showcase-text">
+                    <h4>Stāsts</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Deserunt, quas corrupti modi dolor, dicta iure earum
+                        eaque beatae totam ullam sequi nemo cum harum iusto.
+                        Esse temporibus sunt similique dolor.
+                    </p>
+                </div>
+                <div class="showcase-images">
+                    <img
+                        class="showcase-image-1"
+                        src="../Assets/Images/foto1.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-2"
+                        src="../Assets/Images/foto2.webp"
+                        alt=""
+                    />
+                    <img
+                        class="showcase-image-3"
+                        src="../Assets/Images/foto3.png"
+                        alt=""
+                    />
+                </div>
+            </div>
         </div>
     </MainLayout>
 </template>
@@ -48,59 +133,80 @@ img {
     object-fit: cover;
 }
 
-.tools {
-    font-size: 0.875rem;
-    text-align: center;
-    color: #6b7280;
-    margin-left: 1rem;
-}
-.product-showcase-container {
+.originals-showcase-container {
     width: 100%;
-    height: 75vh;
+    height: 55vh;
     display: flex;
+    gap: 2rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 7rem 0;
 
     .product-showcase {
-        width: 75rem;
-        padding-inline: 0.5rem;
+        width: 90%;
+        max-width: 75rem;
         height: 100%;
         background-color: var(--secondary);
-
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        align-items: center;
 
         @media (max-width: 768px) {
             flex-direction: column;
         }
 
-        .left {
-            transform: translate(-25%, -25%);
-            height: 25em;
-            aspect-ratio: 3 / 4;
+        .showcase-text {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            padding: 2rem 1rem;
         }
 
-        .middle {
-            transform: translate(-30%, 15%);
-            height: 25em;
-            aspect-ratio: 3 / 4;
-        }
+        .showcase-images {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            .showcase-image-1 {
+                height: 10em;
+                position: absolute;
+                top: 15%;
+                left: 25%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
+            }
 
-        .right {
-            transform: translate(-10%, 0);
-            height: 25em;
-            aspect-ratio: 3 / 4;
+            .showcase-image-2 {
+                height: 25em;
+                position: absolute;
+                top: 60%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 0;
+            }
+
+            .showcase-image-3 {
+                height: 13rem;
+                position: absolute;
+                top: 100%;
+                left: 80%;
+                transform: translate(-50%, -50%);
+                z-index: 1;
+            }
         }
     }
 }
-@media (min-width: 640px) {
-    .tools {
-        text-align: end;
-        margin-left: 0;
+
+.banner-image {
+    width: 100%;
+    height: 20rem;
+    overflow: auto;
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
     }
 }
 </style>

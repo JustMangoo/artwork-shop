@@ -8,7 +8,7 @@
 .primary-btn {
     font-weight: 300;
     letter-spacing: 0.1em;
-    color: var(--neutral-one);
+    color: var(--light);
     text-transform: uppercase;
     background-color: var(--primary);
     border: 1px solid transparent;
@@ -27,7 +27,7 @@
         content: "";
         width: 0; /* Fixed width of the line */
         height: 1px; /* Thickness of the line */
-        background-color: var(--neutral-one); /* Color of the line */
+        background-color: var(--light); /* Color of the line */
         transition: all 0.15s ease-in-out;
     }
 

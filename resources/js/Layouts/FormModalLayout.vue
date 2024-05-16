@@ -18,11 +18,9 @@
 </template>
 
 <script>
-import BasicButton from "../Components/BasicButton.vue";
 
 export default {
     components: {
-        BasicButton,
     },
     props: {
         showModal: Boolean,

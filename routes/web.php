@@ -130,5 +130,9 @@ Route::post('/send-message', [ContactController::class, 'send']);
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 
+Route::get('/test-area', function () {
+    return Inertia::render('TestArea');
+})->name('test-area');
+
 
 require __DIR__ . '/auth.php';

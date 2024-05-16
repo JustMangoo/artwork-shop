@@ -30,7 +30,7 @@ import Navigation from "@/Components//Navigation.vue";
     .logo {
         display: block;
         width: auto;
-        color: var(--neutral-one);
+        color: var(--light);
         fill: currentColor;
         height: 2.25rem;
     }

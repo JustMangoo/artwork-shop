@@ -55,7 +55,10 @@
             <!-- Bottom Navigation Menu -->
             <div class="outer-container">
                 <div class="inner-container">
-                    <div class="flex" v-if="$page.props.auth.user">
+                    <div
+                        class="wrapper--logo-links"
+                        v-if="$page.props.auth.user"
+                    >
                         <!-- Logo -->
                         <div class="logo-container">
                             <Link href="/dashboard">
@@ -88,7 +91,7 @@
                             </NavLink>
                         </div>
                     </div>
-                    <div class="flex" v-else>
+                    <div class="wrapper--logo-links" v-else>
                         <div class="logo-container">
                             <Link href="/">
                                 <img
@@ -220,17 +223,15 @@
 </template>
 
 <script>
-import ApplicationLogo from "./ApplicationLogo.vue";
-import Dropdown from "./Dropdown.vue";
-import DropdownLink from "./DropdownLink.vue";
-import NavLink from "./NavLink.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
+import NavLink from "@/Components/NavLink.vue";
 import { Link } from "@inertiajs/vue3";
 import CartSidebar from "@/Pages/User/CartSidebar.vue";
 
 export default {
     components: {
         CartSidebar,
-        ApplicationLogo,
         Dropdown,
         DropdownLink,
         NavLink,
@@ -342,6 +343,136 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* Navigation Container Styles */
+.nav-container {
+    border-bottom: 1px solid #f3f4f6;
+    width: 100%;
+
+    /* Top Navigation Styles */
+    .top-navigation {
+        background-color: var(--primary);
+        width: 100%;
+
+        .outer-container {
+            margin: 0 auto;
+            max-width: 95rem;
+            padding-inline: 0.5rem;
+
+            .inner-container {
+                display: flex;
+                justify-content: space-between;
+                height: 2rem;
+
+                .social-container {
+                    display: flex;
+                    gap: 0.5rem;
+
+                    a {
+                        width: 1.2rem;
+                        aspect-ratio: 1 / 1;
+
+                        img {
+                            height: 100%;
+                        }
+                    }
+                }
+
+                .menu {
+                    display: flex;
+                    align-items: center; // Vertically center on larger screens
+                    margin-left: 1.5rem; // Space from social icons on larger screens
+
+                    @media (max-width: 768px) {
+                        margin-left: 0; // Remove margin on smaller screens
+                    }
+
+                    .dropdown-container {
+                        position: relative;
+                        margin-left: 0.75rem; // Space between menu items
+                    }
+                }
+            }
+        }
+    }
+
+    /* Bottom Navigation Styles */
+    .bot-navigation {
+        background-color: var(--secondary);
+        width: 100%;
+
+        .outer-container {
+            margin: 0 auto;
+            max-width: 95rem;
+            padding-inline: 0.5rem;
+
+            .inner-container {
+                height: 4rem;
+                display: flex;
+                justify-content: space-between;
+
+                .wrapper--logo-links {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+
+                    .logo-container {
+                        display: flex;
+                        align-items: center;
+                        flex-shrink: 0; // Prevent logo from shrinking
+
+                        img {
+                            display: block;
+                            width: auto;
+                            height: 3rem;
+                            color: var(--primary);
+                            fill: currentColor;
+                        }
+                    }
+                    .nav-link {
+                        display: none;
+
+                        @media (min-width: 640px) {
+                            display: flex;
+                            gap: 1rem;
+                            margin-top: -1px; // Adjust to align with the top border
+                            margin-bottom: -1px; // Adjust to align with the bottom border
+                            margin-left: 2.5rem;
+                            height: 100%;
+                        }
+                    }
+                }
+                .account-menu {
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row;
+                    gap: 1rem;
+
+                    @media (max-width: 640px) {
+                        display: none;
+                    }
+
+                    .account-links {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 1rem;
+
+                        .link-icon {
+                            display: flex;
+                            flex-direction: row;
+
+                            .icon {
+                                aspect-ratio: 1 / 1;
+                                height: 1rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Link Styles (Shared and Specific) */
 .link {
     display: inline-flex;
     align-items: center;
@@ -350,110 +481,5 @@ export default {
     line-height: 1.25;
     color: var(--primary);
     cursor: pointer;
-}
-.inner-container {
-    display: flex;
-    justify-content: space-between;
-    height: 2rem;
-}
-
-.outer-container {
-    margin: 0 auto;
-    max-width: 95rem;
-    padding-inline: 0.5rem;
-}
-.nav-container {
-    border-bottom: 1px solid #f3f4f6;
-    width: 100%;
-    .top-navigation {
-        background-color: var(--primary);
-        width: 100%;
-
-        .outer-container {
-            .social-container {
-                display: flex;
-                gap: 0.5rem;
-                a {
-                    width: 1.2rem;
-                    aspect-ratio: 1 / 1;
-
-                    img {
-                        height: 100%;
-                    }
-                }
-            }
-
-            .menu {
-                display: flex;
-
-                @media (min-width: 768px) {
-                    display: flex;
-                    align-items: center;
-                    margin-left: 1.5rem;
-                }
-
-                .dropdown-container {
-                    position: relative;
-                    margin-left: 0.75rem;
-                }
-            }
-        }
-    }
-    .bot-navigation {
-        background-color: var(--secondary);
-        width: 100%;
-        .inner-container {
-            height: 4rem;
-
-            .nav-link {
-                display: none;
-                @media (min-width: 640px) {
-                    display: flex;
-                    gap: 1rem;
-                    margin-top: -1px;
-                    margin-bottom: -1px;
-                    margin-inline-start: 2.5rem;
-                }
-            }
-            .logo-container {
-                display: flex;
-                align-items: center;
-                flex-shrink: 0;
-                gap: 1rem;
-                img {
-                    display: block;
-                    width: auto;
-                    color: var(--primary);
-                    fill: currentColor;
-                    height: 3rem;
-                }
-            }
-            .account-menu {
-                display: flex;
-                align-items: center;
-                flex-direction: row;
-                gap: 1rem;
-
-                @media (max-width: 640px) {
-                    display: none;
-                }
-
-                .account-links {
-                    display: flex;
-                    flex-direction: row;
-                    gap: 1rem;
-                    .link-icon {
-                        display: flex;
-                        flex-direction: row;
-
-                        .icon {
-                            aspect-ratio: 1 / 1;
-                            height: 1rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 </style>

@@ -2,7 +2,7 @@
     <MainLayout>
         <Head title="Log in" />
         <div class="box">
-            <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+            <div v-if="status">
                 {{ status }}
             </div>
 
@@ -10,69 +10,58 @@
                 <div>
                     <InputLabel for="email" value="Epasts" />
 
-                    <TextInput
+                    <input
                         id="email"
                         type="email"
-                        class="block w-full mt-1"
                         v-model="form.email"
                         required
                         autofocus
                         autocomplete="username"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.email" />
+                    <InputError :message="form.errors.email" />
                 </div>
 
-                <div class="mt-4">
+                <div>
                     <InputLabel for="password" value="Parole" />
 
-                    <TextInput
+                    <input
                         id="password"
                         type="password"
-                        class="block w-full mt-1"
                         v-model="form.password"
                         required
                         autocomplete="current-password"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.password" />
+                    <InputError :message="form.errors.password" />
                 </div>
 
                 <div class="options-container">
-                    <label class="flex items-center">
+                    <label>
                         <Checkbox
                             name="remember"
                             v-model:checked="form.remember"
                         />
-                        <span class="text-sm text-gray-600 ms-2"
-                            >Atcerēties mani</span
-                        >
+                        <span>Atcerēties mani</span>
                     </label>
 
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Aizmirsi savu paroli?
                     </Link>
                 </div>
 
-                <div class="flex items-center justify-end mt-4">
-                    <PrimaryButton
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
+                <div>
+                    <PrimaryButton :disabled="form.processing">
                         Pieslēdzies
                     </PrimaryButton>
                 </div>
             </form>
             <div class="divider">Vai</div>
             <Link :href="route('register')">
-                <SecondaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
+                <SecondaryButton :disabled="form.processing">
                     Reģisterējies
                 </SecondaryButton>
             </Link>

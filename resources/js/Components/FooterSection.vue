@@ -152,7 +152,7 @@ export default {
 footer {
     background-color: var(--secondary);
     padding: 2rem 0;
-    color: var(--neutral-two);
+    color: var(--dark);
     display: flex;
     flex-direction: column;
     align-items: center;

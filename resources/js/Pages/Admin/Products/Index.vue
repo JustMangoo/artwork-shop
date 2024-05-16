@@ -16,12 +16,9 @@
                             :class="{ 'show-search': isSearchVisible }"
                         />
 
-                        <BasicButton
-                            class="search-button"
-                            @click="toggleSearch"
-                        >
+                        <button class="search-button" @click="toggleSearch">
                             <img src="@/Assets/search.svg" alt="search icon" />
-                        </BasicButton>
+                        </button>
                     </div>
 
                     <div class="category-search-container">
@@ -42,13 +39,13 @@
                     </div>
                 </div>
 
-                <BasicButton
+                <button
                     class="add-button"
                     @click="isAddProductModalOpen = true"
                 >
                     <img src="@/Assets/plus.svg" alt="plus icon" />
                     Jauns
-                </BasicButton>
+                </button>
                 <FormModalLayout
                     v-model:showModal="isAddProductModalOpen"
                     @submit="addProduct"
@@ -148,7 +145,7 @@
 
                     <template #footer>
                         <!-- Modal footer content -->
-                        <BasicButton
+                        <button
                             class="cancel-btn"
                             @click="
                                 isAddProductModalOpen = false;
@@ -156,10 +153,10 @@
                             "
                         >
                             Atcelt
-                        </BasicButton>
-                        <BasicButton class="submit-btn" @click="addProduct">
+                        </button>
+                        <button class="submit-btn" @click="addProduct">
                             Saglabāt
-                        </BasicButton>
+                        </button>
                     </template>
                 </FormModalLayout>
             </div>
@@ -225,7 +222,6 @@
 
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import BasicButton from "@/Components/BasicButton.vue";
 import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -240,7 +236,6 @@ export default {
     components: {
         AdminLayout,
         Head,
-        BasicButton,
         FormModalLayout,
         InputError,
         InputLabel,
@@ -586,11 +581,11 @@ export default {
 
             thead {
                 background-color: var(--primary);
-                border-bottom: 0.3rem solid var(--neutral-one);
+                border-bottom: 0.3rem solid var(--light);
 
                 tr {
                     th {
-                        color: var(--neutral-one);
+                        color: var(--light);
                         text-align: left;
                         padding: 0.5rem;
                         font-weight: 500;
@@ -602,7 +597,7 @@ export default {
                 background-color: var(--secondary);
 
                 tr {
-                    border-bottom: 0.1rem solid var(--neutral-one);
+                    border-bottom: 0.1rem solid var(--light);
                     border-left: 2px solid transparent;
 
                     &:hover {
@@ -611,7 +606,7 @@ export default {
                     }
 
                     td {
-                        color: var(--neutral-two);
+                        color: var(--dark);
                         padding: 0.5rem;
                         vertical-align: middle;
 

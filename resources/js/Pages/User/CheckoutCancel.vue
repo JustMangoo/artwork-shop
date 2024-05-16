@@ -1,20 +1,26 @@
 <template>
-    <div class="cancel-container">
-        <h1>Payment Canceled</h1>
-        <p>
-            Your payment was not processed. If this was an error, please try
-            again or contact support.
-        </p>
-        <PrimaryButton @click="goToHome">Return to Homepage</PrimaryButton>
-    </div>
+    <MainLayout>
+        <div class="cancel-container">
+            <h1>Maksājums atcelts</h1>
+            <p>
+                Jūsu maksājums netika apstrādāts. Ja tā bija kļūda, lūdzu,
+                mēģiniet vēlreiz vai sazinieties ar atbalsta dienestu.
+            </p>
+            <PrimaryButton @click="goToHome"
+                >Atgriezties uz sākumlapu</PrimaryButton
+            >
+        </div>
+    </MainLayout>
 </template>
 
 <script>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
 export default {
     components: {
         PrimaryButton,
+        MainLayout,
     },
     methods: {
         goToHome() {
@@ -31,11 +37,11 @@ export default {
     text-align: center;
     padding: 20px;
     border-radius: 8px;
-    background-color: #fff0f0;
+    background-color: var(--light);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     h1 {
-        color: #ff5252;
+        color: var(--dark);
     }
 
     p {

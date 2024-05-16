@@ -36,6 +36,7 @@ input {
     padding: 0.5rem;
     width: 100%;
     outline: 1px solid #ddd;
+    border: none;
     border-radius: var(--border-rad);
     &:focus {
         outline: 1px solid var(--primary);

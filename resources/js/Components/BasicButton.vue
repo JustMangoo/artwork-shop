@@ -12,7 +12,7 @@
     font-size: 1rem;
     font-weight: 500;
     letter-spacing: 0.1em;
-    color: var(--neutral-one);
+    color: var(--light);
     text-transform: uppercase;
     background-color: var(--primary);
     border: 1px solid transparent;
