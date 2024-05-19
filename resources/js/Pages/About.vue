@@ -30,7 +30,8 @@
             <div class="input-grid">
                 <div class="name-input">
                     <InputError :message="form.errors.name" class="mt-2" />
-                    <TextInput
+                    <input
+                        type="text"
                         v-model="form.name"
                         placeholder="Jūsu Vārds"
                         autocomplete="name"
@@ -38,19 +39,20 @@
                 </div>
                 <div class="email-input">
                     <InputError :message="form.errors.email" class="mt-2" />
-                    <TextInput
+                    <input
+                        type="email"
                         v-model="form.email"
                         placeholder="Jūsu Epasts"
                         autocomplete="email"
                     />
                 </div>
 
-                <TextArea
+                <textarea
                     v-model="form.message"
                     class="message-input"
                     :rows="3"
                     placeholder="Ievadiet Savu Ziņu"
-                ></TextArea>
+                ></textarea>
             </div>
             <PrimaryButton type="submit">Nosutīt</PrimaryButton>
         </form>
@@ -61,8 +63,6 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import TextArea from "@/Components/TextArea.vue";
 import InputError from "@/Components/InputError.vue";
 
 const form = useForm({

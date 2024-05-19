@@ -7,7 +7,7 @@
             </div>
 
             <form @submit.prevent="submit">
-                <div>
+                <div class="input-wrapper">
                     <InputLabel for="email" value="Epasts" />
 
                     <input
@@ -22,7 +22,7 @@
                     <InputError :message="form.errors.email" />
                 </div>
 
-                <div>
+                <div class="input-wrapper">
                     <InputLabel for="password" value="Parole" />
 
                     <input
@@ -36,21 +36,23 @@
                     <InputError :message="form.errors.password" />
                 </div>
 
-                <div class="options-container">
-                    <label>
-                        <Checkbox
-                            name="remember"
-                            v-model:checked="form.remember"
-                        />
-                        <span>Atcerēties mani</span>
-                    </label>
+                <div class="input-wrapper">
+                    <div class="options-container">
+                        <label>
+                            <Checkbox
+                                name="remember"
+                                v-model:checked="form.remember"
+                            />
+                            <span>Atcerēties mani</span>
+                        </label>
 
-                    <Link
-                        v-if="canResetPassword"
-                        :href="route('password.request')"
-                    >
-                        Aizmirsi savu paroli?
-                    </Link>
+                        <Link
+                            v-if="canResetPassword"
+                            :href="route('password.request')"
+                        >
+                            Aizmirsi savu paroli?
+                        </Link>
+                    </div>
                 </div>
 
                 <div>
@@ -75,7 +77,6 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 
@@ -113,11 +114,20 @@ const submit = () => {
         max-width: 28rem;
         border-radius: 0.5rem;
     }
-    .options-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 1rem;
+    .input-wrapper {
+        margin-bottom: 1rem;
+        .options-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            label {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+        }
     }
 }
 </style>

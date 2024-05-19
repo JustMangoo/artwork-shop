@@ -3,83 +3,68 @@
         <Head title="Register" />
 
         <form @submit.prevent="submit" class="box">
-            <div>
-                <InputLabel for="name" value="Name" />
+            <div class="input-wrapper">
+                <label for="name">Name</label>
 
-                <TextInput
+                <input
                     id="name"
                     type="text"
-                    class="block w-full mt-1"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError :message="form.errors.name" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <div class="input-wrapper">
+                <label for="email">Email</label>
 
-                <TextInput
+                <input
                     id="email"
                     type="email"
-                    class="block w-full mt-1"
                     v-model="form.email"
                     required
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError :message="form.errors.email" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <div class="input-wrapper">
+                <label for="password">Password</label>
 
-                <TextInput
+                <input
                     id="password"
                     type="password"
-                    class="block w-full mt-1"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError :message="form.errors.password" />
             </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
+            <div class="input-wrapper">
+                <label for="password_confirmation">Apsti Password</label>
 
-                <TextInput
+                <input
                     id="password_confirmation"
                     type="password"
-                    class="block w-full mt-1"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
                 />
 
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
+                <InputError :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('login')"
-                    class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Already registered?
-                </Link>
-
+            <div class="input-wrapper">
+                <Link :href="route('login')"> Esi jau reģisterējies? </Link>
+            </div>
+            <div class="input-wrapper">
                 <PrimaryButton
-                    class="ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
@@ -93,9 +78,7 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const form = useForm({
@@ -119,16 +102,13 @@ const submit = () => {
     margin: 3rem 0;
     background-color: #fff;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
     @media (min-width: 640px) {
         max-width: 28rem;
         border-radius: 0.5rem;
-    }
-    .options-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 1rem;
     }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div v-show="message">
-        <p class="text-sm text-red-600">
+        <p class="input-error-message">
             {{ message }}
         </p>
     </div>
@@ -13,3 +13,11 @@ defineProps({
     },
 });
 </script>
+
+<style lang="scss" scoped>
+.input-error-message {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #dc2626;
+}
+</style>

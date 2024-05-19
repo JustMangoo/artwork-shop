@@ -28,7 +28,6 @@ import Navigation from "@/Components//Navigation.vue";
     border-bottom: 1px solid #f3f4f6;
 
     .logo {
-        display: block;
         width: auto;
         color: var(--light);
         fill: currentColor;

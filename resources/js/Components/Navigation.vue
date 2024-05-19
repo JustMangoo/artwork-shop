@@ -31,19 +31,11 @@
                     <div class="menu">
                         <!-- Settings Dropdown -->
                         <div class="dropdown-container">
-                            <Dropdown align="right" width="48" class="">
-                                <template #dropdown-label> test </template>
+                            <Dropdown>
+                                <template #dropdown-label> lV </template>
                                 <template #link-container>
-                                    <DropdownLink :href="route('profile.edit')">
-                                        Profils
-                                    </DropdownLink>
-                                    <DropdownLink
-                                        :href="route('logout')"
-                                        method="post"
-                                        as="button"
-                                    >
-                                        Iziet
-                                    </DropdownLink>
+                                    <DropdownLink> LV </DropdownLink>
+                                    <DropdownLink> EN </DropdownLink>
                                 </template>
                             </Dropdown>
                         </div>
@@ -57,7 +49,10 @@
                 <div class="inner-container">
                     <div
                         class="wrapper--logo-links"
-                        v-if="$page.props.auth.user"
+                        v-if="
+                            $page.props.auth.user.role_id === 2 ||
+                            $page.props.auth.user.role_id === 3
+                        "
                     >
                         <!-- Logo -->
                         <div class="logo-container">
@@ -86,6 +81,7 @@
                             <NavLink
                                 :href="route('users.index')"
                                 :active="route().current('users.index')"
+                                v-if="$page.props.auth.user.role_id === 2"
                             >
                                 Lietotāji
                             </NavLink>
@@ -143,15 +139,13 @@
                     </div>
 
                     <div v-if="canLogin" class="account-menu">
-                        <div v-if="$page.props.auth.user" class="account-links">
+                        <div class="account-links">
                             <div class="link-icon">
-                                <Dropdown align="right" width="48" class="">
-                                    <template #dropdown-label class="link">
-                                        <button
-                                            type="button"
-                                            class="link"
-                                        ></button>
-                                        {{ $page.props.auth.user.name }}
+                                <Dropdown v-if="$page.props.auth.user">
+                                    <template #dropdown-label>
+                                        <p class="link">
+                                            {{ $page.props.auth.user.name }}
+                                        </p>
                                     </template>
                                     <template #link-container>
                                         <DropdownLink
@@ -162,32 +156,12 @@
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
-                                            as="button"
                                         >
                                             Iziet
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
-                                <img
-                                    src="../Assets/user.svg"
-                                    alt="lietotajs"
-                                    class="icon"
-                                />
-                            </div>
-                            <div class="link-icon" @click="toggleCart($event)">
-                                <p class="link"></p>
-                                Grozs
-                                <img
-                                    src="../Assets/cart.svg"
-                                    alt="raati"
-                                    class="icon"
-                                />
-                            </div>
-                        </div>
-
-                        <div v-else class="account-links">
-                            <div class="link-icon">
-                                <Link :href="route('login')" class="link"
+                                <Link v-else :href="route('login')" class="link"
                                     >Pieslēgties</Link
                                 >
                                 <img
@@ -196,7 +170,14 @@
                                     class="icon"
                                 />
                             </div>
-                            <div class="link-icon" @click="toggleCart($event)">
+                            <div
+                                v-if="
+                                    !$page.props.auth.user ||
+                                    $page.props.auth.user.role_id === 1
+                                "
+                                class="link-icon"
+                                @click="toggleCart($event)"
+                            >
                                 <p class="link">Grozs</p>
 
                                 <img
@@ -379,16 +360,16 @@ export default {
 
                 .menu {
                     display: flex;
-                    align-items: center; // Vertically center on larger screens
-                    margin-left: 1.5rem; // Space from social icons on larger screens
+                    align-items: center;
+                    margin-left: 1.5rem;
 
                     @media (max-width: 768px) {
-                        margin-left: 0; // Remove margin on smaller screens
+                        margin-left: 0;
                     }
 
                     .dropdown-container {
                         position: relative;
-                        margin-left: 0.75rem; // Space between menu items
+                        margin-left: 0.75rem;
                     }
                 }
             }
@@ -418,7 +399,7 @@ export default {
                     .logo-container {
                         display: flex;
                         align-items: center;
-                        flex-shrink: 0; // Prevent logo from shrinking
+                        flex-shrink: 0;
 
                         img {
                             display: block;
@@ -434,8 +415,8 @@ export default {
                         @media (min-width: 640px) {
                             display: flex;
                             gap: 1rem;
-                            margin-top: -1px; // Adjust to align with the top border
-                            margin-bottom: -1px; // Adjust to align with the bottom border
+                            margin-top: -1px;
+                            margin-bottom: -1px;
                             margin-left: 2.5rem;
                             height: 100%;
                         }
@@ -479,7 +460,9 @@ export default {
     font-size: 0.875rem;
     font-weight: 300;
     line-height: 1.25;
+    letter-spacing: normal;
     color: var(--primary);
     cursor: pointer;
+    text-transform: capitalize;
 }
 </style>

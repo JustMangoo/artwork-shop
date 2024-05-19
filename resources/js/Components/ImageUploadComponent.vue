@@ -9,12 +9,7 @@
         <div v-else @click="triggerFileInput" class="image-upload-placeholder">
             <img src="../Assets/upload.svg" alt="upload" />
         </div>
-        <input
-            type="file"
-            ref="fileInput"
-            @change="handleImageUpload"
-            class="hidden"
-        />
+        <input type="file" ref="fileInput" @change="handleImageUpload" hidden />
     </div>
 </template>
 
@@ -84,7 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .image-upload-container {
-    width: 30%;
+    width: 100%;
     aspect-ratio: 3 / 4;
     border: 2px dashed #ccc;
     border-radius: var(--border-rad);
@@ -112,6 +107,7 @@ export default {
     }
 
     .image-preview {
+        width: 100%;
         object-fit: cover;
         aspect-ratio: 3/ 4;
     }
@@ -119,9 +115,11 @@ export default {
         position: absolute;
         top: -8px;
         right: -8px;
+        padding: 2px;
+        border-radius: 50%;
 
         img {
-            width: 20px;
+            width: 16px;
             background-color: var(--primary);
             border-radius: 50%;
         }

@@ -37,7 +37,7 @@
                         <!-- (input fields) -->
                         <div>
                             <InputLabel for="name">Vārds:</InputLabel>
-                            <TextInput id="name" v-model="form.name" />
+                            <input type="text" id="name" v-model="form.name" />
                             <InputError
                                 :message="form.errors.name"
                                 class="mt-2"
@@ -45,7 +45,11 @@
                         </div>
                         <div>
                             <InputLabel for="email">Epasts:</InputLabel>
-                            <TextInput id="email" v-model="form.email" />
+                            <input
+                                type="email"
+                                id="email"
+                                v-model="form.email"
+                            />
                             <InputError
                                 :message="form.errors.email"
                                 class="mt-2"
@@ -103,7 +107,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Vārds</th>
-                            <th>Epasts</th>
+                            <th class="hide-ssmall">Epasts</th>
                             <th>Loma</th>
                             <th></th>
                         </tr>
@@ -112,7 +116,7 @@
                         <tr v-for="user in users" :key="user.id">
                             <td>{{ user.id }}</td>
                             <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
+                            <td class="hide-ssmall">{{ user.email }}</td>
                             <td>
                                 <div class="single-role">
                                     {{ user.role.name }}
@@ -145,8 +149,6 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import TextArea from "@/Components/TextArea.vue";
 import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
@@ -158,8 +160,6 @@ export default {
         FormModalLayout,
         InputError,
         InputLabel,
-        TextInput,
-        TextArea,
         SystemMessage,
     },
     props: {

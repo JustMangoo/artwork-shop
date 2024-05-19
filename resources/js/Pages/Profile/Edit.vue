@@ -1,3 +1,33 @@
+<template>
+    <Head title="Profils" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h1>Profils</h1>
+        </template>
+
+        <div class="content-container">
+            <div class="form-container">
+                <div class="form-wrapper">
+                    <UpdateProfileInformationForm
+                        :must-verify-email="mustVerifyEmail"
+                        :status="status"
+                        class="form-content"
+                    />
+                </div>
+
+                <div class="form-wrapper">
+                    <UpdatePasswordForm class="form-content" />
+                </div>
+
+                <div class="form-wrapper">
+                    <DeleteUserForm class="form-content" />
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
+
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DeleteUserForm from "./Partials/DeleteUserForm.vue";
@@ -15,32 +45,32 @@ defineProps({
 });
 </script>
 
-<template>
-    <Head title="Profile" />
+<style lang="scss" scoped>
+.content-container {
+    padding: 3rem 0;
+    display: flex;
+    justify-content: center;
+}
 
-    <AuthenticatedLayout>
-        <template #header>
-            <h1 class="">Profils</h1>
-        </template>
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 95rem;
+    padding-inline: 0.5rem;
+    width: 100%;
 
-        <div class="py-12">
-            <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
-                <div class="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                    <UpdateProfileInformationForm
-                        :must-verify-email="mustVerifyEmail"
-                        :status="status"
-                        class="max-w-xl"
-                    />
-                </div>
+    .form-wrapper {
+        padding: 1rem 2rem;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 0.5rem;
 
-                <div class="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
-                <div class="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                    <DeleteUserForm class="max-w-xl" />
-                </div>
-            </div>
-        </div>
-    </AuthenticatedLayout>
-</template>
+        width: 100%;
+        .form-content {
+            width: 100%;
+        }
+    }
+}
+</style>

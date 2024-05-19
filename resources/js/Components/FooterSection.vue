@@ -4,10 +4,11 @@
         <div class="container">
             <!-- Form Section -->
             <div class="form-container">
-                <h3>Jaunumi</h3>
+                <h4>Jaunumi</h4>
                 <form @submit.prevent="submitForm">
                     <div class="input-email">
-                        <TextInput
+                        <input
+                            type="email"
                             id="email"
                             v-model="form.email"
                             required
@@ -15,7 +16,7 @@
                             placeholder="Ievadiet Epastu"
                         />
 
-                        <InputError class="mt-2" :message="form.errors.email" />
+                        <InputError :message="form.errors.email" />
                     </div>
                     <div class="newsletter-btn">
                         <PrimaryButton
@@ -30,7 +31,7 @@
 
             <!-- Contact Information Section -->
             <div class="contacts">
-                <h3>Kontakti</h3>
+                <h4>Kontakti</h4>
                 <div class="info">
                     <p>
                         <img src="../Assets/mail.svg" alt="" />
@@ -48,7 +49,7 @@
             </div>
 
             <div class="recources">
-                <h3>Citi Resursi</h3>
+                <h4>Citi Resursi</h4>
                 <div class="info">
                     <p>Privātuma politika</p>
                     <a href="/about">Par mani</a>
@@ -58,7 +59,7 @@
 
             <!-- Social Media Links Section -->
             <div class="socials">
-                <h3>Sociālie tīkli</h3>
+                <h4>Sociālie tīkli</h4>
                 <div class="links">
                     <a
                         class="icon"
@@ -87,14 +88,14 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
+
 import SystemMessage from "@/Components/SystemMessage.vue";
 
 export default {
     components: {
         InputError,
         PrimaryButton,
-        TextInput,
+
         SystemMessage,
     },
     setup() {
@@ -148,7 +149,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 footer {
     background-color: var(--secondary);
     padding: 2rem 0;
@@ -161,6 +162,7 @@ footer {
     overflow: hidden;
 
     .container {
+        width: 100%;
         max-width: 95rem;
         padding-inline: 0.5rem;
         display: grid;
@@ -227,9 +229,10 @@ footer {
     .recources,
     .contacts {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         h3 {
-            width: 100%;
-
             @media (max-width: 768px) {
                 text-align: center;
             }
@@ -332,6 +335,7 @@ footer {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 8px;
 
         .links {
             display: flex;

@@ -15,14 +15,19 @@
         @slideChange="onSlideChange"
         class="swiper"
     >
-        <swiper-slide class="swiper-slide">
-            <img src="../Assets/Images/Image1.png" alt="" />
+        <swiper-slide class="swiper-slide slide-1">
+            <div class="slide-content">
+                <h1>Jauni Izlaidumi</h1>
+                <p>Jaunas gleznas un produkti!</p>
+                <button>Skatīt</button>
+            </div>
         </swiper-slide>
-        <swiper-slide class="swiper-slide">
-            <img src="../Assets/Images/Image2.png" alt="" />
-        </swiper-slide>
-        <swiper-slide class="swiper-slide">
-            <img src="../Assets/Images/Image3.png" alt="" />
+        <swiper-slide class="swiper-slide slide-2">
+            <div class="slide-content">
+                <h1>Stāsts Par Mani</h1>
+                <p>Iepazīsties ar to ko daru</p>
+                <button>Lasīt vairāk</button>
+            </div>
         </swiper-slide>
     </swiper>
 </template>
@@ -55,7 +60,7 @@ export default {
 
 <style lang="scss" scoped>
 .swiper {
-    height: 65vh;
+    height: 75vh;
     width: 100%;
     user-select: none;
     overflow: hidden;
@@ -68,10 +73,33 @@ export default {
         width: 100%;
         object-fit: cover;
         overflow: hidden;
+        width: 100%;
+        overflow: hidden;
 
-        img {
-            width: 100%;
-            overflow: hidden;
+        .slide-content {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: baseline;
+
+            p {
+                font-size: 2rem;
+            }
+        }
+
+        &.slide-1 {
+            background-image: url("@/Assets/Images/Image1.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        &.slide-2 {
+            background-image: url("@/Assets/Images/Image2.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
         }
     }
 }

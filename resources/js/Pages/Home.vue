@@ -2,7 +2,11 @@
     <Head title="Sveicināti" />
 
     <MainLayout>
-        <CarouselHero />
+        <CarouselHero>
+            <template v-slot="{ index }">
+                <img :src="`../Assets/Images/Image${index + 1}.png`" alt="" />
+            </template>
+        </CarouselHero>
         <div class="originals-showcase-container">
             <h2>Oriģināli</h2>
             <div class="product-showcase">
@@ -34,7 +38,9 @@
                 </div>
             </div>
         </div>
-        <CarouselProducts />
+        <div class="banner-image">
+            <img src="@\Assets\Images\Image1.png" alt="hero image" />
+        </div>
         <div class="originals-showcase-container">
             <h2>Oriģināli</h2>
             <div class="product-showcase">
@@ -107,7 +113,6 @@
 import { Head } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import CarouselHero from "@/Components/CarouselHero.vue";
-import CarouselProducts from "@/Components/CarouselProducts.vue";
 
 defineProps({
     canLogin: {
@@ -128,11 +133,6 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-img {
-    box-shadow: 0 10px 50px #0000002a;
-    object-fit: cover;
-}
-
 .originals-showcase-container {
     width: 100%;
     height: 55vh;
@@ -169,6 +169,10 @@ img {
             position: relative;
             width: 100%;
             height: 100%;
+            img {
+                box-shadow: 0 10px 50px #0000002a;
+                object-fit: cover;
+            }
             .showcase-image-1 {
                 height: 10em;
                 position: absolute;
@@ -201,8 +205,8 @@ img {
 
 .banner-image {
     width: 100%;
-    height: 20rem;
-    overflow: auto;
+    height: 45rem;
+
     img {
         object-fit: cover;
         width: 100%;

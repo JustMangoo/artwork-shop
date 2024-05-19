@@ -57,30 +57,29 @@
                         <!-- (input fields) -->
                         <div>
                             <InputLabel for="title">Nosaukums:</InputLabel>
-                            <TextInput id="title" v-model="form.title" />
-                            <InputError
-                                :message="form.errors.title"
-                                class="mt-2"
+                            <input
+                                type="text"
+                                id="title"
+                                v-model="form.title"
                             />
+                            <InputError :message="form.errors.title" />
                         </div>
                         <div>
                             <InputLabel for="description">Apraksts:</InputLabel>
-                            <TextArea
+                            <textarea
                                 id="description"
                                 v-model="form.description"
-                            ></TextArea>
-                            <InputError
-                                :message="form.errors.description"
-                                class="mt-2"
-                            />
+                            ></textarea>
+                            <InputError :message="form.errors.description" />
                         </div>
                         <div>
                             <InputLabel for="price">Cena:</InputLabel>
-                            <TextInput id="price" v-model="form.price" />
-                            <InputError
-                                :message="form.errors.price"
-                                class="mt-2"
+                            <input
+                                type="number"
+                                id="price"
+                                v-model="form.price"
                             />
+                            <InputError :message="form.errors.price" />
                         </div>
                         <div class="image-category">
                             <div>
@@ -108,10 +107,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <InputError
-                                    :message="form.errors.category"
-                                    class="mt-2"
-                                />
+                                <InputError :message="form.errors.category" />
                             </div>
                             <div class="images-input-box">
                                 <InputLabel for="images">Attēli:</InputLabel>
@@ -166,9 +162,9 @@
                     <thead>
                         <tr>
                             <th>Nosaukums</th>
-                            <th>Apraksts</th>
+                            <th class="hide-ssmall">raksts</th>
                             <th>Cena</th>
-                            <th>kategorija</th>
+                            <th class="hide-ssmall">kategorija</th>
                             <th>Bilde</th>
                             <th></th>
                         </tr>
@@ -178,11 +174,11 @@
                             <td>
                                 {{ product.title }}
                             </td>
-                            <td>
+                            <td class="hide-ssmall">
                                 {{ product.description }}
                             </td>
                             <td>{{ product.price }}&euro;</td>
-                            <td>
+                            <td class="hide-ssmall">
                                 <div class="single-category">
                                     {{ product.category.name }}
                                 </div>
@@ -190,9 +186,10 @@
                             <td>
                                 <div class="product-image-field">
                                     <img
-                                        v-for="image in product.images"
-                                        :key="image.id"
-                                        :src="productImagePath(image)"
+                                        v-if="product.images.length > 0"
+                                        :src="
+                                            productImagePath(product.images[0])
+                                        "
                                         alt="Product Image"
                                         class="product-image"
                                     />
@@ -225,8 +222,6 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import TextArea from "@/Components/TextArea.vue";
 import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
 import SystemMessage from "@/Components/SystemMessage.vue";
 import { Head } from "@inertiajs/vue3";
@@ -239,8 +234,6 @@ export default {
         FormModalLayout,
         InputError,
         InputLabel,
-        TextInput,
-        TextArea,
         ImageUploadComponent,
         SystemMessage,
     },
@@ -648,10 +641,12 @@ export default {
         gap: 1rem;
 
         .images-input-box {
+            width: 100%;
             .images-input {
+                width: 100%;
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
+                gap: 1rem;
             }
         }
 
