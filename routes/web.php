@@ -37,27 +37,13 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
 
-Route::get('/products-customer', function () {
-    $products = Product::with(['images'])->get();
-    return Inertia::render('Products', [
-        'products' => $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'title' => $product->title,
-                'description' => $product->description,
-                'price' => $product->price,
-                'categories' => $product->category,
-                'images' => $product->images->map(function ($image) {
-                    return ['url' => Storage::url($image->image)];
-                })->toArray(),
-                'created_at' => $product->created_at,
-            ];
-        }),
-    ]);
-})->name('products-customer');
+Route::get('/original', function () {
+    return Inertia::render('Original');
+})->name('original');
 
 Route::get('/printed', function () {
     $products = Product::with(['images'])->get();
@@ -78,63 +64,83 @@ Route::get('/printed', function () {
     ]);
 })->name('printed');
 
-Route::get('/about', function () {
-    return Inertia::render('About');
-})->name('about');
-
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::post('/cart', [CartController::class, 'store']);
-Route::delete('/cart/{id}', [CartController::class, 'destroy']);
-Route::post('/cart/clear', [CartController::class, 'clear']);
-
-
-Route::post('/cart/item/{id}', [CartController::class, 'update']);
-
-Route::get('/original', function () {
-    return Inertia::render('Original');
-})->name('original');
-
 Route::get('/woodwork', function () {
     return Inertia::render('Woodwork');
 })->name('woodwork');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-});
-
-Route::middleware('auth')->group(function () {
-    Route::resource('products', ProductController::class);
-    Route::resource('orders', OrdersController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('images', ImageController::class);
-    Route::resource('categories', CategoryController::class);
-});
+Route::get('/products-customer', function () {
+    $products = Product::with(['images'])->get();
+    return Inertia::render('Products', [
+        'products' => $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'title' => $product->title,
+                'description' => $product->description,
+                'price' => $product->price,
+                'categories' => $product->category,
+                'images' => $product->images->map(function ($image) {
+                    return ['url' => Storage::url($image->image)];
+                })->toArray(),
+                'created_at' => $product->created_at,
+            ];
+        }),
+    ]);
+})->name('products-customer');
 
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-Route::middleware(['cors'])->group(function () {
-    Route::post('/checkout', [ProductController::class, 'checkout'])->name('checkout');
-    Route::get('/checkout/success', [ProductController::class, 'success'])->name('checkout.success');
-    Route::get('/checkout/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
-});
-
-Route::get("/testroute", function () {
-    $name = "A name";
-
-    Mail::to('daugatsa@gmail.com')->send(new MyEmail());
-});
+// Email Routes
 
 Route::post('/send-message', [ContactController::class, 'send']);
-
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
+
+// E-commerce Routes
+
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart');
+    Route::post('/', [CartController::class, 'store']);
+    Route::delete('/{id}', [CartController::class, 'destroy']);
+    Route::post('/clear', [CartController::class, 'clear']);
+    Route::post('/item/{id}', [CartController::class, 'update']);
+});
+
+Route::prefix('checkout')->group(function () {
+    Route::post('/', [ProductController::class, 'checkout'])->name('checkout');
+    Route::get('/success', [ProductController::class, 'success'])->name('checkout.success');
+    Route::get('/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
+});
+
+// Test Page Route
 
 Route::get('/test-area', function () {
     return Inertia::render('TestArea');
 })->name('test-area');
+
+// Authenticated Routes
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::resources([
+        'products' => ProductController::class,
+        'orders' => OrdersController::class,
+        'users' => UserController::class,
+        'images' => ImageController::class,
+        'categories' => CategoryController::class,
+    ]);
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+});
+
+
+
 
 
 require __DIR__ . '/auth.php';
