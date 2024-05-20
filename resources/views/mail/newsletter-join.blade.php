@@ -21,13 +21,13 @@
     margin: 20px auto;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
   }
   .header {
     background-color: #9aa283;
     color: #ffffff;
-    padding: 20px;
+    padding: 16px;
     text-align: center;
     font-size: 24px;
     font-weight: 700;
@@ -36,7 +36,7 @@
     padding: 20px;
     line-height: 1.5;
     font-weight: 400;
-    text-align: center; /* Center align text for better reading on subscription confirmation */
+    text-align: center;
   }
   .footer {
     background-color: #9aa283;
@@ -49,10 +49,10 @@
     display: block;
     width: max-content;
     padding: 10px 20px;
-    background-color: #76a676;
+    background-color: #9aa283;
     color: #ffffff;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 4px;
     text-align: center;
     margin: 20px auto;
     font-weight: 700;
@@ -65,7 +65,7 @@
     <h1>Paldies par Pierakstīšanos!</h1>
   </div>
   <div class="content">
-    <p>Laipni lūdzam mūsu biļetenā. Jūs esat veiksmīgi pierakstījušies, lai saņemtu jaunākās ziņas un ekskluzīvus piedāvājumus tieši savā e-pastā.</p>
+    <p>Laipni lūdzam mūsu pastā <strong>{{ $details['email'] }}</strong>. Jūs esat veiksmīgi pierakstījušies, lai saņemtu jaunākās ziņas un ekskluzīvus piedāvājumus tieši savā e-pastā.</p>
     <a href="#" class="button">Apskatīt mūsu vietni</a>
   </div>
   <div class="footer">

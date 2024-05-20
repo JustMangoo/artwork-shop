@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Mail\NewsletterSubscription;
+use Illuminate\Support\Facades\Mail;
 
 class SubscriptionController extends Controller
 {
@@ -14,6 +16,8 @@ class SubscriptionController extends Controller
         ]);
 
         Subscription::create($validatedData);
+        Mail::to($validatedData['email'])->send(new NewsletterSubscription($validatedData));
+
 
         return redirect()->back()->with('message', 'Subscription successful.');
     }

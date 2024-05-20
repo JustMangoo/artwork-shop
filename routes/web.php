@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ImageController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\{
+    ProfileController,
+    ProductController,
+    CategoryController,
+    ImageController,
+    DashboardController,
+    UserController,
+    ContactController,
+    SubscriptionController,
+    CartController,
+    OrdersController
+};
 use App\Mail\MyEmail;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Mail;
@@ -32,8 +34,6 @@ Route::get('/', function () {
     return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 })->name('home');
 

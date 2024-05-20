@@ -13,7 +13,7 @@ class ContactController extends Controller
     {
 
         Log::info('CONTACT send method:', $request->all());
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'message' => 'required|string'
@@ -21,7 +21,7 @@ class ContactController extends Controller
 
         Log::info('CONTACT after validation');
 
-        Mail::send(new ContactFormMail($validated));
+        Mail::send(new ContactFormMail($validatedData));
 
         return redirect()->back()->with('message', 'Your message has been sent successfully!');
     }
