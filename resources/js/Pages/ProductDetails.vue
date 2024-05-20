@@ -84,6 +84,7 @@ const decreaseQuantity = () => {
 .container {
     display: flex;
     justify-content: space-between;
+    width: 100%;
     max-width: 75rem;
     padding-inline: 0.5rem;
     gap: 2.5rem;

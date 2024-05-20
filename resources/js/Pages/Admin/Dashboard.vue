@@ -53,8 +53,8 @@
                 </div>
                 <div class="box">
                     <div class="info-text">
-                        <span>0</span>
-                        <p>Jaunas ziņas</p>
+                        <span>{{ orderCount }}</span>
+                        <p>Aktīvi pasūtījumi</p>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,8 @@ import { usePage } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head } from "@inertiajs/vue3";
 
-const { productCount, userCount, subscriptionCount } = usePage().props;
+const { productCount, userCount, subscriptionCount, orderCount } =
+    usePage().props;
 </script>
 
 <style lang="scss" scoped>

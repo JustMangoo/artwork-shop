@@ -7,7 +7,7 @@
         </div>
         <div class="about-container">
             <div class="about-text">
-                <h1>Par Arti Daugatu</h1>
+                <h2>Par Arti Daugatu</h2>
                 <p>
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                     Fuga, repudiandae eum nihil earum, omnis aperiam animi
@@ -26,7 +26,7 @@
         </div>
 
         <form class="form-container" @submit.prevent="submit" id="contact-form">
-            <h2>Sazinies</h2>
+            <h3>Sazinies</h3>
             <div class="input-grid">
                 <div class="name-input">
                     <InputError :message="form.errors.name" class="mt-2" />
@@ -72,8 +72,11 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.reset();
-    form.post("/send-message");
+    form.post("/send-message", {
+        onSuccess: () => {
+            form.reset();
+        },
+    });
 };
 </script>
 
@@ -81,7 +84,7 @@ const submit = () => {
 .hero-image {
     width: 100%;
     height: 40rem;
-    overflow: auto;
+    overflow: hidden;
     img {
         object-fit: cover;
         width: 100%;
@@ -111,6 +114,8 @@ const submit = () => {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        text-align: center;
+        gap: 16px;
         @media (max-width: 768px) {
             max-width: 70%;
         }
@@ -118,7 +123,6 @@ const submit = () => {
         p {
             text-align: center;
             font-size: 20px;
-            padding-bottom: 1rem;
         }
     }
     .about-image {

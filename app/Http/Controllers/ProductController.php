@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Image;
-use App\Models\Cart;
+use App\Models\Order;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -173,27 +173,28 @@ class ProductController extends Controller
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        Log::info('PRODUCT checkout method called: ', $request->all());
-        Log::info('Headers', $request->headers->all());
-
         $lineItems = [];
         $cartItems = $request->input('cartItems', []);
         $totalPrice = 0;
 
         foreach ($cartItems as $item) {
-
             $product = Product::find($item['product']['id']);
-            $totalPrice += $product->price;
+            if (!$product) {
+                continue; // Skip if product not found
+            }
+            $totalPrice += $product->price * $item['quantity'];
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
-                    'product_data' => [
-                        'name' => $product->title,
-                    ],
+                    'product_data' => ['name' => $product->title],
                     'unit_amount' => $product->price * 100,
                 ],
                 'quantity' => $item['quantity'],
             ];
+        }
+
+        if (empty($lineItems)) {
+            return response()->json(['error' => 'Cart is empty'], 400);
         }
 
         $session = CheckoutSession::create([
@@ -204,15 +205,16 @@ class ProductController extends Controller
             'cancel_url' => route('checkout.cancel'),
         ]);
 
-        /* $order = new Order();
-        $order->status = 'unpaid';
-        $order->total_price = $totalPrice;
-        $order->session_id = $session->id;
-        $order->save90; */
+        $order = new Order([
+            'total_price' => $totalPrice,
+            'session_id' => $session->id,
+            'items' => $cartItems,
+            'status' => 'pending',
+        ]);
+        $order->save();
 
         return response()->json(['url' => $session->url]);
     }
-
     public function success()
     {
         return Inertia::render('User/CheckoutSuccess');

@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrdersController;
 use App\Mail\MyEmail;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Mail;
@@ -106,6 +107,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
+    Route::resource('orders', OrdersController::class);
     Route::resource('users', UserController::class);
     Route::resource('images', ImageController::class);
     Route::resource('categories', CategoryController::class);

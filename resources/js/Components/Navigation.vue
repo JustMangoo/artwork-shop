@@ -50,8 +50,9 @@
                     <div
                         class="wrapper--logo-links"
                         v-if="
-                            $page.props.auth.user.role_id === 2 ||
-                            $page.props.auth.user.role_id === 3
+                            $page.props.auth.user &&
+                            ($page.props.auth.user.role_id === 2 ||
+                                $page.props.auth.user.role_id === 3)
                         "
                     >
                         <!-- Logo -->
@@ -77,6 +78,12 @@
                                 :active="route().current('products.index')"
                             >
                                 Produkti
+                            </NavLink>
+                            <NavLink
+                                :href="route('orders.index')"
+                                :active="route().current('orders.index')"
+                            >
+                                Pasūtījumi
                             </NavLink>
                             <NavLink
                                 :href="route('users.index')"
@@ -149,6 +156,7 @@
                                     </template>
                                     <template #link-container>
                                         <DropdownLink
+                                            v-if="route('profile.edit')"
                                             :href="route('profile.edit')"
                                         >
                                             Profils

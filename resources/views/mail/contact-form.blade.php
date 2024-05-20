@@ -55,11 +55,12 @@
     <h1>Ir pienākusi jauna ziņa</h1>
   </div>
   <div class="content">
-    <p>Vārds: {{ $details['name'] }}</p>
-    <p>Epasts: {{ $details['email'] }}</p>
-    <p>Ziņa: {{ $details['message'] }}</p>
+    <p><strong>Vārds:</strong> {{ $details['name'] }}</p>
+    <p><strong>Epasts:</strong> {{ $details['email'] }}</p>
+    <p><strong>Ziņa:</strong> {{ $details['message'] }}</p>
   </div>
   <div class="footer">
+    &copy; {{ date('Y') }} Artis Daugats. Visas tiesības aizsargātas.
   </div>
 </div>
 </body>
