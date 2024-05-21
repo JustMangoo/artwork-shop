@@ -12,9 +12,6 @@ use App\Http\Controllers\{
     CartController,
     OrdersController
 };
-use App\Mail\MyEmail;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Product;
@@ -90,13 +87,13 @@ Route::get('/products-customer', function () {
 
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-// Email Routes
+// Email Routes ---------
 
 Route::post('/send-message', [ContactController::class, 'send']);
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 Route::get('/unsubscribe/{email}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 
-// E-commerce Routes
+// E-commerce Routes ---------
 
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart');
@@ -112,13 +109,13 @@ Route::prefix('checkout')->group(function () {
     Route::get('/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
 });
 
-// Test Page Route
+// Test Page Route ---------
 
 Route::get('/test-area', function () {
     return Inertia::render('TestArea');
 })->name('test-area');
 
-// Authenticated Routes
+// Authenticated Routes ---------
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
