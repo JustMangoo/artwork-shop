@@ -1,8 +1,10 @@
 <template>
     <Head title="Produkti" />
     <MainLayout>
+        <div class="banner-image">
+            <h1 class="products-title">Visi Produkti</h1>
+        </div>
         <div class="container">
-            <h2 class="products-title">Produkti</h2>
             <div class="product-grid">
                 <div
                     v-for="product in products"
@@ -11,7 +13,7 @@
                     @mouseover="hoverImage(product)"
                     @mouseleave="unhoverImage(product)"
                 >
-                    <Link :href="`/products/${product.id}`">
+                    <Link :href="`/products-customer/${product.id}`">
                         <div v-if="product.images.length" class="product-image">
                             <!-- Bind image source dynamically -->
                             <img
@@ -121,19 +123,19 @@ const unhoverImage = (product) => {
                 height: auto;
                 aspect-ratio: 3/4;
                 object-fit: cover;
-                border-radius: var(--border-rad);
+                border-radius: var(--rounded-box);
             }
 
             .tag-new-release {
                 position: absolute;
                 top: 0.3rem;
                 left: 0.3rem;
-                background-color: var(--secondary);
-                color: var(--primary);
+                background-color: var(--color--secondary);
+                color: var(--color--primary);
                 padding: 0.75rem 0.75rem;
                 font-size: 0.875rem;
                 font-weight: 300;
-                border-radius: var(--border-rad);
+                border-radius: var(--rounded-box);
             }
         }
 
@@ -142,17 +144,26 @@ const unhoverImage = (product) => {
 
             .product-title {
                 margin: 0;
-                font-size: 1rem;
-                color: #333;
-                font-weight: 200;
+                color: var(--color--dark);
             }
 
             .product-price {
-                font-size: 1rem;
-                color: #333;
-                font-weight: 200;
+                color: var(--color--dark);
             }
         }
+    }
+}
+.banner-image {
+    width: 100%;
+    height: 25rem;
+    background-image: url("@/Assets/Images/Image1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h1 {
     }
 }
 </style>

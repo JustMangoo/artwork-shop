@@ -64,12 +64,9 @@
                 <Link :href="route('login')"> Esi jau reģisterējies? </Link>
             </div>
             <div class="input-wrapper">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
+                <button class="w-full btn-primary" :disabled="form.processing">
                     Reģisterēties
-                </PrimaryButton>
+                </button>
             </div>
         </form>
     </MainLayout>
@@ -78,7 +75,6 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import InputError from "@/Components/InputError.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const form = useForm({

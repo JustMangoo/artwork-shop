@@ -1,58 +1,52 @@
 <template>
-    <section>
+    <section class="profile-section">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Profile Information
-            </h2>
+            <h4>Profila informācija</h4>
 
-            <p class="mt-1 text-sm text-gray-600">
-                Update your account's profile information and email address.
+            <p class="header-description">
+                Atjauniniet konta profila informāciju un e-pasta adresi.
             </p>
         </header>
 
         <form
             @submit.prevent="form.patch(route('profile.update'))"
-            class="mt-6 space-y-6"
+            class="profile-info-form"
         >
-            <div>
+            <div class="form-group">
                 <InputLabel for="name" value="Name" />
-
                 <input
                     id="name"
                     type="text"
-                    class="block w-full mt-1"
+                    class="form-input"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
                 />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="input-error" :message="form.errors.name" />
             </div>
 
-            <div>
+            <div class="form-group">
                 <InputLabel for="email" value="Email" />
-
                 <input
                     id="email"
                     type="email"
-                    class="block w-full mt-1"
+                    class="form-input"
                     v-model="form.email"
                     required
                     autocomplete="username"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="input-error" :message="form.errors.email" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-gray-800">
+                <p class="email-unverified-message">
                     Your email address is unverified.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        class="verification-link"
                     >
                         Click here to re-send the verification email.
                     </Link>
@@ -60,28 +54,17 @@
 
                 <div
                     v-show="status === 'verification-link-sent'"
-                    class="mt-2 text-sm font-medium text-green-600"
+                    class="verification-sent-message"
                 >
                     A new verification link has been sent to your email address.
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                >
-                    <p
-                        v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
-                    >
-                        Saved.
-                    </p>
-                </Transition>
+            <div class="form-actions">
+                <button :disabled="form.processing">Saglabāt</button>
+                <p v-if="form.recentlySuccessful" class="success-message">
+                    Saglabāts.
+                </p>
             </div>
         </form>
     </section>
@@ -90,7 +73,6 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 
 defineProps({
@@ -109,3 +91,81 @@ const form = useForm({
     email: user.email,
 });
 </script>
+
+<style lang="scss" scoped>
+/* Section Styles */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h4 {
+        font-weight: 500;
+        color: var(--color--dark);
+
+        .header-description {
+            margin-top: 0.25rem;
+            color: var(--color--dark);
+        }
+    }
+}
+
+/* Header Styles */
+
+/* Form Styles */
+.profile-info-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-input {
+    // ... (same as in the previous response)
+}
+
+.input-error {
+    margin-top: 0.5rem;
+    color: var(--error-msg);
+}
+
+/* Email Verification Styles */
+.email-unverified-message {
+    margin-top: 0.5rem;
+    color: var(--gray-800);
+}
+
+.verification-link {
+    font-size: 0.875rem; /* text-sm */
+    color: var(--gray-600);
+    text-decoration: underline;
+
+    &:hover {
+        color: var(--gray-900);
+    }
+}
+
+.verification-sent-message {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500; /* font-medium */
+    color: var(--green-600); /* Replace with your green success color */
+}
+/* Form Actions Styles */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    button {
+        // Add your button styles here
+    }
+}
+.success-message {
+    color: var(--success-msg);
+}
+</style>

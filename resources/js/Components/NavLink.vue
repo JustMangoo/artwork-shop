@@ -27,17 +27,26 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     display: inline-flex;
     align-items: center;
     padding: 0.25rem;
-    border-bottom: 3px solid var(--primary);
     font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.25;
-    color: var(--primary);
+    color: var(--color--primary);
     transition: all 0.15s ease-in-out;
     height: 100%;
+    position: relative;
 
-    &:focus {
-        outline: none;
-        border-color: var(--primary);
+    &:after,
+    &:after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 100%;
+        content: ".";
+        color: var(--color--primary);
+        background: var(--color--primary);
+        height: 2px;
     }
 }
 
@@ -46,17 +55,28 @@ const classes = computed(() => (props.active ? "activeLink" : "inactiveLink"));
     display: inline-flex;
     align-items: center;
     padding: 0.25rem;
-    border-bottom: 2px solid transparent;
     font-size: 0.9rem;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.25;
-    color: var(--primary);
+    color: var(--color--dark);
     transition: all 0.15s ease-in-out;
+    position: relative;
 
-    &:hover,
-    &:focus {
-        outline: none;
-        border-color: var(--primary);
+    &:after,
+    &:after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 0%;
+        content: ".";
+        color: transparent;
+        background: var(--color--primary);
+        height: 2px;
+    }
+    &:hover:after {
+        width: 100%;
     }
 }
 </style>

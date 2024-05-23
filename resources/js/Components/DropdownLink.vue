@@ -17,6 +17,6 @@ defineProps({
 
 <style lang="scss" scoped>
 .option {
-    color: var(--dark);
+    color: var(--color--dark);
 }
 </style>

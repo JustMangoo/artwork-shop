@@ -15,7 +15,7 @@
     font-weight: 400;
     font-style: normal;
     box-shadow: none;
-    color: var(--dark);
+    color: var(--color--dark);
     transition: all 280ms ease-in-out;
 }
 
@@ -30,21 +30,35 @@ body {
 /* ------- Values (Root Variables) ------- */
 
 :root {
-    --light: #f8f8f8;
-    --dark: #5a5c54;
-    --primary: #9aa283;
-    --secondary: #ebeee3;
-    --white: white;
-    --border-rad: 2px;
+    --color--primary: #9aa283;
+    --color--secondary: #ebeee3;
+    --color--info: #b2e5f9;
+    --color--success: #bef9b2;
+    --color--warning: #f9e0b2;
+    --color--error: #f8bcbc;
+    --color--light: #f8f8f8;
+    --color--dark: #313131;
+    --color--white: white;
     --success-msg: #9aa283;
     --error-msg: #f8bcbc;
     --warning-msg: #f9e0b2;
-    --swiper-navigation-color: #9aa283;
-    --swiper-pagination-color: #9aa283;
-    --swiper-pagination-bullet-opacity-inactive: 0.1;
-    --selection-text: var(--light);
-    --selection-background: #787e66;
-    --light-background: #f4f5f0;
+
+    --rounded-box: 3px;
+    --rounded-elem: 1px;
+    --rounded-badge: var(--rounded-elem);
+    --animation-elem: 0.25s;
+    --animation-input: 0.2s;
+    --btn-focus-scale: 0.95;
+    --border-elem: 1px;
+    --border-btn: 2px;
+    --tab-border: 1px;
+
+    --swiper-navigation-color: var(--color--primary);
+    --swiper-pagination-color: var(--color--primary);
+    --swiper-pagination-bullet-opacity-inactive: 10%;
+    --selection-text: var(--color--light);
+    --color--selection: #787e66;
+
     --breakpoint-desktop: 1453px;
     --breakpoint-tablet: 768px;
     --breakpoint-mobile-h: 568px;
@@ -61,7 +75,7 @@ h5 {
     font-family: "Alegreya", serif;
     margin: 0;
     font-weight: 400;
-    color: var(--dark);
+    color: var(--color--dark);
 }
 h1 {
     font-size: 4.21rem;
@@ -100,7 +114,7 @@ small {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary);
+    background: var(--color--primary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -121,7 +135,7 @@ small {
     content: "";
     width: 40px;
     height: 1px;
-    background-color: var(--dark);
+    background-color: var(--color--dark);
     justify-self: center;
 }
 
@@ -174,7 +188,7 @@ small {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--dark);
+    color: var(--color--dark);
     background-color: transparent;
 }
 
@@ -198,7 +212,7 @@ select {
     width: 100%;
     outline: 1px solid #ddd;
     border: none;
-    border-radius: var(--border-rad);
+    border-radius: var(--rounded-elem);
     margin: 1px 0;
 }
 
@@ -212,7 +226,7 @@ input[type="search"]:focus,
 input[type="url"]:focus,
 textarea:focus,
 select:focus {
-    outline: 1px solid var(--primary);
+    outline: 1px solid var(--color--primary);
     box-shadow: none;
 }
 
@@ -237,14 +251,14 @@ input[type="radio"] {
 }
 
 input[type="checkbox"] {
-    border-radius: var(--border-rad);
+    border-radius: var(--rounded-elem);
 }
 
 /* Checked States */
 input[type="radio"]:checked,
 input[type="checkbox"]:checked {
-    background-color: var(--primary);
-    border: 1px solid var(--primary);
+    background-color: var(--color--primary);
+    border: 1px solid var(--color--primary);
 }
 
 /* Hover and Focus States */
@@ -253,7 +267,7 @@ input[type="checkbox"]:hover,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
     outline: none;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--color--primary);
 }
 
 /* Checkmark for Checkboxes */
@@ -264,7 +278,7 @@ input[type="checkbox"]:checked::before {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 0.8em; /* Adjust size as needed */
-    color: var(--white); /* White checkmark */
+    color: var(--color--white); /* White checkmark */
 }
 
 /* Circle for Radio Buttons */
@@ -274,28 +288,153 @@ input[type="radio"]:checked::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 0.4em; /* Adjust size as needed */
-    height: 0.4em;
+    width: 8px;
+    aspect-ratio: 1/1;
     border-radius: 50%;
-    background-color: var(--white); /* White circle */
+    background-color: var(--color--white); /* White circle */
 }
 
 button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    color: var(--light);
+    padding: 12px 24px;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: var(--color--light);
     text-transform: uppercase;
-    background-color: var(--primary);
-    border: 1px solid transparent;
-    border-radius: var(--border-rad);
-    transition: all 0.15s ease-in-out;
+    background-color: var(--color--primary);
+    border: var(--border-elem) solid transparent;
+    border-radius: var(--rounded-elem);
+    transition: all var(--animation-elem) ease-in-out;
     width: fit-content;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    scale: 1.02;
+}
+
+button:disabled,
+button[disabled] {
+    background-color: #ddd;
+    color: #aaa;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary::before,
+.btn-primary::after {
+    content: "";
+    width: 0;
+    height: 1px; /* Thickness of the line */
+    background-color: var(--color--light); /* Color of the line */
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-secondary {
+    color: var(--color--primary);
+    background-color: transparent;
+    border: 1px solid var(--color--primary);
+}
+
+.btn-secondary::before,
+.btn-secondary::after {
+    content: "";
+    width: 0;
+    height: 1px; /* Thickness of the line */
+    background-color: var(--color--primary); /* Color of the line */
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-secondary::before,
+.btn-primary::before {
+    justify-self: end;
+}
+
+.btn-secondary:hover,
+.btn-primary:hover {
+    letter-spacing: 4px;
+}
+
+.btn-secondary:hover::before,
+.btn-secondary:hover::after,
+.btn-primary:hover::before,
+.btn-primary:hover::after {
+    content: "";
+    width: 80%; /* Fixed width of the line */
+}
+
+/*--------- Tables ---------*/
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: var(--rounded-box);
+}
+table thead {
+    background-color: var(--color--primary);
+    border-bottom: 4px solid var(--color--light);
+}
+table thead tr th {
+    color: var(--color--light);
+    text-align: left;
+    padding: 8px;
+    font-weight: 500;
+}
+table tbody {
+    background-color: var(--color--secondary);
+}
+table tbody tr {
+    border-bottom: 0.1rem solid var(--color--light);
+    border-left: 2px solid transparent;
+}
+table tbody tr:hover {
+    box-sizing: border-box;
+    border-left: 2px solid var(--color--primary);
+}
+table tbody tr td {
+    color: var(--color--dark);
+    padding: 0.5rem;
+    vertical-align: middle;
+}
+table tbody tr td .table-badge {
+    width: fit-content;
+    padding: 2px 8px;
+    border: var(--border-elem) solid var(--color--primary);
+    border-radius: var(--rounded-elem);
+}
+table tbody tr td .image-cell {
+    display: flex;
+    gap: 5px;
+}
+table tbody tr td .image-cell .table-image {
+    aspect-ratio: 3/4;
+    width: 3rem;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--rounded-box);
+}
+table tbody tr td .action-btn {
+    display: inline;
+    margin-right: 0.5rem;
+    border-radius: var(--rounded-box);
+    height: 2rem;
+    aspect-ratio: 1/1;
+    padding: 0.3rem;
+    background: var(--color--primary);
+    cursor: pointer;
+    stroke: var(--color--light);
 }
 
 /*--------- Quick Styles ---------*/
@@ -315,7 +454,7 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary);
+    background: var(--color--primary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -355,10 +494,10 @@ button {
 /* ------ User Selection (Browser Specific) ------ */
 ::-moz-selection {
     color: var(--selection-text);
-    background: var(--selection-background);
+    background: var(--color--selection);
 }
 
 ::selection {
     color: var(--selection-text);
-    background: var(--selection-background);
+    background: var(--color--selection);
 }

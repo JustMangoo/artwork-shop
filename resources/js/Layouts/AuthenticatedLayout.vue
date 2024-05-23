@@ -24,12 +24,12 @@ import Navigation from "@/Components//Navigation.vue";
 
 <style lang="scss" scoped>
 .navigation {
-    background-color: var(--secondary);
+    background-color: var(--color--secondary);
     border-bottom: 1px solid #f3f4f6;
 
     .logo {
         width: auto;
-        color: var(--light);
+        color: var(--color--light);
         fill: currentColor;
         height: 2.25rem;
     }

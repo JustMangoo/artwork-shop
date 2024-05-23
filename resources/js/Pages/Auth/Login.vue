@@ -56,16 +56,22 @@
                 </div>
 
                 <div>
-                    <PrimaryButton :disabled="form.processing">
+                    <button
+                        class="w-full btn-primary"
+                        :disabled="form.processing"
+                    >
                         Pieslēdzies
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
             <div class="divider">Vai</div>
             <Link :href="route('register')">
-                <SecondaryButton :disabled="form.processing">
+                <button
+                    class="w-full btn-secondary"
+                    :disabled="form.processing"
+                >
                     Reģisterējies
-                </SecondaryButton>
+                </button>
             </Link>
         </div>
     </MainLayout>
@@ -76,9 +82,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineProps({
     canResetPassword: {

@@ -8,33 +8,28 @@
         />
 
         <!-- change the HEX values here -->
-        <div class="sectionHeading">
-            <span class="sectionTitle">COLORS</span>
-            <div class="sectionSeperator"></div>
+        <div class="section-heading">
+            <span>colors</span>
+            <div></div>
         </div>
 
         <ul id="colors">
-            <li class="colorCircle color-1">
-                <div class="colorHex">--light</div>
-            </li>
-            <li class="colorCircle color-2">
-                <div class="colorHex">--dark</div>
-            </li>
-            <li class="colorCircle color-3">
-                <div class="colorHex">--primary</div>
-            </li>
-            <li class="colorCircle color-4">
-                <div class="colorHex">--secondary</div>
-            </li>
-            <li class="colorCircle color-5">
-                <div class="colorHex">--white</div>
-            </li>
+            <li class="color-block color-1">--color--light</li>
+            <li class="color-block color-2">--color--dark</li>
+            <li class="color-block color-3">--color--primary</li>
+            <li class="color-block color-4">--color--secondary</li>
+        </ul>
+        <ul id="colors">
+            <li class="color-block color-5">--color--info</li>
+            <li class="color-block color-6">--color--success</li>
+            <li class="color-block color-7">--color--warning</li>
+            <li class="color-block color-8">--color--error</li>
         </ul>
 
         <!-- customize these heading descriptions if necessary -->
-        <div class="sectionHeading">
-            <span class="sectionTitle">TYPOGRAPHY</span>
-            <div class="sectionSeperator"></div>
+        <div class="section-heading">
+            <span>TYPOGRAPHY</span>
+            <div></div>
         </div>
 
         <div id="typography">
@@ -47,9 +42,9 @@
         </div>
 
         <!-- use these as needed -->
-        <div class="sectionHeading">
-            <span class="sectionTitle">INLINE ELEMENTS</span>
-            <div class="sectionSeperator"></div>
+        <div class="section-heading">
+            <span>Inline Elements</span>
+            <div></div>
         </div>
 
         <div id="inlineElements">
@@ -85,15 +80,15 @@
             <p><cite>This is a citation</cite></p>
         </div>
 
-        <div class="sectionHeading">
-            <span class="sectionTitle">FORM ELEMENTS</span>
-            <div class="sectionSeperator"></div>
+        <div class="section-heading">
+            <span>Form Elements</span>
+            <div></div>
         </div>
 
         <div id="formElements">
             <form>
                 <div class="form-item">
-                    <label for="text">Email</label>
+                    <label for="text">Name</label>
                     <input
                         type="text"
                         placeholder="Text Field"
@@ -102,14 +97,16 @@
                     />
                 </div>
                 <div class="form-item">
+                    <label for="password">Password</label>
                     <input
                         type="password"
                         placeholder="Password"
-                        name=""
+                        name="password"
                         id="password"
                     />
                 </div>
                 <div class="form-item">
+                    <label for="email">Email</label>
                     <input
                         type="email"
                         placeholder="Email"
@@ -118,30 +115,33 @@
                     />
                 </div>
                 <div class="form-item">
+                    <label for="tel">Phone Nr.</label>
                     <input
                         type="tel"
                         placeholder="Phone Number"
-                        name=""
-                        id="email"
+                        name="tel"
+                        id="tel"
                     />
                 </div>
                 <div class="form-item">
+                    <label for="number">Number</label>
                     <input
                         type="number"
                         placeholder="Number"
-                        name=""
+                        name="number"
                         id="number"
                     />
                 </div>
                 <div class="form-item">
-                    <input type="date" name="" id="date" />
+                    <label for="date">Date</label>
+                    <input type="date" name="date" id="date" />
                 </div>
                 <div class="form-item">
                     <textarea
                         name=""
                         id="textarea"
                         cols="40"
-                        rows="5"
+                        rows="3"
                         placeholder="Textarea"
                     ></textarea>
                 </div>
@@ -163,7 +163,7 @@
                         /><label for="" class="option">Radio One</label>
                     </div>
                     <div class="form-item">
-                        <input type="radio" name="example-radios" id="" /><label
+                        <input type="radio" name="example-radios" /><label
                             for=""
                             class="option"
                             >Radio Two</label
@@ -173,25 +173,78 @@
 
                 <div class="form-item form-type-checkboxes">
                     <div class="form-item">
-                        <input type="checkbox" name="" id="" /><label for=""
+                        <input type="checkbox" name="" /><label for=""
                             >checkbox 1</label
                         >
                     </div>
                     <div class="form-item">
-                        <input type="checkbox" name="" id="" /><label for=""
+                        <input type="checkbox" name="" /><label for=""
                             >checkbox 2</label
                         >
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="form-submit">Cancel</button>
+                    <button>Default</button>
+                    <button disabled>Disabled</button>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="form-submit">Submit</button>
+                    <button class="btn-primary">Primary</button>
+                    <button class="btn-secondary">Secondary</button>
                 </div>
             </form>
+        </div>
+
+        <div class="section-heading">
+            <span>Tables</span>
+            <div></div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nosaukums</th>
+                        <th>raksts</th>
+                        <th>Cena</th>
+                        <th>kategorija</th>
+                        <th>Bilde</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Title</td>
+                        <td>A long description about something</td>
+                        <td>99.99&euro;</td>
+                        <td>
+                            <div class="table-badge">Tag</div>
+                        </td>
+                        <td>
+                            <div class="image-cell">
+                                <img
+                                    src="@\Assets\Images\foto1.webp"
+                                    alt="Product Image"
+                                    class="table-image"
+                                />
+                            </div>
+                        </td>
+                        <td>
+                            <img
+                                class="action-btn"
+                                src="@/Assets/pen.svg"
+                                alt="edit-icon"
+                            />
+                            <img
+                                class="action-btn"
+                                src="@/Assets/trash.svg"
+                                alt="delete-icon"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -207,79 +260,82 @@ export default {
 <style lang="scss" scoped>
 /* Color Variables */
 .color-1 {
-    background: var(--light);
+    background: var(--color--light);
+    color: var(--color--dark);
 }
 .color-2 {
-    background: var(--dark);
+    background: var(--color--dark);
+    color: var(--color--light);
 }
 .color-3 {
-    background: var(--primary);
+    background: var(--color--primary);
+    color: var(--color--light);
 }
 .color-4 {
-    background: var(--secondary);
+    background: var(--color--secondary);
+    color: var(--color--dark);
 }
 .color-5 {
-    background: var(--white);
-    border: 1px solid lightgrey;
+    background: var(--color--info);
+    color: var(--color--dark);
+}
+.color-6 {
+    background: var(--color--success);
+    color: var(--color--dark);
+}
+.color-7 {
+    background: var(--color--warning);
+    color: var(--color--dark);
+}
+.color-8 {
+    background: var(--color--error);
+    color: var(--color--dark);
 }
 
 /* General Styles */
 html {
-    background: #f7f7f7;
+    background: var(--color--white);
 }
 
 #templateTitle,
 ul#colors,
 #typography,
 #inlineElements,
-#formElements {
-    width: 90%; /* Increased width to fit more elements */
-    margin: 0 auto 2rem auto; /* Consistent vertical spacing */
+#formElements,
+.table-container {
+    width: 95%; /* Increased width to fit more elements */
+    margin: 0 auto 32px auto; /* Consistent vertical spacing */
 }
 
 /* Section Headings */
-.sectionHeading {
+.section-heading {
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
-    font-family: sans-serif;
-}
-.sectionTitle {
-    font-size: 1.2rem;
-    font-weight: 500; /* Slightly bolder title */
-    color: #848484;
-    margin-right: 1rem;
-}
-.sectionSeperator {
-    flex-grow: 1;
-    height: 1px;
-    background-color: #cccccc;
-}
+    text-transform: uppercase;
 
-/* Project Title and Description */
-#templateTitle {
-    text-align: center; /* Center title and description */
-}
-#projectTitle {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #c4c4c4;
-}
-#projectDesc {
-    font-size: 1rem;
-    font-weight: 300;
-    color: #dbdbdb;
-}
+    span {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--color--dark);
+        margin-right: 8px;
+    }
 
-#colors {
-    display: flex;
+    div {
+        flex-grow: 1;
+        height: 1px;
+        background-color: var(--color--dark);
+    }
 }
 
 /* Color Circles */
-.colorCircle {
-    width: 60px; /* Smaller circles */
+#colors {
+    display: flex;
+}
+.color-block {
+    width: 100%;
     height: 60px;
-    border-radius: 50%;
+    border-radius: var(--rounded-elem);
     display: flex; /* Allow better vertical alignment */
     align-items: center; /* Center hex code vertically */
     justify-content: center; /* Center hex code horizontally */
@@ -288,9 +344,6 @@ ul#colors,
 
 li {
     display: flex; /* Allow better vertical alignment */
-}
-.colorHex {
-    color: var(--dark);
 }
 
 /* Form Elements */
@@ -301,10 +354,21 @@ li {
             auto-fit,
             minmax(200px, 1fr)
         ); /* Responsive columns */
+        justify-items: center;
+        align-items: center;
         gap: 1rem;
 
         .form-item {
             margin-bottom: 0.5rem;
+        }
+        .form-actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            button {
+                width: 100%;
+            }
         }
     }
 }

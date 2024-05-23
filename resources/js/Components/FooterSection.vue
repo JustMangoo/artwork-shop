@@ -1,5 +1,5 @@
 <template>
-    <SystemMessage :message="systemMessage" :type="messageType" />
+    <SystemAlert :message="SystemAlert" :type="messageType" />
     <footer>
         <div class="container">
             <!-- Form Section -->
@@ -19,12 +19,12 @@
                         <InputError :message="form.errors.email" />
                     </div>
                     <div class="newsletter-btn">
-                        <PrimaryButton
-                            class="form-button"
+                        <button
+                            class="w-full btn-primary"
                             :disabled="form.processing"
                         >
                             Abonēt
-                        </PrimaryButton>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -87,16 +87,12 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-
-import SystemMessage from "@/Components/SystemMessage.vue";
+import SystemAlert from "@/Components/SystemAlert.vue";
 
 export default {
     components: {
         InputError,
-        PrimaryButton,
-
-        SystemMessage,
+        SystemAlert,
     },
     setup() {
         const form = useForm({
@@ -116,18 +112,12 @@ export default {
                 {
                     preserveState: true,
                     onSuccess: () => {
-                        this.setSystemMessage(
-                            "Abonaments veiksmīgs",
-                            "success"
-                        );
+                        this.setSystemAlert("Abonaments veiksmīgs", "success");
                         this.form.email = "";
                         this.form.errors = {};
                     },
                     onError: (errors) => {
-                        this.setSystemMessage(
-                            "Abonaments nav izdevies",
-                            "error"
-                        );
+                        this.setSystemAlert("Abonaments nav izdevies", "error");
                         this.form.errors = errors;
                     },
                     onFinish: () => (this.form.processing = false),
@@ -135,14 +125,14 @@ export default {
             );
         },
 
-        setSystemMessage(message, type = "info") {
-            this.systemMessage = message;
+        setSystemAlert(message, type = "info") {
+            this.SystemAlert = message;
             this.messageType = type;
         },
     },
     data() {
         return {
-            systemMessage: "",
+            SystemAlert: "",
             messageType: "info",
         };
     },
@@ -151,9 +141,9 @@ export default {
 
 <style lang="scss" scoped>
 footer {
-    background-color: var(--secondary);
+    background-color: var(--color--secondary);
     padding: 2rem 0;
-    color: var(--dark);
+    color: var(--color--dark);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -247,6 +237,9 @@ footer {
     }
     .form-container {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
         form {
             display: flex;
             flex-direction: column;
@@ -254,9 +247,6 @@ footer {
             margin-top: 0.4rem;
             width: 100%;
             .input-email {
-                width: 100%;
-            }
-            .form-button {
                 width: 100%;
             }
         }
@@ -314,7 +304,7 @@ footer {
                     content: "";
                     width: 5px; /* Fixed width of the line */
                     height: 1px; /* Thickness of the line */
-                    background-color: var(--primary);
+                    background-color: var(--color--primary);
                     justify-self: center;
                     transition: all 0.3s ease-in-out;
                 }
@@ -347,7 +337,7 @@ footer {
             a {
                 width: 2.6rem;
                 height: 2.6rem;
-                background-color: var(--primary);
+                background-color: var(--color--primary);
                 border-radius: 50%;
 
                 img {

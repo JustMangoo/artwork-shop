@@ -1,5 +1,5 @@
 <template>
-    <SystemMessage :message="systemMessage" :type="messageType" />
+    <SystemAlert :message="SystemAlert" :type="messageType" />
     <footer>
         <!-- Copyright -->
         <p class="copyright">© 2024 Aleksis Daugats</p>
@@ -9,11 +9,11 @@
 <script>
 import { useForm } from "@inertiajs/vue3";
 
-import SystemMessage from "@/Components/SystemMessage.vue";
+import SystemAlert from "@/Components/SystemAlert.vue";
 
 export default {
     components: {
-        SystemMessage,
+        SystemAlert,
     },
     setup() {
         const form = useForm({
@@ -23,14 +23,14 @@ export default {
         return { form };
     },
     methods: {
-        setSystemMessage(message, type = "info") {
-            this.systemMessage = message;
+        setSystemAlert(message, type = "info") {
+            this.SystemAlert = message;
             this.messageType = type;
         },
     },
     data() {
         return {
-            systemMessage: "",
+            SystemAlert: "",
             messageType: "info",
         };
     },
@@ -39,9 +39,9 @@ export default {
 
 <style lang="scss">
 footer {
-    background-color: var(--secondary);
+    background-color: var(--color--secondary);
     padding: 2rem 0;
-    color: var(--dark);
+    color: var(--color--dark);
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -2,11 +2,7 @@
     <Head title="Sveicināti" />
 
     <MainLayout>
-        <CarouselHero>
-            <template v-slot="{ index }">
-                <img :src="`../Assets/Images/Image${index + 1}.png`" alt="" />
-            </template>
-        </CarouselHero>
+        <CarouselHero />
         <div class="originals-showcase-container">
             <h2>Oriģināli</h2>
             <div class="product-showcase">
@@ -42,7 +38,7 @@
             <img src="@\Assets\Images\Image1.png" alt="hero image" />
         </div>
         <div class="originals-showcase-container">
-            <h2>Oriģināli</h2>
+            <h2>Printēti</h2>
             <div class="product-showcase">
                 <div class="showcase-images">
                     <img
@@ -76,7 +72,7 @@
             <img src="@\Assets\Images\Image1.png" alt="hero image" />
         </div>
         <div class="originals-showcase-container">
-            <h2>Oriģināli</h2>
+            <h2>Kokdarbi</h2>
             <div class="product-showcase">
                 <div class="showcase-text">
                     <h4>Stāsts</h4>
@@ -139,7 +135,7 @@ defineProps({
         width: 90%;
         max-width: 75rem;
         height: 100%;
-        background-color: var(--secondary);
+        background-color: var(--color--secondary);
         display: flex;
         flex-direction: row;
 

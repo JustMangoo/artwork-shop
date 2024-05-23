@@ -1,84 +1,70 @@
 <template>
-    <section>
+    <section class="profile-section">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
+            <h4>Paroles atjaunināšana</h4>
 
-            <p class="mt-1 text-sm text-gray-600">
-                Ensure your account is using a long, random password to stay
-                secure.
+            <p class="header-description">
+                Pārliecinieties, ka jūsu kontā tiek izmantota gara, nejauši
+                izvēlēta parole, lai nodrošinātu drošību.
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
+        <form @submit.prevent="updatePassword" class="update-password-form">
+            <div class="form-group">
                 <InputLabel for="current_password" value="Current Password" />
-
                 <input
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
                     type="password"
-                    class="block w-full mt-1"
+                    class="form-input"
                     autocomplete="current-password"
                 />
-
                 <InputError
                     :message="form.errors.current_password"
-                    class="mt-2"
+                    class="input-error"
                 />
             </div>
 
-            <div>
+            <div class="form-group">
                 <InputLabel for="password" value="New Password" />
-
                 <input
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
-                    class="block w-full mt-1"
+                    class="form-input"
                     autocomplete="new-password"
                 />
-
-                <InputError :message="form.errors.password" class="mt-2" />
+                <InputError
+                    :message="form.errors.password"
+                    class="input-error"
+                />
             </div>
 
-            <div>
+            <div class="form-group">
                 <InputLabel
                     for="password_confirmation"
                     value="Confirm Password"
                 />
-
                 <input
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
-                    class="block w-full mt-1"
+                    class="form-input"
                     autocomplete="new-password"
                 />
-
                 <InputError
                     :message="form.errors.password_confirmation"
-                    class="mt-2"
+                    class="input-error"
                 />
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
-                <Transition
-                    enter-active-class="transition ease-in-out"
-                    enter-from-class="opacity-0"
-                    leave-active-class="transition ease-in-out"
-                    leave-to-class="opacity-0"
-                >
-                    <p
-                        v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
-                    >
-                        Saved.
-                    </p>
-                </Transition>
+            <div class="form-actions">
+                <button :disabled="form.processing">Saglabāt</button>
+                <p v-if="form.recentlySuccessful" class="success-message">
+                    Saglabāts.
+                </p>
             </div>
         </form>
     </section>
@@ -87,7 +73,6 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
@@ -117,3 +102,76 @@ const updatePassword = () => {
     });
 };
 </script>
+
+<style lang="scss" scoped>
+/* Section Styles */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h4 {
+        font-weight: 500;
+        color: var(--color--dark);
+
+        .header-description {
+            margin-top: 0.25rem;
+            color: var(--color--dark);
+        }
+    }
+}
+
+/* Form Styles */
+.update-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    outline: 1px solid #ddd;
+    border: none;
+    border-bottom: 1px solid var(--dark);
+    background-color: transparent;
+    font-size: 1rem;
+    color: var(--dark);
+    transition: all 0.2s ease-in-out;
+
+    &:focus {
+        outline: 1px solid var(--primary);
+        box-shadow: none;
+    }
+
+    &::placeholder {
+        color: var(--light-background);
+    }
+}
+
+.input-error {
+    margin-top: 0.5rem;
+    color: var(--error-msg); /* Use your error color variable */
+}
+
+/* Form Actions Styles */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    button {
+        // Add your button styles here
+    }
+}
+
+.success-message {
+    color: var(--success-msg); /* Use your success color variable */
+}
+</style>

@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     ContactController,
     SubscriptionController,
     CartController,
-    OrdersController
+    OrdersController,
+    StripeWebhookController,
 };
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -85,7 +86,7 @@ Route::get('/products-customer', function () {
     ]);
 })->name('products-customer');
 
-Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products-customer/{product}', [ProductController::class, 'show'])->name('products.show');
 
 // Email Routes ---------
 
@@ -109,6 +110,12 @@ Route::prefix('checkout')->group(function () {
     Route::get('/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
 });
 
+Route::post('/enviorenment', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
+
+Route::get('/test', function () {
+    return Inertia::render('User/CheckoutForm');
+})->name('test');
+
 // Test Page Route ---------
 
 Route::get('/test-area', function () {
@@ -121,8 +128,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('products', ProductController::class);
+
     Route::resources([
-        'products' => ProductController::class,
         'orders' => OrdersController::class,
         'users' => UserController::class,
         'images' => ImageController::class,
@@ -135,9 +143,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 });
-
-
-
-
 
 require __DIR__ . '/auth.php';

@@ -53,9 +53,11 @@ onUnmounted(() => {
 .label {
     display: flex;
     align-items: center;
+    justify-content: center;
     border: none;
     padding: 0;
     color: white;
+    height: 100%;
 }
 
 .dropdown-content {
@@ -63,7 +65,7 @@ onUnmounted(() => {
     min-width: 100px;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: var(--border-rad);
+    border-radius: var(--rounded-box);
     padding: 0.5rem;
     z-index: 20;
     top: 100%;

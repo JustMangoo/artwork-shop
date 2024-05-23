@@ -18,10 +18,8 @@
 </template>
 
 <script>
-
 export default {
-    components: {
-    },
+    components: {},
     props: {
         showModal: Boolean,
     },
@@ -65,7 +63,7 @@ export default {
             margin-bottom: 20px;
 
             .close-btn {
-                background: var(--primary);
+                background: var(--color--primary);
                 border: none;
                 font-size: 1.5rem;
                 border-radius: 50%;

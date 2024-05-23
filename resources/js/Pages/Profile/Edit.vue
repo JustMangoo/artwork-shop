@@ -1,7 +1,7 @@
 <template>
     <Head title="Profils" />
 
-    <AuthenticatedLayout>
+    <MainLayout>
         <template #header>
             <h1>Profils</h1>
         </template>
@@ -25,11 +25,11 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </MainLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";

@@ -54,7 +54,7 @@
                     placeholder="Ievadiet Savu Ziņu"
                 ></textarea>
             </div>
-            <PrimaryButton type="submit">Nosutīt</PrimaryButton>
+            <button class="w-full btn-primary" type="submit">Nosutīt</button>
         </form>
     </MainLayout>
 </template>
@@ -62,7 +62,6 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 
 const form = useForm({

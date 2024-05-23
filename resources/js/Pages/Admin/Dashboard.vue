@@ -91,9 +91,9 @@ span {
 
         .box {
             padding: 1rem;
-            border-radius: var(--border-rad);
+            border-radius: var(--rounded-box);
             width: 100%;
-            background-color: var(--secondary);
+            background-color: var(--color--secondary);
             min-height: 2rem;
             display: flex;
             justify-content: space-between;
@@ -106,7 +106,7 @@ span {
                 aspect-ratio: 1/1;
                 width: 20%;
                 margin-right: 1rem;
-                background-color: var(--primary);
+                background-color: var(--color--primary);
                 padding: 0.5rem;
                 border-radius: 50%;
             }
@@ -125,9 +125,9 @@ span {
 
         .box {
             padding: 1rem;
-            border-radius: var(--border-rad);
+            border-radius: var(--rounded-box);
             width: 100%;
-            background-color: var(--secondary);
+            background-color: var(--color--secondary);
             min-height: 2rem;
             display: flex;
             justify-content: space-between;

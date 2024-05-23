@@ -6,20 +6,18 @@
                 Jūsu maksājums netika apstrādāts. Ja tā bija kļūda, lūdzu,
                 mēģiniet vēlreiz vai sazinieties ar atbalsta dienestu.
             </p>
-            <PrimaryButton @click="goToHome"
-                >Atgriezties uz sākumlapu</PrimaryButton
-            >
+            <button class="w-full btn-primary" @click="goToHome">
+                Atgriezties uz sākumlapu
+            </button>
         </div>
     </MainLayout>
 </template>
 
 <script>
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 
 export default {
     components: {
-        PrimaryButton,
         MainLayout,
     },
     methods: {
@@ -37,11 +35,11 @@ export default {
     text-align: center;
     padding: 20px;
     border-radius: 8px;
-    background-color: var(--light);
+    background-color: var(--color--light);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
     h1 {
-        color: var(--dark);
+        color: var(--color--dark);
     }
 
     p {

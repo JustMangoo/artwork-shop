@@ -203,6 +203,10 @@ class ProductController extends Controller
             'mode' => 'payment',
             'success_url' => route('checkout.success'),
             'cancel_url' => route('checkout.cancel'),
+            'phone_number_collection' => ['enabled' => true],
+            'shipping_address_collection' => [
+                'allowed_countries' => ['LV'],
+            ],
         ]);
 
         $order = new Order([

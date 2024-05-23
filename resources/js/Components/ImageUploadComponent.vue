@@ -82,7 +82,7 @@ export default {
     width: 100%;
     aspect-ratio: 3 / 4;
     border: 2px dashed #ccc;
-    border-radius: var(--border-rad);
+    border-radius: var(--rounded-box);
     position: relative;
     cursor: pointer;
 
@@ -120,7 +120,7 @@ export default {
 
         img {
             width: 16px;
-            background-color: var(--primary);
+            background-color: var(--color--primary);
             border-radius: 50%;
         }
     }

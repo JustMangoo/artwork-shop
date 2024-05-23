@@ -121,19 +121,19 @@ const unhoverImage = (product) => {
                 height: auto;
                 aspect-ratio: 3/4;
                 object-fit: cover;
-                border-radius: var(--border-rad);
+                border-radius: var(--rounded-box);
             }
 
             .tag-new-release {
                 position: absolute;
                 top: 0.3rem;
                 left: 0.3rem;
-                background-color: var(--secondary);
-                color: var(--primary);
+                background-color: var(--color--secondary);
+                color: var(--color--primary);
                 padding: 0.75rem 0.75rem;
                 font-size: 0.875rem;
                 font-weight: 300;
-                border-radius: var(--border-rad);
+                border-radius: var(--rounded-box);
             }
         }
 

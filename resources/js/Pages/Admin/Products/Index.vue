@@ -2,10 +2,21 @@
     <Head title="Produkti" />
 
     <AdminLayout>
-        <SystemMessage :message="systemMessage" :type="messageType" />
+        <SystemAlert :message="SystemAlert" :type="messageType" />
+
         <div class="container">
             <div class="option-container">
-                <div class="option-container-left">
+                <div class="container-heading">
+                    <h1>Produkti</h1>
+                    <button
+                        class="add-button"
+                        @click="isAddProductModalOpen = true"
+                    >
+                        <img src="@/Assets/plus.svg" alt="plus icon" />
+                        Jauns
+                    </button>
+                </div>
+                <div class="container-filters">
                     <div class="search-container">
                         <input
                             v-show="showSearch"
@@ -39,13 +50,6 @@
                     </div>
                 </div>
 
-                <button
-                    class="add-button"
-                    @click="isAddProductModalOpen = true"
-                >
-                    <img src="@/Assets/plus.svg" alt="plus icon" />
-                    Jauns
-                </button>
                 <FormModalLayout
                     v-model:showModal="isAddProductModalOpen"
                     @submit="addProduct"
@@ -179,31 +183,31 @@
                             </td>
                             <td>{{ product.price }}&euro;</td>
                             <td class="hide-ssmall">
-                                <div class="single-category">
+                                <div class="table-badge">
                                     {{ product.category.name }}
                                 </div>
                             </td>
                             <td>
-                                <div class="product-image-field">
+                                <div class="image-cell">
                                     <img
                                         v-if="product.images.length > 0"
                                         :src="
                                             productImagePath(product.images[0])
                                         "
                                         alt="Product Image"
-                                        class="product-image"
+                                        class="table-image"
                                     />
                                 </div>
                             </td>
                             <td>
                                 <img
-                                    class="action-icon"
+                                    class="action-btn"
                                     src="@/Assets/pen.svg"
                                     alt="edit-icon"
                                     @click="editProduct(product)"
                                 />
                                 <img
-                                    class="action-icon"
+                                    class="action-btn"
                                     src="@/Assets/trash.svg"
                                     alt="delete-icon"
                                     @click="deleteProduct(product)"
@@ -223,7 +227,7 @@ import FormModalLayout from "@/Layouts/FormModalLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
-import SystemMessage from "@/Components/SystemMessage.vue";
+import SystemAlert from "@/Components/SystemAlert.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 
@@ -235,7 +239,7 @@ export default {
         InputError,
         InputLabel,
         ImageUploadComponent,
-        SystemMessage,
+        SystemAlert,
     },
     props: {
         products: Array,
@@ -248,7 +252,7 @@ export default {
             initialImages: [null, null, null],
             initialImagesId: [null, null, null],
             isEditMode: false,
-            systemMessage: "",
+            SystemAlert: "",
             messageType: "info",
             showSearch: false,
             isSearchVisible: false,
@@ -393,7 +397,7 @@ export default {
             this.$inertia.post(url, formData, {
                 onSuccess: () => {
                     this.isAddProductModalOpen = false;
-                    this.setSystemMessage(
+                    this.setSystemAlert(
                         this.isEditMode
                             ? "Produkts atjaunināts veiksmīgi"
                             : "Produkts pievienots veiksmīgi",
@@ -448,13 +452,13 @@ export default {
             if (confirm(`Are you sure you want to delete ${product.title}?`)) {
                 this.$inertia.delete(route("products.destroy", product.id), {
                     onSuccess: () => {
-                        this.setSystemMessage(
+                        this.setSystemAlert(
                             "Produkts dzēsts veiksmīgi",
                             "success"
                         );
                     },
                     onError: (errors) => {
-                        this.setSystemMessage(
+                        this.setSystemAlert(
                             "An error occurred while deleting the product",
                             "error"
                         );
@@ -462,8 +466,8 @@ export default {
                 });
             }
         },
-        setSystemMessage(message, type = "info") {
-            this.systemMessage = message;
+        setSystemAlert(message, type = "info") {
+            this.SystemAlert = message;
             this.messageType = type;
         },
     },
@@ -473,24 +477,65 @@ export default {
 <style lang="scss" scoped>
 .container {
     max-width: 95rem;
-    padding: 1rem 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     overflow: hidden;
+    padding: 1rem 0.5rem;
 
     .option-container {
         max-width: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
 
-        .option-container-left {
+        .container-heading {
+            width: 100%;
             display: flex;
-            gap: 1rem;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color--primary);
+            margin: 8px 0;
+
+            h1 {
+                width: 100%;
+                font-size: 3rem;
+            }
+        }
+
+        .container-filters {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
             .search-container {
                 display: flex;
+
+                .search-input {
+                    border-bottom: 2px solid var(--color--secondary);
+                    padding: 0.5rem 0;
+                    max-width: 0;
+                    transition: all 0.3s ease-in-out;
+                    opacity: 1;
+                    border-radius: var(--rounded-box) 0 0 var(--rounded-box);
+                    outline: 0;
+
+                    &:focus {
+                        border-bottom: 2px solid var(--color--primary);
+                    }
+                }
+
+                .show-search {
+                    max-width: 10rem;
+                    padding: 0.5rem;
+                }
+
+                .search-button {
+                    border-radius: 0 var(--rounded-box) var(--rounded-box) 0;
+                }
             }
+
             .category-search-container {
                 position: relative;
                 .dropdown-button {
@@ -498,9 +543,9 @@ export default {
                     align-items: center;
                     justify-content: space-between;
                     padding: 0.5rem 1rem;
-                    background-color: var(--primary);
+                    background-color: var(--color--primary);
                     color: white;
-                    border-radius: var(--border-rad);
+                    border-radius: var(--rounded-box);
                     cursor: pointer;
                     height: 100%;
 
@@ -514,43 +559,20 @@ export default {
                     top: 100%;
                     left: 0;
                     right: 0;
-                    background-color: var(--secondary);
+                    background-color: var(--color--secondary);
                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
                     z-index: 100;
-                    border-radius: 0 0 var(--border-rad) var(--border-rad);
+                    border-radius: 0 0 var(--rounded-box) var(--rounded-box);
                     z-index: 100;
 
                     .dropdown-item {
                         padding: 0.5rem 1rem;
                         cursor: pointer;
                         &:hover {
-                            background-color: var(--light-primary);
+                            background-color: var(--color--light-primary);
                         }
                     }
                 }
-            }
-
-            .search-input {
-                border-bottom: 2px solid var(--secondary);
-                padding: 0.5rem 0;
-                max-width: 0;
-                transition: all 0.3s ease-in-out;
-                opacity: 1;
-                border-radius: var(--border-rad) 0 0 var(--border-rad);
-                outline: 0;
-
-                &:focus {
-                    border-bottom: 2px solid var(--primary);
-                }
-            }
-
-            .show-search {
-                max-width: 10rem;
-                padding: 0.5rem;
-            }
-
-            .search-button {
-                border-radius: 0 var(--border-rad) var(--border-rad) 0;
             }
         }
 
@@ -564,76 +586,8 @@ export default {
     }
 
     .table-container {
-        border-radius: var(--border-rad);
+        border-radius: var(--rounded-box);
         overflow: hidden;
-
-        table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-
-            thead {
-                background-color: var(--primary);
-                border-bottom: 0.3rem solid var(--light);
-
-                tr {
-                    th {
-                        color: var(--light);
-                        text-align: left;
-                        padding: 0.5rem;
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            tbody {
-                background-color: var(--secondary);
-
-                tr {
-                    border-bottom: 0.1rem solid var(--light);
-                    border-left: 2px solid transparent;
-
-                    &:hover {
-                        box-sizing: border-box;
-                        border-left: 2px solid var(--primary);
-                    }
-
-                    td {
-                        color: var(--dark);
-                        padding: 0.5rem;
-                        vertical-align: middle;
-
-                        .single-category {
-                            width: fit-content;
-                            padding: 0.1rem 0.4rem;
-                            border: 1px solid var(--primary);
-                            border-radius: var(--border-rad);
-                        }
-                        .product-image-field {
-                            display: flex;
-                            gap: 5px;
-                            .product-image {
-                                aspect-ratio: 3 / 4;
-                                width: 3rem;
-                                object-fit: cover;
-                                display: block;
-                                border-radius: var(--border-rad);
-                            }
-                        }
-
-                        .action-icon {
-                            display: inline;
-                            margin-right: 0.5rem;
-                            border-radius: var(--border-rad);
-                            height: 2rem;
-                            padding: 0.3rem;
-                            background: var(--primary);
-                            cursor: pointer;
-                        }
-                    }
-                }
-            }
-        }
     }
     .image-category {
         display: grid;
@@ -661,15 +615,15 @@ export default {
                 align-items: center;
 
                 .tag-label {
-                    background-color: var(--secondary);
+                    background-color: var(--color--secondary);
                     padding: 5px 10px;
-                    border-radius: var(--border-rad);
+                    border-radius: var(--rounded-box);
                     display: block;
                     cursor: pointer;
                     user-select: none;
 
                     &:hover {
-                        background-color: var(--secondary);
+                        background-color: var(--color--secondary);
                     }
 
                     &::before {
@@ -687,7 +641,7 @@ export default {
                     display: none;
 
                     &:checked + .tag-label {
-                        background-color: var(--primary);
+                        background-color: var(--color--primary);
                         color: white;
                         text-align: center;
 

@@ -17,24 +17,43 @@
                         <tr v-for="order in orders" :key="order.id">
                             <td>{{ order.id }}</td>
                             <td>
-                                <div class="single-status">
+                                <div class="table-badge">
                                     {{ order.status }}
                                 </div>
                             </td>
                             <td>{{ order.total_price }}</td>
                             <td>{{ order.email }}</td>
                             <td>
-                                <Link
+                                <img />
+                                <svg
                                     :href="route('orders.edit', order.id)"
-                                    class="btn btn-edit"
-                                    >Edit</Link
+                                    class="action-btn"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                <button
+                                    <g
+                                        id="SVGRepo_bgCarrier"
+                                        stroke-width="0"
+                                    ></g>
+                                    <g
+                                        id="SVGRepo_tracerCarrier"
+                                        stroke-linecap="sharp"
+                                        stroke-linejoin="sharp"
+                                    ></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path
+                                            d="M18 12H18.01M12 12H12.01M6 12H6.01M13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12ZM19 12C19 12.5523 18.5523 13 18 13C17.4477 13 17 12.5523 17 12C17 11.4477 17.4477 11 18 11C18.5523 11 19 11.4477 19 12ZM7 12C7 12.5523 6.55228 13 6 13C5.44772 13 5 12.5523 5 12C5 11.4477 5.44772 11 6 11C6.55228 11 7 11.4477 7 12Z"
+                                            stroke-width="2"
+                                            stroke-linecap="sharp"
+                                            stroke-linejoin="sharp"
+                                        ></path>
+                                    </g>
+                                </svg>
+                                <img
                                     @click="deleteOrder(order.id)"
-                                    class="btn btn-delete"
-                                >
-                                    Delete
-                                </button>
+                                    class="action-btn"
+                                    src="@/Assets/trash.svg"
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -71,77 +90,8 @@ function deleteOrder(orderId) {
     overflow: hidden;
 
     .table-container {
-        border-radius: var(--border-rad);
+        border-radius: var(--rounded-box);
         overflow: hidden;
-
-        table {
-            width: 100%;
-            table-layout: fixed;
-            border-collapse: collapse;
-
-            thead {
-                background-color: var(--primary);
-                border-bottom: 0.3rem solid var(--light);
-
-                tr {
-                    th {
-                        color: var(--light);
-                        text-align: left;
-                        padding: 0.5rem;
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            tbody {
-                background-color: var(--secondary);
-
-                tr {
-                    border-bottom: 0.1rem solid var(--light);
-                    border-left: 2px solid transparent;
-
-                    &:hover {
-                        box-sizing: border-box;
-                        border-left: 2px solid var(--primary);
-                    }
-
-                    td {
-                        color: var(--dark);
-                        padding: 0.5rem;
-                        vertical-align: middle;
-
-                        .single-status {
-                            width: fit-content;
-                            padding: 0.1rem 0.4rem;
-                            border: 1px solid var(--primary);
-                            border-radius: var(--border-rad);
-                        }
-
-                        .product-image-field {
-                            display: flex;
-                            gap: 5px;
-                            .product-image {
-                                aspect-ratio: 3 / 4;
-                                width: 3rem;
-                                object-fit: cover;
-                                display: block;
-                                border-radius: var(--border-rad);
-                            }
-                        }
-
-                        .action-icon {
-                            display: inline;
-                            margin-right: 0.5rem;
-                            border-radius: var(--border-rad);
-                            height: 2rem;
-                            padding: 0.3rem;
-                            background: var(--primary);
-                            cursor: pointer;
-                        }
-                    }
-                }
-            }
-        }
     }
     .image-category {
         display: grid;
@@ -169,15 +119,15 @@ function deleteOrder(orderId) {
                 align-items: center;
 
                 .tag-label {
-                    background-color: var(--secondary);
+                    background-color: var(--color--secondary);
                     padding: 5px 10px;
-                    border-radius: var(--border-rad);
+                    border-radius: var(--rounded-box);
                     display: block;
                     cursor: pointer;
                     user-select: none;
 
                     &:hover {
-                        background-color: var(--secondary);
+                        background-color: var(--color--secondary);
                     }
 
                     &::before {
@@ -195,7 +145,7 @@ function deleteOrder(orderId) {
                     display: none;
 
                     &:checked + .tag-label {
-                        background-color: var(--primary);
+                        background-color: var(--color--primary);
                         color: white;
                         text-align: center;
 
