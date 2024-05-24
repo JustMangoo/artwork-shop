@@ -81,7 +81,7 @@ export default {
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            align-items: center;
+            align-items: baseline;
             transform: translateY(100%); /* Start below viewport */
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
             transition-delay: 1.5s;
@@ -90,6 +90,10 @@ export default {
             &.active {
                 opacity: 1;
                 transform: translateY(0); /* Slide up to normal position */
+            }
+
+            h1 {
+                font-size: 8rem;
             }
 
             p {

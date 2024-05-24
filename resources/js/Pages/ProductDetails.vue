@@ -26,8 +26,10 @@
                 <!-- Product Details -->
                 <div class="product-details">
                     <h1>{{ product.title }}</h1>
-                    <p>&euro;{{ product.price }}</p>
+                    <p>{{ product.category.name }}</p>
                     <p>{{ product.description }}</p>
+                    <hr />
+                    <p class="price">&euro;{{ product.price }}</p>
                     <div class="quantity-control">
                         <button @click="decreaseQuantity">-</button>
                         <input type="text" v-model="quantity" readonly />
@@ -112,8 +114,8 @@ const decreaseQuantity = () => {
         90deg,
         var(--color--secondary) 0%,
         var(--color--secondary) 50%,
-        var(--color--light) 50%,
-        var(--color--light) 100%
+        var(--color--white) 50%,
+        var(--color--white) 100%
     );
     .inner-container {
         display: flex;
@@ -124,7 +126,7 @@ const decreaseQuantity = () => {
         .images-section {
             width: 100%;
             display: flex;
-            padding: 96px;
+            padding: 96px 96px 96px 0;
             .thumbnail-images {
                 display: flex;
                 flex-direction: column;
@@ -142,8 +144,10 @@ const decreaseQuantity = () => {
                 position: relative;
                 .main-image {
                     width: 100%;
+
                     object-fit: cover;
                     aspect-ratio: 3/4;
+                    box-shadow: 0px 20px 40px -35px rgba(0, 0, 0, 0.75);
                 }
             }
         }
@@ -153,6 +157,18 @@ const decreaseQuantity = () => {
             gap: 1rem;
             width: 100%;
             padding: 96px;
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            p {
+                font-size: 1.2rem;
+            }
+
+            .price {
+                font-weight: 500;
+                font-size: 2rem;
+            }
 
             .quantity-control {
                 display: flex;
@@ -185,13 +201,6 @@ const decreaseQuantity = () => {
                     border: none;
                     outline: none;
                 }
-            }
-
-            h1 {
-            }
-
-            p {
-                font-size: 1.4rem;
             }
         }
     }

@@ -191,9 +191,8 @@ export default {
     width: 400px;
     height: 100vh;
     background: white;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    box-shadow: -2px 0 100px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    padding: 20px;
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     overflow: auto;
@@ -210,6 +209,7 @@ export default {
     .cart-heading {
         display: flex;
         justify-content: space-between;
+        padding: 20px;
     }
 
     .cart-content {
@@ -227,6 +227,8 @@ export default {
                 width: 100%;
                 overflow-y: auto;
                 flex-grow: 1;
+                background-color: var(--color--secondary);
+                padding: 20px;
 
                 .cart-product-image {
                     width: 50px;
@@ -295,6 +297,7 @@ export default {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            padding: 20px;
             p {
                 font-size: 25px;
             }

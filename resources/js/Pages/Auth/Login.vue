@@ -116,7 +116,7 @@ const submit = () => {
 
     @media (min-width: 640px) {
         max-width: 28rem;
-        border-radius: 0.5rem;
+        border-radius: var(--rounded-elem);
     }
     .input-wrapper {
         margin-bottom: 1rem;

@@ -2,8 +2,6 @@
     <div class="guest-container">
         <Navigation />
 
-        
-
         <div class="content">
             <slot />
         </div>
@@ -16,7 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--color--light);
+    background-color: var(--color--white);
     min-height: 100vh;
     width: 100%;
     justify-content: space-between;
