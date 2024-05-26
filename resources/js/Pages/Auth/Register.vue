@@ -47,7 +47,7 @@
             </div>
 
             <div class="input-wrapper">
-                <label for="password_confirmation">Apsti Password</label>
+                <label for="password_confirmation">Apstiprini Password</label>
 
                 <input
                     id="password_confirmation"

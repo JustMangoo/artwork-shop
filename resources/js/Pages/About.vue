@@ -2,26 +2,35 @@
     <Head title="Panelis" />
 
     <MainLayout>
-        <div class="hero-image">
-            <img src="@\Assets\Images\Image1.png" alt="hero image" />
-        </div>
+        <img
+            class="brush-stroke-1"
+            src="@/Assets/brush-strokes/brush-stroke-2.svg"
+        />
+        <img
+            class="brush-stroke-2"
+            src="@/Assets/brush-strokes/brush-stroke-3.svg"
+        />
         <div class="about-container">
-            <div class="about-text">
-                <h2>Par Arti Daugatu</h2>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Fuga, repudiandae eum nihil earum, omnis aperiam animi
-                    corporis, perspiciatis in provident inventore vel iste cum
-                </p>
-                <p>
-                    voluptates corrupti amet fugit atque harum excepturi!
-                    Sapiente iste, eius maxime quas eligendi fuga! Corporis
-                    eaque repellendus odio voluptatem blanditiis ipsum ad
-                    commodi nemo quis. Sapiente.
-                </p>
-            </div>
-            <div class="about-image">
-                <img src="@/Assets/Images/Artis-port.jpg" alt="" />
+            <div class="inner-container">
+                <div class="about-text">
+                    <h2>Par Arti Daugatu</h2>
+                    <div class="text-seperator"></div>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing
+                        elit. Fuga, repudiandae eum nihil earum, omnis aperiam
+                        animi corporis, perspiciatis in provident inventore vel
+                        iste cum
+                    </p>
+                    <p>
+                        voluptates corrupti amet fugit atque harum excepturi!
+                        Sapiente iste, eius maxime quas eligendi fuga! Corporis
+                        eaque repellendus odio voluptatem blanditiis ipsum ad
+                        commodi nemo quis. Sapiente.
+                    </p>
+                </div>
+                <div class="about-image">
+                    <img src="@/Assets/Images/artis-port-masked.svg" alt="" />
+                </div>
             </div>
         </div>
 
@@ -80,6 +89,29 @@ const submit = () => {
 </script>
 
 <style lang="scss" scoped>
+.brush-stroke-1 {
+    position: absolute;
+    width: 16vw;
+    min-width: 150px;
+    left: -30px;
+    top: 560px;
+    z-index: 50;
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+}
+
+.brush-stroke-2 {
+    position: absolute;
+    width: 6vw;
+
+    right: 30px;
+    top: -120px;
+    z-index: 50;
+    -webkit-transform: scalex(-1);
+    transform: scalex(-1);
+    transform: rotate(5deg);
+}
+
 .hero-image {
     width: 100%;
     height: 40rem;
@@ -93,13 +125,27 @@ const submit = () => {
 
 .about-container {
     display: flex;
-    max-width: 95rem;
-    padding: 4rem 1rem;
-    justify-content: space-around;
+    background-image: linear-gradient(
+        90deg,
+        var(--color--white) 0%,
+        var(--color--white) 50%,
+        var(--color--secondary) 50%,
+        var(--color--secondary) 100%
+    );
+    width: 100%;
+    display: flex;
+    justify-content: center;
 
     @media (max-width: 768px) {
         align-items: center;
         flex-direction: column;
+        background-image: linear-gradient(
+            0deg,
+            var(--color--white) 0%,
+            var(--color--white) 50%,
+            var(--color--secondary) 50%,
+            var(--color--secondary) 100%
+        );
     }
     @media (max-width: 568px) {
         display: flex;
@@ -107,46 +153,60 @@ const submit = () => {
         flex-direction: column;
     }
 
-    .about-text {
-        max-width: 30%;
+    .inner-container {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        gap: 16px;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 95rem;
+
         @media (max-width: 768px) {
-            max-width: 70%;
+            align-items: center;
+            flex-direction: column-reverse;
+        }
+        @media (max-width: 568px) {
+            display: flex;
+            align-items: center;
+            flex-direction: column-reverse;
         }
 
-        p {
-            text-align: center;
-            font-size: 20px;
-        }
-    }
-    .about-image {
-        max-width: 40%;
-        padding: 0 4rem;
-        @media (max-width: 768px) {
-            max-width: 100%;
-        }
-        background: url("@/Assets/brush-strokes/brush-stroke-1.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        aspect-ratio: 1/1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
+        .about-text {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: left;
+            text-align: left;
+            gap: 16px;
+            padding: 96px;
+
+            .text-seperator {
+                height: 2px;
+                background-color: var(--color--primary);
+                width: 80px;
+            }
+
+            p {
+                text-align: left;
+                font-size: 20px;
+            }
+        }
+        .about-image {
+            width: 100%;
+            padding: 96px;
+            aspect-ratio: 1/1;
             display: flex;
             justify-content: center;
             align-items: center;
-            filter: hue-rotate(15deg);
+
+            img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                filter: hue-rotate(15deg);
+            }
         }
     }
 }
@@ -157,7 +217,7 @@ const submit = () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-bottom: 2rem;
+    padding: 2rem 0;
 
     h2 {
         text-align: center;

@@ -50,7 +50,7 @@ class StripeWebhookController extends Controller
         $order = Order::where('session_id', $session->id)->first();
         if ($order) {
             Log::info('Session Data:', ['session' => $session]); // Log entire session data
-            $order->status = 'completed';
+            $order->status = 'paid';
 
             // Update the email using customer_details
             if (isset($session->customer_details->email)) {

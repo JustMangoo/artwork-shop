@@ -11,10 +11,12 @@
 
         <button @click="confirmUserDeletion">Dzēst kontu</button>
 
-        <Modal :show="confirmingUserDeletion" @close="closeModal">
-            <div class="modal-content">
+        <Modal v-if="confirmingUserDeletion" @close="closeModal">
+            <template #header>
                 <h4>Vai esat pārliecināts, ka vēlaties dzēst savu kontu?</h4>
+            </template>
 
+            <template #content>
                 <p>
                     Pēc konta dzēšanas visi tā resursi un dati tiks
                     neatgriezeniski dzēsti.
@@ -42,22 +44,25 @@
                         class="input-error"
                     />
                 </div>
+            </template>
 
-                <div class="button-group">
-                    <button class="w-full btn-secondary" @click="closeModal">
+            <template #side-content></template>
+
+            <template #footer>
+                <div class="modal-footer">
+                    <button class="btn-secondary" @click="closeModal">
                         Atcelt
                     </button>
 
                     <button
-                        class="w-full btn-primary"
-                        :class="{ 'opacity-50': form.processing }"
+                        class="btn-primary"
                         :disabled="form.processing"
                         @click="deleteUser"
                     >
                         Dzēst kontu
                     </button>
                 </div>
-            </div>
+            </template>
         </Modal>
     </section>
 </template>
@@ -99,6 +104,10 @@ const closeModal = () => {
 </script>
 
 <style lang="scss" scoped>
+#side-content {
+    display: none;
+    background-color: red;
+}
 .profile-section {
     display: flex;
     flex-direction: column;
@@ -116,48 +125,45 @@ const closeModal = () => {
 }
 
 .modal-content {
-    padding: 1.5rem; /* p-6 */
+    padding: 1.5rem;
 }
 
 .modal-title {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 500; /* font-medium */
+    font-size: 1.125rem;
+    font-weight: 500;
     color: var(--gray-900);
 }
 
 .modal-description {
-    margin-top: 0.25rem; /* mt-1 */
-    font-size: 0.875rem; /* text-sm */
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
     color: var(--gray-600);
 }
 
 .input-group {
-    margin-top: 1.5rem; /* mt-6 */
+    margin-top: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .password-input {
     display: block;
     width: 100%;
-    margin-top: 0.25rem; /* mt-1 */
-    // ... other input styles from your CSS
+    margin-top: 0.25rem;
 }
 
 .input-error {
-    margin-top: 0.5rem; /* mt-2 */
+    margin-top: 0.5rem;
 }
 
 .button-group {
     display: flex;
-    justify-content: flex-end; /* justify-end */
+    justify-content: flex-end;
     gap: 32px;
-    margin-top: 1.5rem; /* mt-6 */
-}
-
-.ml-3 {
-    margin-left: 0.75rem; /* ms-3 */
-}
-
-.opacity-50 {
-    opacity: 0.5;
+    margin-top: 1.5rem;
 }
 </style>

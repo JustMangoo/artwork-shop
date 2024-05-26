@@ -25,8 +25,8 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 3rem;
         align-items: center;
+        position: relative;
 
         @media (min-width: 640px) {
             justify-content: center;

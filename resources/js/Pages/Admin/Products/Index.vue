@@ -5,19 +5,115 @@
         <SystemAlert :message="SystemAlert" :type="messageType" />
 
         <div class="container">
-            <div class="option-container">
-                <div class="container-heading">
-                    <h1>Produkti</h1>
-                    <button
-                        class="add-button"
-                        @click="isAddProductModalOpen = true"
-                    >
-                        <img src="@/Assets/plus.svg" alt="plus icon" />
-                        Jauns
-                    </button>
-                </div>
-                <div class="container-filters">
-                    <div class="search-container">
+            <Modal v-if="isModalOpen" @close="closeModal" :showSidebar="true">
+                <template #header><h2>Pievienot Produktu</h2></template>
+
+                <template #content class="modal-content">
+                    <!-- (input fields) -->
+                    <div class="input-field">
+                        <InputLabel for="title">Nosaukums:</InputLabel>
+                        <input type="text" id="title" v-model="form.title" />
+                        <InputError :message="form.errors.title" />
+                    </div>
+                    <div class="input-field">
+                        <InputLabel for="description">Apraksts:</InputLabel>
+                        <textarea
+                            id="description"
+                            v-model="form.description"
+                        ></textarea>
+                        <InputError :message="form.errors.description" />
+                    </div>
+
+                    <div class="images-input-box input-field">
+                        <InputLabel for="images">Attēli:</InputLabel>
+                        <div class="images-input">
+                            <ImageUploadComponent
+                                :initial-image="initialImages[0]"
+                                :image-id="initialImagesId[0]"
+                                :index="0"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                            <ImageUploadComponent
+                                :initial-image="initialImages[1]"
+                                :image-id="initialImagesId[1]"
+                                :index="1"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                            <ImageUploadComponent
+                                :initial-image="initialImages[2]"
+                                :image-id="initialImagesId[2]"
+                                :index="2"
+                                @image-added="handleImageAdded"
+                                @image-removed="handleImageRemoved"
+                            />
+                        </div>
+                    </div>
+                    <InputError :message="form.images.price" class="mt-2" />
+                </template>
+
+                <template #side-content>
+                    <div class="input-field">
+                        <InputLabel for="price">Cena:</InputLabel>
+                        <input type="number" id="price" v-model="form.price" />
+                        <InputError :message="form.errors.price" />
+                    </div>
+                    <div>
+                        <InputLabel for="category">Kategorijas:</InputLabel>
+                        <div class="categories-input">
+                            <div
+                                v-for="category in categories"
+                                :key="category.id"
+                                class="radio-tag"
+                            >
+                                <input
+                                    type="radio"
+                                    :id="'category-' + category.id"
+                                    :value="category.id"
+                                    v-model="form.category"
+                                    name="category"
+                                />
+                                <label
+                                    :for="'category-' + category.id"
+                                    class="tag-label"
+                                >
+                                    {{ category.name }}
+                                </label>
+                            </div>
+                        </div>
+                        <InputError :message="form.errors.category" />
+                    </div>
+                </template>
+
+                <template #footer>
+                    <div class="modal-footer">
+                        <button
+                            class="btn-secondary"
+                            @click="
+                                isModalOpen = false;
+                                resetForm();
+                            "
+                        >
+                            Atcelt
+                        </button>
+                        <button class="btn-primary" @click="addProduct">
+                            Saglabāt
+                        </button>
+                    </div>
+                </template>
+            </Modal>
+            <header class="header">
+                <h1>Produkti</h1>
+                <button class="add-button" @click="isModalOpen = true">
+                    <img src="@/Assets/plus.svg" alt="plus icon" />
+                    Pievienot
+                </button>
+            </header>
+            <div class="main-content">
+                <aside class="filters">
+                    <h2>Filtrēšana</h2>
+                    <div class="search-wrapper">
                         <input
                             v-show="showSearch"
                             v-model="searchTerm"
@@ -48,174 +144,67 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </aside>
 
-                <FormModalLayout
-                    v-model:showModal="isAddProductModalOpen"
-                    @submit="addProduct"
-                    @reset-form="resetForm"
-                >
-                    <template #header><h2>Pievienot Produktu</h2></template>
-
-                    <template #body class="modal-content">
-                        <!-- (input fields) -->
-                        <div>
-                            <InputLabel for="title">Nosaukums:</InputLabel>
-                            <input
-                                type="text"
-                                id="title"
-                                v-model="form.title"
-                            />
-                            <InputError :message="form.errors.title" />
-                        </div>
-                        <div>
-                            <InputLabel for="description">Apraksts:</InputLabel>
-                            <textarea
-                                id="description"
-                                v-model="form.description"
-                            ></textarea>
-                            <InputError :message="form.errors.description" />
-                        </div>
-                        <div>
-                            <InputLabel for="price">Cena:</InputLabel>
-                            <input
-                                type="number"
-                                id="price"
-                                v-model="form.price"
-                            />
-                            <InputError :message="form.errors.price" />
-                        </div>
-                        <div class="image-category">
-                            <div>
-                                <InputLabel for="category"
-                                    >Kategorijas:</InputLabel
-                                >
-                                <div class="categories-input">
-                                    <div
-                                        v-for="category in categories"
-                                        :key="category.id"
-                                        class="radio-tag"
-                                    >
-                                        <input
-                                            type="radio"
-                                            :id="'category-' + category.id"
-                                            :value="category.id"
-                                            v-model="form.category"
-                                            name="category"
-                                        />
-                                        <label
-                                            :for="'category-' + category.id"
-                                            class="tag-label"
-                                        >
-                                            {{ category.name }}
-                                        </label>
+                <!-- Product table -->
+                <div class="table-container">
+                    <table cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th>Nosaukums</th>
+                                <th class="hide-ssmall">raksts</th>
+                                <th>Cena</th>
+                                <th class="hide-ssmall">kategorija</th>
+                                <th>Bilde</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="product in products" :key="product.id">
+                                <td>
+                                    {{ product.title }}
+                                </td>
+                                <td class="hide-ssmall">
+                                    {{ product.description }}
+                                </td>
+                                <td>{{ product.price }}&euro;</td>
+                                <td class="hide-ssmall">
+                                    <div class="table-badge">
+                                        {{ product.category.name }}
                                     </div>
-                                </div>
-                                <InputError :message="form.errors.category" />
-                            </div>
-                            <div class="images-input-box">
-                                <InputLabel for="images">Attēli:</InputLabel>
-                                <div class="images-input">
-                                    <ImageUploadComponent
-                                        :initial-image="initialImages[0]"
-                                        :image-id="initialImagesId[0]"
-                                        :index="0"
-                                        @image-added="handleImageAdded"
-                                        @image-removed="handleImageRemoved"
-                                    />
-                                    <ImageUploadComponent
-                                        :initial-image="initialImages[1]"
-                                        :image-id="initialImagesId[1]"
-                                        :index="1"
-                                        @image-added="handleImageAdded"
-                                        @image-removed="handleImageRemoved"
-                                    />
-                                    <ImageUploadComponent
-                                        :initial-image="initialImages[2]"
-                                        :image-id="initialImagesId[2]"
-                                        :index="2"
-                                        @image-added="handleImageAdded"
-                                        @image-removed="handleImageRemoved"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <InputError :message="form.images.price" class="mt-2" />
-                    </template>
-
-                    <template #footer>
-                        <!-- Modal footer content -->
-                        <button
-                            class="cancel-btn"
-                            @click="
-                                isAddProductModalOpen = false;
-                                resetForm();
-                            "
-                        >
-                            Atcelt
-                        </button>
-                        <button class="submit-btn" @click="addProduct">
-                            Saglabāt
-                        </button>
-                    </template>
-                </FormModalLayout>
-            </div>
-            <!-- Product table -->
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nosaukums</th>
-                            <th class="hide-ssmall">raksts</th>
-                            <th>Cena</th>
-                            <th class="hide-ssmall">kategorija</th>
-                            <th>Bilde</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product in products" :key="product.id">
-                            <td>
-                                {{ product.title }}
-                            </td>
-                            <td class="hide-ssmall">
-                                {{ product.description }}
-                            </td>
-                            <td>{{ product.price }}&euro;</td>
-                            <td class="hide-ssmall">
-                                <div class="table-badge">
-                                    {{ product.category.name }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="image-cell">
+                                </td>
+                                <td>
+                                    <div class="image-cell">
+                                        <img
+                                            v-if="product.images.length > 0"
+                                            :src="
+                                                productImagePath(
+                                                    product.images[0]
+                                                )
+                                            "
+                                            alt="Product Image"
+                                            class="table-image"
+                                        />
+                                    </div>
+                                </td>
+                                <td>
                                     <img
-                                        v-if="product.images.length > 0"
-                                        :src="
-                                            productImagePath(product.images[0])
-                                        "
-                                        alt="Product Image"
-                                        class="table-image"
+                                        class="action-btn"
+                                        src="@/Assets/pen.svg"
+                                        alt="edit-icon"
+                                        @click="editProduct(product)"
                                     />
-                                </div>
-                            </td>
-                            <td>
-                                <img
-                                    class="action-btn"
-                                    src="@/Assets/pen.svg"
-                                    alt="edit-icon"
-                                    @click="editProduct(product)"
-                                />
-                                <img
-                                    class="action-btn"
-                                    src="@/Assets/trash.svg"
-                                    alt="delete-icon"
-                                    @click="deleteProduct(product)"
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <img
+                                        class="action-btn"
+                                        src="@/Assets/trash.svg"
+                                        alt="delete-icon"
+                                        @click="deleteProduct(product)"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </AdminLayout>
@@ -223,7 +212,7 @@
 
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import FormModalLayout from "@/Layouts/FormModalLayout.vue";
+import Modal from "@/Components/Modal.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
@@ -235,7 +224,7 @@ export default {
     components: {
         AdminLayout,
         Head,
-        FormModalLayout,
+        Modal,
         InputError,
         InputLabel,
         ImageUploadComponent,
@@ -247,7 +236,7 @@ export default {
     },
     data() {
         return {
-            isAddProductModalOpen: false,
+            isModalOpen: false,
             imagePreviewUrls: [],
             initialImages: [null, null, null],
             initialImagesId: [null, null, null],
@@ -396,7 +385,7 @@ export default {
             // Use Inertia's post method for all requests, handling both create and update actions
             this.$inertia.post(url, formData, {
                 onSuccess: () => {
-                    this.isAddProductModalOpen = false;
+                    this.isModalOpen = false;
                     this.setSystemAlert(
                         this.isEditMode
                             ? "Produkts atjaunināts veiksmīgi"
@@ -415,6 +404,10 @@ export default {
                 forceFormData: true,
             });
         },
+        closeModal() {
+            this.isModalOpen = false;
+            this.resetForm();
+        },
         resetForm() {
             this.form.reset();
             this.initialImages = [null, null, null];
@@ -429,7 +422,7 @@ export default {
         editProduct(product) {
             this.isEditMode = true;
 
-            this.form.reset();
+            this.resetForm();
             this.form.id = product.id;
             this.form.title = product.title;
             this.form.description = product.description;
@@ -446,7 +439,7 @@ export default {
                 this.initialImages.push(null);
             }
 
-            this.isAddProductModalOpen = true;
+            this.isModalOpen = true;
         },
         deleteProduct(product) {
             if (confirm(`Are you sure you want to delete ${product.title}?`)) {
@@ -476,41 +469,50 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-    max-width: 95rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    overflow: hidden;
-    padding: 1rem 0.5rem;
+    max-width: 95rem;
+    margin: 0 auto;
+    padding-inline: 0.5rem;
 
-    .option-container {
-        max-width: 100%;
+    .header {
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
         align-items: center;
+        padding: 1rem 0;
 
-        .container-heading {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--color--primary);
-            margin: 8px 0;
-
-            h1 {
-                width: 100%;
-                font-size: 3rem;
+        .add-button {
+            width: fit-content;
+            img {
+                height: 1.2rem;
             }
         }
+    }
 
-        .container-filters {
+    .main-content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 1rem;
+
+        .filters {
             width: 100%;
+            height: fit-content;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
+            border-radius: var(--rounded-box);
+            border: 1px solid var(--color--secondary);
+            padding: 4px;
 
-            .search-container {
+            h2 {
+                background-color: var(--color--secondary);
+                font-size: 1.563rem;
+                padding: 6px 8px;
+            }
+
+            .search-wrapper {
                 display: flex;
+                padding: 8px;
 
                 .search-input {
                     border-bottom: 2px solid var(--color--secondary);
@@ -527,7 +529,7 @@ export default {
                 }
 
                 .show-search {
-                    max-width: 10rem;
+                    max-width: 100%;
                     padding: 0.5rem;
                 }
 
@@ -537,6 +539,7 @@ export default {
             }
 
             .category-search-container {
+                padding: 8px;
                 position: relative;
                 .dropdown-button {
                     display: flex;
@@ -576,7 +579,6 @@ export default {
             }
         }
 
-        .add-button,
         .search-button {
             width: fit-content;
             img {
@@ -586,72 +588,76 @@ export default {
     }
 
     .table-container {
-        border-radius: var(--rounded-box);
-        overflow: hidden;
+        overflow: auto;
     }
-    .image-category {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
 
-        .images-input-box {
+    .images-input-box {
+        width: 100%;
+        .images-input {
             width: 100%;
-            .images-input {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                gap: 1rem;
-            }
-        }
-
-        .categories-input {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
+            flex-direction: row;
+            gap: 1rem;
+        }
+    }
 
-            .radio-tag {
-                display: flex;
-                align-items: center;
+    .input-field {
+        margin-bottom: 16px;
+    }
 
-                .tag-label {
+    .modal-footer {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .categories-input {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+
+        .radio-tag {
+            display: flex;
+            align-items: center;
+
+            .tag-label {
+                background-color: var(--color--secondary);
+                padding: 5px 10px;
+                border-radius: var(--rounded-box);
+                display: block;
+                cursor: pointer;
+                user-select: none;
+
+                &:hover {
                     background-color: var(--color--secondary);
-                    padding: 5px 10px;
-                    border-radius: var(--rounded-box);
-                    display: block;
-                    cursor: pointer;
-                    user-select: none;
+                }
 
-                    &:hover {
-                        background-color: var(--color--secondary);
-                    }
+                &::before {
+                    content: url(@/Assets/check.svg);
+                    display: inline-block;
+                    width: 0;
+                    height: 100%;
+                    margin-right: 0;
+                    transition: all 0.5s;
+                    transform: translate(0, 2px);
+                }
+            }
+
+            input[type="radio"] {
+                display: none;
+
+                &:checked + .tag-label {
+                    background-color: var(--color--primary);
+                    color: white;
+                    text-align: center;
 
                     &::before {
                         content: url(@/Assets/check.svg);
                         display: inline-block;
-                        width: 0;
+                        width: 1rem;
                         height: 100%;
-                        margin-right: 0;
-                        transition: all 0.5s;
-                        transform: translate(0, 2px);
-                    }
-                }
-
-                input[type="radio"] {
-                    display: none;
-
-                    &:checked + .tag-label {
-                        background-color: var(--color--primary);
-                        color: white;
-                        text-align: center;
-
-                        &::before {
-                            content: url(@/Assets/check.svg);
-                            display: inline-block;
-                            width: 1rem;
-                            height: 100%;
-                            margin-right: 0.2rem;
-                        }
+                        margin-right: 0.2rem;
                     }
                 }
             }

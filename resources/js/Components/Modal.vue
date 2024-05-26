@@ -1,66 +1,73 @@
 <template>
-    <Teleport to="body">
-        <div v-show="show" class="modal-overlay" scroll-region>
-            <div v-show="show" class="modal-backdrop" @click="close">
-                <div class="backdrop" />
+    <div class="modal-overlay" @click.self="closeModal">
+        <div class="modal-container" :class="{ 'with-sidebar': showSidebar }">
+            <header class="modal-header">
+                <slot name="header">
+                    <h2>Default Heading</h2>
+                    <!-- Default heading if no slot content provided -->
+                </slot>
+                <button class="close-button" @click="closeModal">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M6 6L18 18M18 6L6 18"
+                            stroke-width="2"
+                            stroke-linecap="sharp"
+                            stroke-linejoin="sharp"
+                        />
+                    </svg>
+                </button>
+            </header>
+            <div class="modal-body">
+                <div class="content">
+                    <slot name="content">
+                        <p>Default content</p>
+                        <!-- Default content if no slot content provided -->
+                    </slot>
+                </div>
+                <div
+                    class="side-content"
+                    :class="{ 'no-side-content': !showSidebar }"
+                >
+                    <slot name="side-content"> </slot>
+                </div>
             </div>
-
-            <div v-show="show" class="modal-content" :class="maxWidthClass">
-                <slot v-if="show" />
-            </div>
+            <footer class="modal-footer">
+                <slot name="footer">
+                    <button class="btn-secondary" @click="closeModal">
+                        Cancel
+                    </button>
+                    <button class="btn-primary" @click="saveChanges">
+                        Save
+                    </button>
+                </slot>
+            </footer>
         </div>
-    </Teleport>
+    </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, watch } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-    show: {
+    showSidebar: {
         type: Boolean,
         default: false,
     },
-    maxWidth: {
-        type: String,
-        default: "2xl",
-    },
-    closeable: {
-        type: Boolean,
-        default: true,
-    },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "save"]);
 
-watch(
-    () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = null;
-        }
-    }
-);
+function closeModal() {
+    emit("close");
+}
 
-const close = () => {
-    if (props.closeable) {
-        emit("close");
-    }
-};
-
-const closeOnEscape = (e) => {
-    if (e.key === "Escape" && props.show) {
-        close();
-    }
-};
-
-onMounted(() => document.addEventListener("keydown", closeOnEscape));
-
-onUnmounted(() => {
-    document.removeEventListener("keydown", closeOnEscape);
-    document.body.style.overflow = null;
-});
+function saveChanges() {
+    emit("save");
+}
 </script>
 
 <style lang="scss" scoped>
@@ -68,58 +75,76 @@ onUnmounted(() => {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    background-color: rgba(black, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem 1rem;
-    overflow-y: auto;
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transition: all 0.2s;
-}
-
-.backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: white;
+.modal-container {
+    background: var(--color--white);
+    width: 800px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    row-gap: 2rem;
     padding: 16px;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s;
-    max-width: 45vw;
-    width: auto;
+    border-radius: var(--rounded-box);
 
-    @media (min-width: 640px) {
-        // Optionally adjust width on larger screens
-        // Example: max-width: 42rem;
+    &.with-sidebar {
+        grid-template-columns: 3fr 1fr;
     }
-}
 
-/* Responsive Max-Width Classes */
-// These classes will remain the same, based on your `maxWidth` prop.
-.sm-max-w-sm {
-    @media (min-width: 640px) {
-        max-width: 24rem;
+    .modal-header {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .close-button {
+            padding: 0;
+            background-color: transparent;
+
+            svg {
+                cursor: pointer;
+                width: 30px;
+                aspect-ratio: 1/1;
+                stroke: var(--color--primary);
+            }
+        }
+    }
+
+    .modal-body {
+        display: contents;
+
+        .content {
+            overflow: hidden;
+            border-radius: var(--rounded-box);
+            border: 1px solid var(--color--secondary);
+            padding: 18px;
+        }
+
+        .side-content {
+            overflow: hidden;
+            border-radius: var(--rounded-box);
+            border: 1px solid var(--color--secondary);
+            padding: 18px;
+        }
+        .no-side-content {
+            display: none;
+        }
+    }
+
+    .modal-footer {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        background-color: var(--color--white);
+        padding: 0;
     }
 }
 </style>

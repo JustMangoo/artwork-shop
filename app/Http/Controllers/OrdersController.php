@@ -32,6 +32,13 @@ class OrdersController extends Controller
         ]);
     }
 
+    public function show(Order $order)
+    {
+        return Inertia::render('Admin/Orders/Edit', [
+            'order' => $order,
+        ]);
+    }
+
     /**
      * Update the specified order in storage.
      */

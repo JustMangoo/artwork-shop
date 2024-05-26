@@ -202,7 +202,7 @@
         </div>
 
         <div class="table-container">
-            <table>
+            <table cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
                         <th>Nosaukums</th>
