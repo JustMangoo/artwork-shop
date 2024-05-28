@@ -81,11 +81,13 @@ function saveChanges() {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 
 .modal-container {
     background: var(--color--white);
-    width: 800px;
+    width: 1000px;
+    max-height: 75vh;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
@@ -93,6 +95,7 @@ function saveChanges() {
     row-gap: 2rem;
     padding: 16px;
     border-radius: var(--rounded-box);
+    overflow: auto;
 
     &.with-sidebar {
         grid-template-columns: 3fr 1fr;
@@ -121,7 +124,6 @@ function saveChanges() {
         display: contents;
 
         .content {
-            overflow: hidden;
             border-radius: var(--rounded-box);
             border: 1px solid var(--color--secondary);
             padding: 18px;
@@ -129,6 +131,7 @@ function saveChanges() {
 
         .side-content {
             overflow: hidden;
+            text-overflow: ellipsis;
             border-radius: var(--rounded-box);
             border: 1px solid var(--color--secondary);
             padding: 18px;
@@ -139,6 +142,8 @@ function saveChanges() {
     }
 
     .modal-footer {
+        height: max-content;
+        padding: 16px;
         grid-column: 1 / -1;
         display: flex;
         justify-content: flex-end;

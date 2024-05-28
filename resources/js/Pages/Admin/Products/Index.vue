@@ -2,8 +2,6 @@
     <Head title="Produkti" />
 
     <AdminLayout>
-        <SystemAlert :message="SystemAlert" :type="messageType" />
-
         <div class="container">
             <Modal v-if="isModalOpen" @close="closeModal" :showSidebar="true">
                 <template #header><h2>Pievienot Produktu</h2></template>
@@ -115,15 +113,13 @@
                     <h2>Filtrēšana</h2>
                     <div class="search-wrapper">
                         <input
-                            v-show="showSearch"
                             v-model="searchTerm"
                             type="text"
                             class="search-input"
                             @keyup.enter="performSearch"
-                            :class="{ 'show-search': isSearchVisible }"
                         />
 
-                        <button class="search-button" @click="toggleSearch">
+                        <button class="search-button">
                             <img src="@/Assets/search.svg" alt="search icon" />
                         </button>
                     </div>
@@ -216,7 +212,6 @@ import Modal from "@/Components/Modal.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import ImageUploadComponent from "@/Components/ImageUploadComponent.vue";
-import SystemAlert from "@/Components/SystemAlert.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 
@@ -228,7 +223,6 @@ export default {
         InputError,
         InputLabel,
         ImageUploadComponent,
-        SystemAlert,
     },
     props: {
         products: Array,
@@ -241,7 +235,6 @@ export default {
             initialImages: [null, null, null],
             initialImagesId: [null, null, null],
             isEditMode: false,
-            SystemAlert: "",
             messageType: "info",
             showSearch: false,
             isSearchVisible: false,
@@ -275,7 +268,6 @@ export default {
             this.filterByCategory();
         },
         filterByCategory() {
-            // Logic to filter products by category
             this.performSearch();
         },
         toggleSearch() {
@@ -297,7 +289,7 @@ export default {
                 route("products.index"),
                 {
                     search: this.searchTerm,
-                    category: this.selectedCategory, // Pass the selected category ID
+                    category: this.selectedCategory,
                 },
                 {
                     preserveState: true,
@@ -386,12 +378,7 @@ export default {
             this.$inertia.post(url, formData, {
                 onSuccess: () => {
                     this.isModalOpen = false;
-                    this.setSystemAlert(
-                        this.isEditMode
-                            ? "Produkts atjaunināts veiksmīgi"
-                            : "Produkts pievienots veiksmīgi",
-                        "success"
-                    );
+
                     this.resetForm();
                     this.isEditMode = false;
                 },
@@ -444,18 +431,8 @@ export default {
         deleteProduct(product) {
             if (confirm(`Are you sure you want to delete ${product.title}?`)) {
                 this.$inertia.delete(route("products.destroy", product.id), {
-                    onSuccess: () => {
-                        this.setSystemAlert(
-                            "Produkts dzēsts veiksmīgi",
-                            "success"
-                        );
-                    },
-                    onError: (errors) => {
-                        this.setSystemAlert(
-                            "An error occurred while deleting the product",
-                            "error"
-                        );
-                    },
+                    onSuccess: () => {},
+                    onError: (errors) => {},
                 });
             }
         },
@@ -517,7 +494,7 @@ export default {
                 .search-input {
                     border-bottom: 2px solid var(--color--secondary);
                     padding: 0.5rem 0;
-                    max-width: 0;
+                    max-width: 100%;
                     transition: all 0.3s ease-in-out;
                     opacity: 1;
                     border-radius: var(--rounded-box) 0 0 var(--rounded-box);
@@ -526,11 +503,6 @@ export default {
                     &:focus {
                         border-bottom: 2px solid var(--color--primary);
                     }
-                }
-
-                .show-search {
-                    max-width: 100%;
-                    padding: 0.5rem;
                 }
 
                 .search-button {
@@ -564,9 +536,8 @@ export default {
                     right: 0;
                     background-color: var(--color--secondary);
                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                    z-index: 100;
+                    z-index: 60;
                     border-radius: 0 0 var(--rounded-box) var(--rounded-box);
-                    z-index: 100;
 
                     .dropdown-item {
                         padding: 0.5rem 1rem;

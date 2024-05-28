@@ -5,6 +5,7 @@
         <div class="content">
             <slot />
         </div>
+        
         <FooterSectionAdmin />
     </div>
 </template>

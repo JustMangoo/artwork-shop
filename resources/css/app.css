@@ -32,10 +32,10 @@ body {
 :root {
     --color--primary: #9aa283;
     --color--secondary: #ebeee3;
-    --color--info: #b2e5f9;
-    --color--success: #bef9b2;
-    --color--warning: #f9e0b2;
-    --color--error: #f8bcbc;
+    --color--info: 178, 229, 249;
+    --color--success: 190, 249, 178;
+    --color--warning: 249, 224, 178;
+    --color--error: 248, 188, 188;
     --color--light: #f8f8f8;
     --color--dark: #313131;
     --color--white: white;
@@ -94,8 +94,9 @@ h4 {
     line-height: 1;
 }
 h5 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     line-height: 1;
+    opacity: 0.9;
 }
 
 small {
@@ -429,8 +430,6 @@ table tbody tr td {
     border-top: 1px solid var(--color--secondary);
 }
 
-table tbody tr td:hover {
-}
 table tbody tr td .table-badge {
     width: fit-content;
     padding: 2px 8px;

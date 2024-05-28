@@ -8,28 +8,48 @@
             <div class="main-content">
                 <aside class="filters">
                     <h2>Filtrēšana</h2>
+                    <div class="category-search-container">
+                        <div @click="toggleDropdown" class="dropdown-button">
+                            {{ selectedCategoryName || "Kategorijas" }}
+                            <img src="@/Assets/arrow.svg" alt="arrow-icon" />
+                        </div>
+                        <div v-if="dropdownActive" class="dropdown-content">
+                            <div
+                                v-for="category in orders"
+                                :key="category.id"
+                                @click="selectCategory(category)"
+                                class="dropdown-item"
+                            >
+                                {{ category.status }}
+                            </div>
+                        </div>
+                    </div>
                 </aside>
                 <div class="table-container">
                     <table cellspacing="0" cellpadding="0">
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Vārds</th>
+                                <th>Epasts</th>
                                 <th>Status</th>
                                 <th>Pilna Cena</th>
-                                <th>Epasts</th>
+
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="order in orders" :key="order.id">
                                 <td>{{ order.id }}</td>
+                                <td>{{ order.full_name }}</td>
+                                <td>{{ order.email }}</td>
                                 <td>
                                     <div class="table-badge">
                                         {{ order.status }}
                                     </div>
                                 </td>
                                 <td>{{ order.total_price }}</td>
-                                <td>{{ order.email }}</td>
+
                                 <td>
                                     <svg
                                         @click="showOrderDetails(order)"
@@ -72,58 +92,120 @@
                     :showSidebar="true"
                 >
                     <template #header>
-                        <h2>Order Details for #{{ selectedOrder.id }}</h2>
+                        <h2>#{{ selectedOrder.id }} Pasūtījums</h2>
                     </template>
                     <template #content class="modal-content">
-                        <div class="order-details">
-                            <div>
-                                <p>
-                                    <strong>Full Name:</strong>
-                                    {{ selectedOrder.full_name }}
-                                </p>
-                                <p>
-                                    <strong>Phone Number:</strong>
-                                    {{ selectedOrder.phone_number }}
-                                </p>
-                                <p>
-                                    <strong>Shipping Address:</strong>
-                                    {{ selectedOrder.shipping_address }},
-                                    {{ selectedOrder.shipping_city }},
-                                    {{ selectedOrder.shipping_country }}
-                                    {{ selectedOrder.shipping_postal_code }}
-                                </p>
-                                <p>
-                                    <strong>Session ID:</strong>
-                                    {{ selectedOrder.session_id }}
-                                </p>
-                                <p>
-                                    <strong>Created At:</strong>
-                                    {{ selectedOrder.created_at }}
-                                </p>
-                                <p>
-                                    <strong>Updated At:</strong>
-                                    {{ selectedOrder.updated_at }}
-                                </p>
-                                <strong>Items:</strong>
-                                <ul>
-                                    <li
-                                        v-for="item in selectedOrder.items"
-                                        :key="item.id"
+                        <div class="order-items-container">
+                            <h3>
+                                Order Items ({{ selectedOrder.items.length }})
+                            </h3>
+                            <div
+                                v-for="item in selectedOrder.items"
+                                :key="item.id"
+                                class="order-item"
+                            >
+                                <div class="product-image">
+                                    <img
+                                        :src="
+                                            productImagePath(
+                                                item.product.images[0].image
+                                            )
+                                        "
+                                        alt="Product Image"
+                                    />
+                                </div>
+                                <div class="product-details">
+                                    <p class="product-title">
+                                        {{ item.product.title }}
+                                    </p>
+                                    <p>
+                                        {{ item.product.price }}€ Par Vienību x
+                                        {{ item.quantity }} Daudzums
+                                    </p>
+                                </div>
+                                <div class="product-summary">
+                                    <h3>
+                                        {{
+                                            calculateGrandTotal(
+                                                item.product.price,
+                                                item.quantity
+                                            )
+                                        }}€
+                                    </h3>
+                                    <p>Price - {{ item.product.price }}€</p>
+                                    <p>Tax - 0.00€</p>
+                                    <!-- Assuming no tax for simplicity -->
+                                    <p>
+                                        Sub Total -
+                                        {{
+                                            calculateSubTotal(
+                                                item.product.price,
+                                                item.quantity
+                                            )
+                                        }}€
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="order-summary">
+                                <div class="order-summary-label">
+                                    <strong>Starpsumma</strong>
+                                    <p>Nodokļi</p>
+                                    <p>Piegāde</p>
+                                    <strong>Kopsumma</strong>
+                                    <p>Kopā samaksāts</p>
+                                    <p>Kopā atgriezts</p>
+                                    <p>Kopējais maksājums</p>
+                                </div>
+                                <div class="order-summary-values">
+                                    <strong
+                                        >€{{
+                                            selectedOrder.total_price
+                                        }}</strong
                                     >
-                                        {{ item.product.title }} - Quantity:
-                                        {{ item.quantity }}
-                                    </li>
-                                </ul>
+                                    <p>€0.00</p>
+                                    <p>€0.00</p>
+                                    <strong
+                                        >€{{
+                                            selectedOrder.total_price
+                                        }}</strong
+                                    >
+                                    <p>€{{ selectedOrder.total_price }}</p>
+                                    <p>€0.00</p>
+                                    <p>€{{ selectedOrder.total_price }}</p>
+                                </div>
                             </div>
                         </div>
                     </template>
-                    <template #side-content
-                        ><p>Status: {{ selectedOrder.status }}</p>
-                        <p>Total Price: €{{ selectedOrder.total_price }}</p>
-                        <p>Email: {{ selectedOrder.email }}</p>
+                    <template #side-content>
+                        <h3>Klients</h3>
+                        <p>
+                            <strong>{{ selectedOrder.full_name }}</strong>
+                        </p>
+                        <p>{{ selectedOrder.email }}</p>
+                        <p>{{ selectedOrder.phone_number }}</p>
+                        <h3>Piegādes adrese:</h3>
+                        <p>
+                            {{ selectedOrder.shipping_country }}
+                            {{ selectedOrder.shipping_address }},
+                            {{ selectedOrder.shipping_city }},
+                            {{ selectedOrder.shipping_postal_code }}
+                        </p>
+                        <h3>Pasūtījuma info</h3>
+                        <p>
+                            <strong>Sessijas ID:</strong>
+                            {{ selectedOrder.session_id }}
+                        </p>
+                        <p>
+                            <strong>Pasūtījuma datums:</strong>
+                            {{ formatDate(selectedOrder.created_at) }}
+                        </p>
+                        <p>
+                            <strong>Statuss:</strong>
+                            {{ selectedOrder.status }}
+                        </p>
                     </template>
                     <template #footer>
-                        <button @click="closeModal">Close</button>
+                        <button @click="closeModal">Aizvērt</button>
                     </template>
                 </Modal>
             </div>
@@ -131,34 +213,116 @@
     </AdminLayout>
 </template>
 
-<script setup>
+<script>
 import { ref, computed } from "vue";
 import Modal from "@/Components/Modal.vue";
 import { Inertia } from "@inertiajs/inertia";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
 
-const props = defineProps({
-    orders: Array,
-});
-
-const isModalOpen = ref(false);
-const selectedOrder = ref({});
-
-function deleteOrder(orderId) {
-    if (confirm("Are you sure you want to delete this order?")) {
-        Inertia.delete(route("orders.destroy", orderId));
-    }
-}
-
-function showOrderDetails(order) {
-    selectedOrder.value = order;
-    isModalOpen.value = true;
-}
-
-function closeModal() {
-    isModalOpen.value = false;
-}
+export default {
+    components: {
+        AdminLayout,
+        Modal,
+        Head,
+        Link,
+    },
+    props: {
+        orders: Array,
+    },
+    data() {
+        return {
+            isModalOpen: false,
+            selectedOrder: {},
+            showSearch: false,
+            isSearchVisible: false,
+            searchTerm: "",
+            dropdownActive: false,
+            selectedCategory: null,
+            selectedCategoryName: "",
+        };
+    },
+    methods: {
+        toggleDropdown() {
+            this.dropdownActive = !this.dropdownActive;
+        },
+        selectCategory(category) {
+            this.selectedCategory = category.id;
+            this.selectedCategoryName = category.name;
+            this.dropdownActive = false;
+            this.filterByCategory();
+        },
+        filterByCategory() {
+            this.performSearch();
+        },
+        toggleSearch() {
+            if (!this.showSearch) {
+                this.showSearch = true;
+                setTimeout(() => {
+                    this.isSearchVisible = true;
+                }, 1);
+            } else {
+                this.isSearchVisible = !this.isSearchVisible;
+                setTimeout(() => {
+                    this.showSearch = !this.showSearch;
+                }, 300);
+                this.performSearch();
+            }
+        },
+        performSearch() {
+            this.$inertia.get(
+                route("orders.index"),
+                {
+                    search: this.searchTerm,
+                    category: this.selectedCategory,
+                },
+                {
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                }
+            );
+            this.isSearchVisible = false;
+            setTimeout(() => {
+                this.showSearch = false;
+            }, 300);
+        },
+        productImagePath(image) {
+            const imagePath = image
+                ? "/storage/" + image.replace("public/", "")
+                : "resources/js/Assets/Images/Image1.png";
+            return imagePath;
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, "0");
+            const month = (date.getMonth() + 1).toString().padStart(2, "0");
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, "0");
+            const minutes = date.getMinutes().toString().padStart(2, "0");
+            const seconds = date.getSeconds().toString().padStart(2, "0");
+            return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        },
+        calculateGrandTotal(price, quantity) {
+            return (price * quantity).toFixed(2);
+        },
+        calculateSubTotal(price, quantity) {
+            return (price * quantity).toFixed(2);
+        },
+        deleteOrder(orderId) {
+            if (confirm("Are you sure you want to delete this order?")) {
+                Inertia.delete(route("orders.destroy", orderId));
+            }
+        },
+        showOrderDetails(order) {
+            this.selectedOrder = order;
+            this.isModalOpen = true;
+        },
+        closeModal() {
+            this.isModalOpen = false;
+        },
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -169,11 +333,84 @@ function closeModal() {
     margin: 0 auto;
     padding-inline: 0.5rem;
 
+    .order-items-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        h3 {
+            grid-column: 1 / -1;
+            font-size: 18px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--color--secondary);
+            .product-image img {
+                width: 100px;
+                aspect-ratio: 3/4;
+                height: auto;
+                margin-right: 20px;
+            }
+
+            .product-details {
+                text-align: left;
+                .product-title {
+                    font-size: 16px;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                p {
+                    margin: 0;
+                }
+            }
+            .product-summary {
+                margin-left: auto;
+            }
+        }
+
+        .order-summary {
+            background: var(--color--secondary);
+            padding: 15px;
+            border-radius: var(--rounded-box);
+            display: flex;
+            justify-content: end;
+            gap: 16px;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+
     .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem 0;
+    }
+
+    h3 {
+        margin: 16px 0 8px 0;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    strong {
+        font-weight: 500;
+        display: block;
+        font-size: 17px;
+    }
+
+    p {
+        text-wrap: wrap;
+        margin-bottom: 8px;
+        font-size: 16px;
+        max-width: 30ch;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .main-content {
@@ -191,6 +428,45 @@ function closeModal() {
                 background-color: var(--color--secondary);
                 font-size: 1.563rem;
                 padding: 6px 8px;
+            }
+
+            .category-search-container {
+                padding: 8px;
+                position: relative;
+                .dropdown-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0.5rem 1rem;
+                    background-color: var(--color--primary);
+                    color: white;
+                    border-radius: var(--rounded-box);
+                    cursor: pointer;
+                    height: 100%;
+
+                    img {
+                        height: 1.5rem;
+                    }
+                }
+
+                .dropdown-content {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background-color: var(--color--secondary);
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                    z-index: 60;
+                    border-radius: 0 0 var(--rounded-box) var(--rounded-box);
+
+                    .dropdown-item {
+                        padding: 0.5rem 1rem;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: var(--color--light-primary);
+                        }
+                    }
+                }
             }
         }
 

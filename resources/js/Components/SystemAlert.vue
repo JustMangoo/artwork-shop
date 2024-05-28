@@ -10,7 +10,12 @@ export default {
         message: String,
         type: {
             type: String,
-            default: "info", // or 'success', 'error', 'warning'
+            default: "message", // or 'success', 'error', 'warning'
+        },
+        uniqueKey: {
+            type: Number,
+            required: false,
+            default: () => Date.now(),
         },
     },
     data() {
@@ -18,21 +23,28 @@ export default {
             visible: false,
         };
     },
+    watch: {
+        uniqueKey(newKey, oldKey) {
+            if (newKey !== oldKey) {
+                this.show();
+            }
+        },
+    },
     methods: {
         show() {
             this.visible = true;
-            setTimeout(this.hide, 3000); // Auto-hide after timer
+            setTimeout(() => {
+                this.hide();
+            }, 3000); // Automatically hide after 3 seconds
         },
         hide() {
             this.visible = false;
         },
     },
-    watch: {
-        message(newValue, oldValue) {
-            if (newValue !== oldValue && newValue !== "") {
-                this.show();
-            }
-        },
+    mounted() {
+        if (this.message != "") {
+            this.show();
+        }
     },
 };
 </script>
@@ -40,28 +52,29 @@ export default {
 <style lang="scss" scoped>
 .message {
     position: fixed;
-    bottom: 2rem;
+    bottom: 10%;
     right: 50%;
     transform: translateX(50%);
     padding: 0.5rem 1rem;
     border-radius: var(--rounded-box);
-    color: white;
+    color: var(--color--dark);
     font-weight: 700;
-    background-color: var(--color--secondary);
+    background-color: rgba(var(--color--info), 0.8);
     transition: all 1s ease;
     cursor: pointer;
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .message.success {
-    background-color: var(--success-msg);
+    background-color: rgba(var(--color--success), 0.8);
+    color: var(--color--dark);
 }
 .message.error {
-    background-color: var(--error-msg);
-    color: black;
+    background-color: rgba(var(--color--error), 0.8);
+    color: var(--color--dark);
 }
 .message.warning {
-    background-color: var(--warning-msg);
-    color: black;
+    background-color: rgba(var(--color--warning), 0.8);
+    color: var(--color--dark);
 }
 </style>

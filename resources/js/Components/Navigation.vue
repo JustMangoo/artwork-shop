@@ -198,6 +198,32 @@
                 </div>
             </div>
         </div>
+        <div
+            v-if="
+                $page.props.flash.success ||
+                $page.props.flash.error ||
+                $page.props.flash.warning ||
+                $page.props.flash.message
+            "
+        >
+            <SystemAlert
+                v-if="
+                    $page.props.flash.success ||
+                    $page.props.flash.error ||
+                    $page.props.flash.warning ||
+                    $page.props.flash.message
+                "
+                :message="
+                    $page.props.flash.success ||
+                    $page.props.flash.error ||
+                    $page.props.flash.warning ||
+                    $page.props.flash.message
+                "
+                :type="getMessageType()"
+                :uniqueKey="Date.now()"
+            />
+        </div>
+
         <CartSidebar
             ref="cartSidebar"
             :cart-items="cartItems"
@@ -214,6 +240,7 @@
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
+import SystemAlert from "@/Components/SystemAlert.vue";
 import { Link } from "@inertiajs/vue3";
 import CartSidebar from "@/Pages/User/CartSidebar.vue";
 
@@ -224,6 +251,7 @@ export default {
         DropdownLink,
         NavLink,
         Link,
+        SystemAlert,
     },
     props: {
         canLogin: {
@@ -235,13 +263,23 @@ export default {
             default: false,
         },
     },
+
     data() {
         return {
             isCartVisible: false,
             cartItems: [],
         };
     },
+    mounted() {
+        this.checkFlashMessages();
+    },
     methods: {
+        getMessageType() {
+            if (this.$page.props.flash.success) return "success";
+            else if (this.$page.props.flash.error) return "error";
+            else if (this.$page.props.flash.warning) return "warning";
+            else return "message";
+        },
         toggleCart(event) {
             if (event) {
                 event.stopPropagation();
@@ -265,6 +303,20 @@ export default {
             }
 
             this.lockBodyScroll(this.isCartVisible);
+        },
+        checkFlashMessages() {
+            const flashMessages = window.Laravel.flashMessages;
+            if (flashMessages.success) {
+                this.showMessage(flashMessages.success, "success");
+            }
+            if (flashMessages.error) {
+                this.showMessage(flashMessages.error, "error");
+            }
+            // Similarly for 'warning' and 'info'
+        },
+        showMessage(message, type) {
+            // Show message in your component or store it in data property
+            console.log(message, type);
         },
         handleClickOutside(event) {
             if (

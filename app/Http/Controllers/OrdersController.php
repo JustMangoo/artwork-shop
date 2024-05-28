@@ -13,12 +13,24 @@ class OrdersController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::query()
+        $searchTerm = $request->input('search', '');
 
-            ->get();
+        $query = Order::query();
+
+        // Apply search filters if a search term is provided
+        if (!empty($searchTerm)) {
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('full_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('status', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        $orders = $query->get();
 
         return Inertia::render('Admin/Orders/Index', [
             'orders' => $orders,
+            'searchTerm' => $searchTerm
         ]);
     }
 

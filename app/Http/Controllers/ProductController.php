@@ -139,7 +139,6 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            // Optionally, remove existing images here if that's the intended behavior
             foreach ($request->file('images') as $image) {
                 $image = $image->store('public/products');
                 $product->images()->create(['image' => $image]);
