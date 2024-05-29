@@ -11,7 +11,7 @@
 
         <form @submit.prevent="updatePassword" class="update-password-form">
             <div class="form-group">
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" value="Pašreizējā parole" />
                 <input
                     id="current_password"
                     ref="currentPasswordInput"
@@ -27,7 +27,7 @@
             </div>
 
             <div class="form-group">
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" value="Jaunā parole" />
                 <input
                     id="password"
                     ref="passwordInput"
@@ -45,7 +45,7 @@
             <div class="form-group">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Apstiprināt paroli"
                 />
                 <input
                     id="password_confirmation"

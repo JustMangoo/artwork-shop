@@ -97,7 +97,9 @@
                     <template #content class="modal-content">
                         <div class="order-items-container">
                             <h3>
-                                Order Items ({{ selectedOrder.items.length }})
+                                Pasūtījuma preces ({{
+                                    selectedOrder.items.length
+                                }})
                             </h3>
                             <div
                                 v-for="item in selectedOrder.items"
@@ -134,7 +136,6 @@
                                     </h3>
                                     <p>Price - {{ item.product.price }}€</p>
                                     <p>Tax - 0.00€</p>
-                                    <!-- Assuming no tax for simplicity -->
                                     <p>
                                         Sub Total -
                                         {{

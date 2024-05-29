@@ -228,4 +228,29 @@ class ProductController extends Controller
         return Inertia::render('User/CheckoutCancel');
     }
 
+    public function showCategory($category = null)
+    {
+        $query = Product::with('images');
+        if ($category) {
+            $query->whereHas('category', function ($q) use ($category) {
+                $q->where('name', $category);
+            });
+        }
+        $products = $query->get();
+
+        return Inertia::render('Products', [
+            'products' => $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->title,
+                    'description' => $product->description,
+                    'price' => $product->price,
+                    'images' => $product->images->map(function ($image) {
+                        return ['url' => Storage::url($image->image)];
+                    }),
+                ];
+            }),
+        ]);
+    }
+
 }

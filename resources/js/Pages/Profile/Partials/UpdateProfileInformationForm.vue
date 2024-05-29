@@ -13,7 +13,7 @@
             class="profile-info-form"
         >
             <div class="form-group">
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Vārds" />
                 <input
                     id="name"
                     type="text"
@@ -27,7 +27,7 @@
             </div>
 
             <div class="form-group">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Epasts" />
                 <input
                     id="email"
                     type="email"
@@ -41,14 +41,15 @@
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="email-unverified-message">
-                    Your email address is unverified.
+                    Jūsu e-pasta adrese nav verificēta.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
                         class="verification-link"
                     >
-                        Click here to re-send the verification email.
+                        Noklikšķiniet šeit, lai atkārtoti nosūtītu verifikācijas
+                        e-pasta vēstuli.
                     </Link>
                 </p>
 
@@ -56,7 +57,8 @@
                     v-show="status === 'verification-link-sent'"
                     class="verification-sent-message"
                 >
-                    A new verification link has been sent to your email address.
+                    Uz jūsu e-pasta adresi ir nosūtīta jauna verifikācijas
+                    saite.
                 </div>
             </div>
 

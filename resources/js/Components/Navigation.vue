@@ -139,6 +139,12 @@
                                         Profils
                                     </DropdownLink>
                                     <DropdownLink
+                                        v-if="route('customer.orders')"
+                                        :href="route('customer.orders')"
+                                    >
+                                        Pasūtījumi
+                                    </DropdownLink>
+                                    <DropdownLink
                                         :href="route('logout')"
                                         method="post"
                                     >

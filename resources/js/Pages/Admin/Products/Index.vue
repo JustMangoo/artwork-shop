@@ -270,20 +270,7 @@ export default {
         filterByCategory() {
             this.performSearch();
         },
-        toggleSearch() {
-            if (!this.showSearch) {
-                this.showSearch = true;
-                setTimeout(() => {
-                    this.isSearchVisible = true;
-                }, 1);
-            } else {
-                this.isSearchVisible = !this.isSearchVisible;
-                setTimeout(() => {
-                    this.showSearch = !this.showSearch;
-                }, 300);
-                this.performSearch();
-            }
-        },
+
         performSearch() {
             this.$inertia.get(
                 route("products.index"),
@@ -507,6 +494,10 @@ export default {
 
                 .search-button {
                     border-radius: 0 var(--rounded-box) var(--rounded-box) 0;
+                    width: fit-content;
+                    img {
+                        height: 1rem;
+                    }
                 }
             }
 
@@ -547,13 +538,6 @@ export default {
                         }
                     }
                 }
-            }
-        }
-
-        .search-button {
-            width: fit-content;
-            img {
-                height: 1.5rem;
             }
         }
     }

@@ -76,4 +76,16 @@ class OrdersController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
     }
+
+    public function customerOrders(Request $request)
+    {
+        $userEmail = $request->user()->email;
+
+        $orders = Order::where('email', $userEmail)->get();
+
+
+        return Inertia::render('User/Orders', [
+            'orders' => $orders,
+        ]);
+    }
 }

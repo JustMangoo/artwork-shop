@@ -39,51 +39,23 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
+Route::get('/products/{category?}', [ProductController::class, 'showCategory'])
+    ->name('products.showCategory');
+
 Route::get('/original', function () {
-    return Inertia::render('Original');
+    return redirect()->route('products.showCategory', ['category' => 'Originals']);
 })->name('original');
 
 Route::get('/printed', function () {
-    $products = Product::with(['images'])->get();
-    return Inertia::render('Printed', [
-        'products' => $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'title' => $product->title,
-                'description' => $product->description,
-                'price' => $product->price,
-                'categories' => $product->category,
-                'images' => $product->images->map(function ($image) {
-                    return ['url' => Storage::url($image->image)];
-                })->toArray(),
-                'created_at' => $product->created_at,
-            ];
-        }),
-    ]);
+    return redirect()->route('products.showCategory', ['category' => 'Printets']);
 })->name('printed');
 
 Route::get('/woodwork', function () {
-    return Inertia::render('Woodwork');
+    return redirect()->route('products.showCategory', ['category' => 'Kokdarbi']);
 })->name('woodwork');
 
-
 Route::get('/products-customer', function () {
-    $products = Product::with(['images'])->get();
-    return Inertia::render('Products', [
-        'products' => $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'title' => $product->title,
-                'description' => $product->description,
-                'price' => $product->price,
-                'categories' => $product->category,
-                'images' => $product->images->map(function ($image) {
-                    return ['url' => Storage::url($image->image)];
-                })->toArray(),
-                'created_at' => $product->created_at,
-            ];
-        }),
-    ]);
+    return redirect()->route('products.showCategory');
 })->name('products-customer');
 
 Route::get('/products-customer/{product}', [ProductController::class, 'show'])->name('products.show');
@@ -126,9 +98,12 @@ Route::get('/test-area', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('/customer/orders', [OrdersController::class, 'customerOrders'])->name('customer.orders');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
     Route::resources([
         'orders' => OrdersController::class,

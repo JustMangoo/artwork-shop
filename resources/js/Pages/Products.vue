@@ -5,7 +5,10 @@
             <h1 class="products-title">Visi Produkti</h1>
         </div>
         <div class="container">
-            <div class="product-grid">
+            <div v-if="products.length === 0" class="no-products">
+                <p>Šajā kategorijā nav produktu.</p>
+            </div>
+            <div v-else class="product-grid">
                 <div
                     v-for="product in products"
                     :key="product.id"
@@ -15,7 +18,6 @@
                 >
                     <Link :href="`/products-customer/${product.id}`">
                         <div v-if="product.images.length" class="product-image">
-                            <!-- Bind image source dynamically -->
                             <img
                                 :src="getImageSrc(product)"
                                 alt="Product Image"
