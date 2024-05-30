@@ -110,7 +110,31 @@
             </header>
             <div class="main-content">
                 <aside class="filters">
-                    <h2>Filtrēšana</h2>
+                    <div class="filters-header">
+                        <h2>Filtrēšana</h2>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            @click="resetFilters"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M3 8H16.5C18.9853 8 21 10.0147 21 12.5C21 14.9853 18.9853 17 16.5 17H3M3 8L6 5M3 8L6 11"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                    </div>
+
                     <div class="search-wrapper">
                         <input
                             v-model="searchTerm"
@@ -119,7 +143,7 @@
                             @keyup.enter="performSearch"
                         />
 
-                        <button class="search-button">
+                        <button class="search-button" @click="performSearch">
                             <img src="@/Assets/search.svg" alt="search icon" />
                         </button>
                     </div>
@@ -288,6 +312,13 @@ export default {
             setTimeout(() => {
                 this.showSearch = false;
             }, 300);
+        },
+
+        resetFilters() {
+            this.searchTerm = "";
+            this.selectedCategory = null;
+            this.selectedCategoryName = "";
+            this.performSearch();
         },
 
         handleImageAdded(imageData) {
@@ -468,10 +499,20 @@ export default {
             border: 1px solid var(--color--secondary);
             padding: 4px;
 
-            h2 {
-                background-color: var(--color--secondary);
-                font-size: 1.563rem;
+            .filters-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 padding: 6px 8px;
+                background-color: var(--color--secondary);
+                h2 {
+                    font-size: 1.563rem;
+                }
+
+                svg {
+                    height: 2rem;
+                    stroke: var(--color--primary);
+                }
             }
 
             .search-wrapper {

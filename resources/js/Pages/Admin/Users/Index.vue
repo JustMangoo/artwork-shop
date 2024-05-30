@@ -74,18 +74,39 @@
             </header>
             <div class="main-content">
                 <aside class="filters">
-                    <h2>Filtrēšana</h2>
+                    <div class="filters-header">
+                        <h2>Filtrēšana</h2>
+                        <svg
+                            @click="resetSearch"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M3 8H16.5C18.9853 8 21 10.0147 21 12.5C21 14.9853 18.9853 17 16.5 17H3M3 8L6 5M3 8L6 11"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                    </div>
+
                     <div class="search-wrapper">
                         <input
-                            v-show="showSearch"
                             v-model="searchTerm"
                             type="text"
                             class="search-input"
                             @keyup.enter="performSearch"
-                            :class="{ 'show-search': isSearchVisible }"
                         />
-
-                        <button class="search-button" @click="toggleSearch">
+                        <button class="search-button" @click="performSearch">
                             <img src="@/Assets/search.svg" alt="search icon" />
                         </button>
                     </div>
@@ -179,36 +200,21 @@ export default {
         return { form };
     },
     methods: {
-        toggleSearch() {
-            if (!this.showSearch) {
-                this.showSearch = true;
-                setTimeout(() => {
-                    this.isSearchVisible = true;
-                }, 1);
-            } else {
-                this.isSearchVisible = !this.isSearchVisible;
-                setTimeout(() => {
-                    this.showSearch = !this.showSearch;
-                }, 300);
-                this.performSearch();
-            }
-        },
         performSearch() {
             this.$inertia.get(
                 route("users.index"),
-                {
-                    search: this.searchTerm,
-                },
+                { search: this.searchTerm },
                 {
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,
                 }
             );
-            this.isSearchVisible = false;
-            setTimeout(() => {
-                this.showSearch = false;
-            }, 300);
+        },
+
+        resetSearch() {
+            this.searchTerm = "";
+            this.performSearch();
         },
         submitForm() {
             const method = this.form.id ? "patch" : "post";
@@ -365,10 +371,21 @@ export default {
             border: 1px solid var(--color--secondary);
             padding: 4px;
 
-            h2 {
-                background-color: var(--color--secondary);
-                font-size: 1.563rem;
+            .filters-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 padding: 6px 8px;
+                background-color: var(--color--secondary);
+                h2 {
+                    font-size: 1.563rem;
+                }
+
+                svg {
+                    height: 2rem;
+                    stroke: var(--color--primary);
+                    cursor: pointer;
+                }
             }
 
             .search-wrapper {
@@ -378,7 +395,7 @@ export default {
                 .search-input {
                     border-bottom: 2px solid var(--color--secondary);
                     padding: 0.5rem 0;
-                    max-width: 0;
+                    max-width: 100%;
                     transition: all 0.3s ease-in-out;
                     opacity: 1;
                     border-radius: var(--rounded-box) 0 0 var(--rounded-box);
@@ -389,20 +406,12 @@ export default {
                     }
                 }
 
-                .show-search {
-                    max-width: 100%;
-                    padding: 0.5rem;
-                }
-
                 .search-button {
                     border-radius: 0 var(--rounded-box) var(--rounded-box) 0;
-                }
-            }
-
-            .search-button {
-                width: fit-content;
-                img {
-                    height: 1.5rem;
+                    width: fit-content;
+                    img {
+                        height: 1rem;
+                    }
                 }
             }
         }

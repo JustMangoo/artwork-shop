@@ -13,15 +13,21 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-
         Log::info('USERS index method:', $request->all());
         $searchTerm = $request->input('search', '');
 
-        $users = User::with('role')
-            ->where('name', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
-            ->get();
+        // Using a query builder to start building the query
+        $query = User::with('role');
 
+        // Applying the search term filter
+        if (!empty($searchTerm)) {
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        $users = $query->get();
         $roles = Role::all();
 
         return Inertia::render('Admin/Users/Index', [

@@ -16,13 +16,14 @@ class DashboardController extends Controller
         $productCount = Product::count();
         $userCount = User::count();
         $subscriptionCount = Subscription::count();
-        $orderCount = Order::count();
+        $activeOrders = Order::where('status', '!=', 'completed')->get();
+        ;
 
         return Inertia::render('Admin/Dashboard', [
             'productCount' => $productCount,
             'userCount' => $userCount,
             'subscriptionCount' => $subscriptionCount,
-            'orderCount' => $orderCount,
+            'activeOrders' => $activeOrders,
         ]);
     }
 }

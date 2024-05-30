@@ -7,20 +7,56 @@
             </header>
             <div class="main-content">
                 <aside class="filters">
-                    <h2>Filtrēšana</h2>
+                    <div class="filters-header">
+                        <h2>Filtrēšana</h2>
+                        <svg
+                            @click="resetFilters"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M3 8H16.5C18.9853 8 21 10.0147 21 12.5C21 14.9853 18.9853 17 16.5 17H3M3 8L6 5M3 8L6 11"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                ></path>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <div class="search-wrapper">
+                        <input
+                            v-model="searchTerm"
+                            type="text"
+                            class="search-input"
+                            @keyup.enter="performSearch"
+                        />
+                        <button class="search-button" @click="performSearch">
+                            <img src="@/Assets/search.svg" alt="search icon" />
+                        </button>
+                    </div>
+
                     <div class="category-search-container">
                         <div @click="toggleDropdown" class="dropdown-button">
-                            {{ selectedCategoryName || "Kategorijas" }}
+                            {{ selectedStatus || "Visi Statusi" }}
                             <img src="@/Assets/arrow.svg" alt="arrow-icon" />
                         </div>
                         <div v-if="dropdownActive" class="dropdown-content">
                             <div
-                                v-for="category in orders"
-                                :key="category.id"
-                                @click="selectCategory(category)"
+                                v-for="status in statusOptions"
+                                :key="status.value"
+                                @click="selectStatus(status)"
                                 class="dropdown-item"
                             >
-                                {{ category.status }}
+                                {{ status.text }}
                             </div>
                         </div>
                     </div>
@@ -238,55 +274,43 @@ export default {
             showSearch: false,
             isSearchVisible: false,
             searchTerm: "",
+            selectedStatus: null,
             dropdownActive: false,
-            selectedCategory: null,
-            selectedCategoryName: "",
+            statusOptions: [
+                { value: "pending", text: "Pending" },
+                { value: "paid", text: "Paid" },
+                { value: "shipped", text: "Shipped" },
+                { value: "completed", text: "Completed" },
+                { value: "cancelled", text: "Cancelled" },
+            ],
         };
     },
     methods: {
         toggleDropdown() {
             this.dropdownActive = !this.dropdownActive;
         },
-        selectCategory(category) {
-            this.selectedCategory = category.id;
-            this.selectedCategoryName = category.name;
+        selectStatus(status) {
+            this.selectedStatus = status.value;
             this.dropdownActive = false;
-            this.filterByCategory();
-        },
-        filterByCategory() {
             this.performSearch();
         },
-        toggleSearch() {
-            if (!this.showSearch) {
-                this.showSearch = true;
-                setTimeout(() => {
-                    this.isSearchVisible = true;
-                }, 1);
-            } else {
-                this.isSearchVisible = !this.isSearchVisible;
-                setTimeout(() => {
-                    this.showSearch = !this.showSearch;
-                }, 300);
-                this.performSearch();
-            }
+        resetFilters() {
+            this.searchTerm = "";
+            this.selectedStatus = null;
+            this.performSearch();
         },
         performSearch() {
             this.$inertia.get(
                 route("orders.index"),
                 {
                     search: this.searchTerm,
-                    category: this.selectedCategory,
+                    status: this.selectedStatus,
                 },
                 {
                     preserveState: true,
                     preserveScroll: true,
-                    replace: true,
                 }
             );
-            this.isSearchVisible = false;
-            setTimeout(() => {
-                this.showSearch = false;
-            }, 300);
         },
         productImagePath(image) {
             const imagePath = image
@@ -420,15 +444,57 @@ export default {
         gap: 1rem;
 
         .filters {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             border-radius: var(--rounded-box);
             border: 1px solid var(--color--secondary);
             padding: 4px;
-            height: fit-content;
 
-            h2 {
-                background-color: var(--color--secondary);
-                font-size: 1.563rem;
+            .filters-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 padding: 6px 8px;
+                background-color: var(--color--secondary);
+                h2 {
+                    font-size: 1.563rem;
+                }
+
+                svg {
+                    height: 2rem;
+                    stroke: var(--color--primary);
+                    cursor: pointer;
+                }
+            }
+
+            .search-wrapper {
+                display: flex;
+                padding: 8px;
+
+                .search-input {
+                    border-bottom: 2px solid var(--color--secondary);
+                    padding: 0.5rem 0;
+                    max-width: 100%;
+                    transition: all 0.3s ease-in-out;
+                    opacity: 1;
+                    border-radius: var(--rounded-box) 0 0 var(--rounded-box);
+                    outline: 0;
+
+                    &:focus {
+                        border-bottom: 2px solid var(--color--primary);
+                    }
+                }
+
+                .search-button {
+                    border-radius: 0 var(--rounded-box) var(--rounded-box) 0;
+                    width: fit-content;
+                    img {
+                        height: 1rem;
+                    }
+                }
             }
 
             .category-search-container {

@@ -39,7 +39,7 @@ Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
-Route::get('/products/{category?}', [ProductController::class, 'showCategory'])
+Route::get('/products-customer/{category?}', [ProductController::class, 'showCategory'])
     ->name('products.showCategory');
 
 Route::get('/original', function () {

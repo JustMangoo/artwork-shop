@@ -20,7 +20,7 @@ class ProductController extends Controller
         Log::info('PRODUCTS index method:', $request->all());
 
         $searchTerm = $request->input('search', '');
-        $categoryId = $request->input('category'); // Receive category ID from the request
+        $categoryId = $request->input('category');
 
         $query = Product::with(['category', 'images']);
 
@@ -46,7 +46,7 @@ class ProductController extends Controller
             'products' => $products,
             'categories' => $categories,
             'searchTerm' => $searchTerm,
-            'selectedCategory' => $categoryId, // Pass the selected category back to the frontend
+            'selectedCategory' => $categoryId,
         ]);
     }
 
