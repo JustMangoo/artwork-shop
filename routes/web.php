@@ -58,7 +58,7 @@ Route::get('/products-customer', function () {
     return redirect()->route('products.showCategory');
 })->name('products-customer');
 
-Route::get('/products-customer/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products-customer/details/{product}', [ProductController::class, 'show'])->name('products.show');
 
 // Email Routes ---------
 
@@ -98,25 +98,30 @@ Route::get('/test-area', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/customer/orders', [OrdersController::class, 'customerOrders'])->name('customer.orders');
+    Route::get('/customer/orders', [OrdersController::class, 'customerOrders'])
+        ->name('customer.orders')
+        ->middleware('customer'); // Apply customer middleware
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::middleware('admin')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('products', ProductController::class)
-        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::resource('products', ProductController::class)
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-    Route::resources([
-        'orders' => OrdersController::class,
-        'users' => UserController::class,
-        'images' => ImageController::class,
-        'categories' => CategoryController::class,
-    ]);
+        Route::resources([
+            'orders' => OrdersController::class,
+            'users' => UserController::class, // Only admins can access users
+            'images' => ImageController::class,
+            'categories' => CategoryController::class,
+        ]);
 
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::prefix('profile')->group(function () {
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        });
     });
 });
+
 
 require __DIR__ . '/auth.php';

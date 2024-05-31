@@ -14,6 +14,33 @@
                         eaque beatae totam ullam sequi nemo cum harum iusto.
                         Esse temporibus sunt similique dolor.
                     </p>
+                    <a
+                        href="/products-customer/Originals"
+                        class="showcase-link"
+                    >
+                        <p>Skatīt</p>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            stroke-width="1"
+                            stroke="#000000"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="sharp"
+                                stroke-linejoin="sharp"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M4 12H20M20 12L16 8M20 12L16 16"
+                                    stroke-linecap="sharp"
+                                    stroke-linejoin="sharp"
+                                ></path>
+                            </g>
+                        </svg>
+                    </a>
                 </div>
                 <div class="showcase-images">
                     <img
@@ -65,6 +92,30 @@
                         eaque beatae totam ullam sequi nemo cum harum iusto.
                         Esse temporibus sunt similique dolor.
                     </p>
+                    <a href="/products-customer/Printets" class="showcase-link">
+                        <p>Skatīt</p>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            stroke-width="1"
+                            stroke="#000000"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="sharp"
+                                stroke-linejoin="sharp"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M4 12H20M20 12L16 8M20 12L16 16"
+                                    stroke-linecap="sharp"
+                                    stroke-linejoin="sharp"
+                                ></path>
+                            </g>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -82,6 +133,31 @@
                         eaque beatae totam ullam sequi nemo cum harum iusto.
                         Esse temporibus sunt similique dolor.
                     </p>
+
+                    <a href="/products-customer/Kokdarbi" class="showcase-link">
+                        <p>Skatīt</p>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            stroke-width="1"
+                            stroke="#000000"
+                        >
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                stroke-linecap="sharp"
+                                stroke-linejoin="sharp"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M4 12H20M20 12L16 8M20 12L16 16"
+                                    stroke-linecap="sharp"
+                                    stroke-linejoin="sharp"
+                                ></path>
+                            </g>
+                        </svg>
+                    </a>
                 </div>
                 <div class="showcase-images">
                     <img
@@ -149,8 +225,33 @@ defineProps({
             display: flex;
             flex-direction: column;
             justify-content: center;
-
+            gap: 1rem;
             padding: 2rem 1rem;
+
+            .showcase-link {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+
+                p {
+                    color: var(--color--primary);
+                }
+
+                svg {
+                    height: 2rem;
+                    width: auto;
+                    stroke: var(--color--primary);
+                    transition: transform 0.3s ease;
+                    transform: scaleX(1.5);
+                    transform-origin: left;
+                }
+
+                &:hover svg {
+                    transform: scaleX(2);
+                    transform-origin: left;
+                }
+            }
         }
 
         .showcase-images {

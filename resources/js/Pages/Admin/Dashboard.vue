@@ -124,7 +124,7 @@ span {
 
     .detailed-info {
         width: 100%;
-
+        padding: 0 0.5rem;
         display: grid;
         grid-template-columns: repeat(1, 1fr);
         grid-template-rows: 1fr;

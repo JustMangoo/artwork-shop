@@ -16,7 +16,7 @@
                     @mouseover="hoverImage(product)"
                     @mouseleave="unhoverImage(product)"
                 >
-                    <Link :href="`/products-customer/${product.id}`">
+                    <Link :href="`/products-customer/details/${product.id}`">
                         <div v-if="product.images.length" class="product-image">
                             <img
                                 :src="getImageSrc(product)"

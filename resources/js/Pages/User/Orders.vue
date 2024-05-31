@@ -155,10 +155,6 @@
                     </p>
                     <h3>Pasūtījuma info</h3>
                     <p>
-                        <strong>Sessijas ID:</strong>
-                        {{ selectedOrder.session_id }}
-                    </p>
-                    <p>
                         <strong>Pasūtījuma datums:</strong>
                         {{ formatDateNumeral(selectedOrder.created_at) }}
                     </p>
