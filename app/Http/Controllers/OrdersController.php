@@ -63,14 +63,13 @@ class OrdersController extends Controller
     public function update(Request $request, Order $order)
     {
         $validatedData = $request->validate([
-            'status' => 'required|in:pending,completed,cancelled',
+            'status' => 'required|in:shipped,completed,paid'
         ]);
 
-        $order->update([
-            'status' => $validatedData['status'],
-        ]);
+        $order->status = $validatedData['status'];
+        $order->save();
 
-        return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
+        return redirect()->route('orders.index')->with('success', 'Pasūtījums veiksmīgi atjaunināts.');
     }
 
     /**
@@ -80,7 +79,7 @@ class OrdersController extends Controller
     {
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+        return redirect()->route('orders.index')->with('success', 'Pasūtījums veiksmīgi dzēsts.');
     }
 
     public function customerOrders(Request $request)
@@ -94,4 +93,5 @@ class OrdersController extends Controller
             'orders' => $orders,
         ]);
     }
+
 }

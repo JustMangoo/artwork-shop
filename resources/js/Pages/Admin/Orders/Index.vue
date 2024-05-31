@@ -236,10 +236,23 @@
                             <strong>Pasūtījuma datums:</strong>
                             {{ formatDate(selectedOrder.created_at) }}
                         </p>
-                        <p>
-                            <strong>Statuss:</strong>
-                            {{ selectedOrder.status }}
-                        </p>
+
+                        <div>
+                            <label for="order-status"
+                                ><strong>Statuss:</strong></label
+                            >
+                            <select
+                                v-model="selectedOrder.status"
+                                id="order-status"
+                            >
+                                <option value="paid">Apmaksāts</option>
+                                <option value="shipped">Izsūtīts</option>
+                                <option value="completed">Pabeigts</option>
+                            </select>
+                        </div>
+                        <button @click="updateOrderStatus">
+                            Manīt statusu
+                        </button>
                     </template>
                     <template #footer>
                         <button @click="closeModal">Aizvērt</button>
@@ -277,11 +290,11 @@ export default {
             selectedStatus: null,
             dropdownActive: false,
             statusOptions: [
-                { value: "pending", text: "Pending" },
-                { value: "paid", text: "Paid" },
-                { value: "shipped", text: "Shipped" },
-                { value: "completed", text: "Completed" },
-                { value: "cancelled", text: "Cancelled" },
+                { value: "pending", text: "Gaida atbildi" },
+                { value: "paid", text: "Atmaksāts" },
+                { value: "shipped", text: "Izsūtīts" },
+                { value: "completed", text: "Pabeigts" },
+                { value: "cancelled", text: "Atcelts" },
             ],
         };
     },
@@ -345,6 +358,24 @@ export default {
         },
         closeModal() {
             this.isModalOpen = false;
+        },
+        updateOrderStatus() {
+            const formData = {
+                status: this.selectedOrder.status,
+            };
+            this.$inertia.patch(
+                route("orders.update", this.selectedOrder.id),
+                formData,
+                {
+                    onSuccess: () => {
+                        this.closeModal();
+                        this.$emit("order-updated");
+                    },
+                    onError: (errors) => {
+                        console.log("Error updating order:", errors);
+                    },
+                }
+            );
         },
     },
 };
