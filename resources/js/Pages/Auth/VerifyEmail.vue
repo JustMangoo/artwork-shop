@@ -1,5 +1,5 @@
 <template>
-    <GuestLayout>
+    <MainLayout>
         <Head title="Email Verification" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -31,12 +31,12 @@
                 >
             </div>
         </form>
-    </GuestLayout>
+    </MainLayout>
 </template>
 
 <script setup>
 import { computed } from "vue";
-import GuestLayout from "@/Layouts/GuestLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
