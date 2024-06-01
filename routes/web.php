@@ -100,7 +100,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/customer/orders', [OrdersController::class, 'customerOrders'])
         ->name('customer.orders')
-        ->middleware('customer'); // Apply customer middleware
+        ->middleware('customer');
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
     Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -110,16 +116,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resources([
             'orders' => OrdersController::class,
-            'users' => UserController::class, // Only admins can access users
+            'users' => UserController::class,
             'images' => ImageController::class,
             'categories' => CategoryController::class,
         ]);
 
-        Route::prefix('profile')->group(function () {
-            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        });
+
     });
 });
 
