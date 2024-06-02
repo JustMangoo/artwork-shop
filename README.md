@@ -48,3 +48,6 @@ npm run prod  # For production
 php artisan serve
 ```
 
+![image](https://github.com/JustMangoo/artwork-shop/assets/98739151/d327acb5-45a4-4c80-bddc-4f155aca8dbd)
+
+
