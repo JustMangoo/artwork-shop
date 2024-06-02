@@ -4,7 +4,7 @@
 
         <form @submit.prevent="submit" class="box">
             <div class="input-wrapper">
-                <label for="name">Name</label>
+                <label for="name">Vārds</label>
 
                 <input
                     id="name"
@@ -19,7 +19,7 @@
             </div>
 
             <div class="input-wrapper">
-                <label for="email">Email</label>
+                <label for="email">Epasts</label>
 
                 <input
                     id="email"
@@ -33,7 +33,7 @@
             </div>
 
             <div class="input-wrapper">
-                <label for="password">Password</label>
+                <label for="password">Parole</label>
 
                 <input
                     id="password"
@@ -47,7 +47,7 @@
             </div>
 
             <div class="input-wrapper">
-                <label for="password_confirmation">Apstiprini Password</label>
+                <label for="password_confirmation">Apstiprināt Paroli</label>
 
                 <input
                     id="password_confirmation"
