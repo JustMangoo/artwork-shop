@@ -72,7 +72,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', 'Lietotājs veiksmīgi atjaunināts.');
     }
 
     /**

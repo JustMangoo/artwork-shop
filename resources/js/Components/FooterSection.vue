@@ -222,7 +222,9 @@ footer {
         display: flex;
         flex-direction: column;
         align-items: center;
-        h3 {
+
+        h4 {
+            margin-bottom: 1rem;
             @media (max-width: 768px) {
                 text-align: center;
             }
@@ -231,7 +233,9 @@ footer {
 
     .socials {
         width: 100%;
-        h3 {
+
+        h4 {
+            margin-bottom: 0.5rem;
             text-align: center;
         }
     }
@@ -239,7 +243,7 @@ footer {
         width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: flex-start;
         form {
             display: flex;
             flex-direction: column;
