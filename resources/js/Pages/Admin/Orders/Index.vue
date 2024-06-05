@@ -432,7 +432,7 @@ export default {
             padding: 15px;
             border-radius: var(--rounded-box);
             display: flex;
-            justify-content: end;
+            justify-content: flex-end;
             gap: 16px;
 
             p {
