@@ -250,6 +250,10 @@ select:focus {
     box-shadow: none;
 }
 
+textarea {
+    resize: vertical;
+}
+
 input[type="radio"],
 input[type="checkbox"] {
     appearance: none;
