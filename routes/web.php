@@ -82,7 +82,7 @@ Route::prefix('checkout')->group(function () {
     Route::get('/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
 });
 
-Route::post('/environment', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
+Route::post('/stripe-webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 Route::get('/test', function () {
     return Inertia::render('User/CheckoutForm');
