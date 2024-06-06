@@ -63,6 +63,7 @@
                     placeholder="Ievadiet Savu Ziņu"
                 ></textarea>
             </div>
+            <div class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
             <button class="w-full btn-primary" type="submit">Nosutīt</button>
         </form>
     </MainLayout>
@@ -77,13 +78,33 @@ const form = useForm({
     name: "",
     email: "",
     message: "",
+    "g-recaptcha-response": "",
 });
+
+const recaptchaSiteKey = "YOUR_SITE_KEY"; // Add your reCAPTCHA site key here
 
 const submit = () => {
     form.post("/send-message", {
         onSuccess: () => {
             form.reset();
+            grecaptcha.reset();
         },
+        onError: () => {
+            grecaptcha.reset();
+        },
+    });
+};
+
+// Add this function to handle the reCAPTCHA response
+window.recaptchaCallback = function (token) {
+    form["g-recaptcha-response"] = token;
+};
+
+// Attach the recaptcha callback to the global window object
+window.onload = function () {
+    grecaptcha.render("g-recaptcha", {
+        sitekey: recaptchaSiteKey,
+        callback: "recaptchaCallback",
     });
 };
 </script>
