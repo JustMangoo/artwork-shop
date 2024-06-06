@@ -84,6 +84,6 @@ class UserController extends Controller
 
         Log::info('Delete method completed');
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Lietotājs veiksmīgi dzēsts.');
     }
 }

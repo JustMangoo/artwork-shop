@@ -44,62 +44,78 @@
     </MainLayout>
 </template>
 
-<script setup>
+<script>
 import { usePage } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, onMounted, watch } from "vue";
 
-const { product } = usePage().props;
-const quantity = ref(1);
-const selectedImage = ref("");
+export default {
+    components: {
+        MainLayout,
+        Head,
+    },
 
-const productImagePath = (image) => {
-    const imagePath = image.image
-        ? "/storage/" + image.image.replace("public/", "")
-        : "resources/js/Assets/Images/Image1.png";
-    return imagePath;
-};
+    data() {
+        return {
+            product: this.$page.props.product,
+            quantity: 1,
+            selectedImage: "",
+        };
+    },
 
-const selectImage = (image) => {
-    selectedImage.value = productImagePath(image);
-};
+    computed: {
+        productImagePath() {
+            return (image) => {
+                const imagePath = image.image
+                    ? "/storage/" + image.image.replace("public/", "")
+                    : "resources/js/Assets/Images/Image1.png";
+                return imagePath;
+            };
+        },
+    },
 
-onMounted(() => {
-    if (product.images.length > 0) {
-        selectImage(product.images[0]);
-    }
-});
+    methods: {
+        selectImage(image) {
+            this.selectedImage = this.productImagePath(image);
+        },
+        addToCart() {
+            this.$inertia.post(
+                "/cart",
+                {
+                    product_id: this.product.id,
+                    quantity: this.quantity,
+                },
+                {
+                    onError: (errors) => {
+                        console.error("Error adding to cart:", errors);
+                    },
+                    onSuccess: () => {
+                        console.log("Added to cart successfully!");
+                    },
+                }
+            );
+        },
+        increaseQuantity() {
+            if (this.quantity < 5) this.quantity++;
+        },
+        decreaseQuantity() {
+            if (this.quantity > 1) this.quantity--;
+        },
+    },
 
-watch(
-    () => product.images,
-    (newImages) => {
-        if (newImages.length > 0) {
-            selectImage(newImages[0]);
+    mounted() {
+        if (this.product.images.length > 0) {
+            this.selectImage(this.product.images[0]);
         }
     },
-    { immediate: true }
-);
 
-const addToCart = async () => {
-    try {
-        const response = await axios.post("/cart", {
-            product_id: product.id,
-            quantity: quantity.value,
-        });
-        alert("Produkts pievienots grozam!");
-    } catch (error) {
-        console.error("Error adding to cart:", error);
-        alert("Kļūda pievienojot produktu grozam!");
-    }
-};
-
-const increaseQuantity = () => {
-    if (quantity.value < 5) quantity.value++;
-};
-
-const decreaseQuantity = () => {
-    if (quantity.value > 1) quantity.value--;
+    watch: {
+        "product.images": function (newImages) {
+            if (newImages.length > 0) {
+                this.selectImage(newImages[0]);
+            }
+        },
+    },
 };
 </script>
 

@@ -32,10 +32,10 @@ body {
 :root {
     --color--primary: #9aa283;
     --color--secondary: #ebeee3;
-    --color--info: 178, 229, 249;
-    --color--success: 190, 249, 178;
-    --color--warning: 249, 224, 178;
-    --color--error: 248, 188, 188;
+    --color--info: #4a90e2;
+    --color--success: #82dd55;
+    --color--warning: #edb95e;
+    --color--error: #e23636;
     --color--light: #f8f8f8;
     --color--dark: #313131;
     --color--white: white;

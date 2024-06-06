@@ -21,7 +21,7 @@ class EnsureUserIsCustomer
                 'user_id' => Auth::id(),
                 'required_role' => 'customer'
             ]);
-            return redirect('/')->with('error', 'Access Denied');
+            return redirect('/')->with('error', 'Pieeja liegta');
         }
 
         return $next($request);

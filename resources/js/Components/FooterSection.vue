@@ -1,5 +1,4 @@
 <template>
-    <SystemAlert :message="SystemAlert" :type="messageType" />
     <footer>
         <div class="container">
             <!-- Form Section -->
@@ -87,12 +86,10 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
-import SystemAlert from "@/Components/SystemAlert.vue";
 
 export default {
     components: {
         InputError,
-        SystemAlert,
     },
     setup() {
         const form = useForm({
@@ -112,27 +109,19 @@ export default {
                 {
                     preserveState: true,
                     onSuccess: () => {
-                        this.setSystemAlert("Abonaments veiksmīgs", "success");
                         this.form.email = "";
                         this.form.errors = {};
                     },
                     onError: (errors) => {
-                        this.setSystemAlert("Abonaments nav izdevies", "error");
                         this.form.errors = errors;
                     },
                     onFinish: () => (this.form.processing = false),
                 }
             );
         },
-
-        setSystemAlert(message, type = "info") {
-            this.SystemAlert = message;
-            this.messageType = type;
-        },
     },
     data() {
         return {
-            SystemAlert: "",
             messageType: "info",
         };
     },

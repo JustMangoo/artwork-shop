@@ -23,6 +23,6 @@ class ContactController extends Controller
 
         Mail::send(new ContactFormMail($validatedData));
 
-        return redirect()->back()->with('message', 'Your message has been sent successfully!');
+        return redirect()->back()->with('message', 'Jūsu ziņojums ir veiksmīgi nosūtīts!');
     }
 }

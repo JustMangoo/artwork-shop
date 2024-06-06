@@ -248,6 +248,8 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import SystemAlert from "@/Components/SystemAlert.vue";
 import { Link } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
+
 import CartSidebar from "@/Pages/User/CartSidebar.vue";
 
 export default {
@@ -318,6 +320,9 @@ export default {
             if (flashMessages.error) {
                 this.showMessage(flashMessages.error, "error");
             }
+            if (flashMessages.warning) {
+                this.showMessage(flashMessages.warning, "warning");
+            }
             // Similarly for 'warning' and 'info'
         },
         showMessage(message, type) {
@@ -342,37 +347,36 @@ export default {
                     console.error("Error fetching cart items:", error);
                 });
         },
-
         handleRemoveItem(id) {
-            axios
-                .delete(`/cart/${id}`)
-                .then((response) => {
+            this.$inertia.delete(`/cart/${id}`, {
+                onSuccess: () => {
                     this.fetchCartItems();
-                })
-                .catch((error) => {
-                    console.error("Error removing item from cart:", error);
-                });
+                },
+            });
         },
         handleClearCart() {
-            axios
-                .post("/cart/clear")
-                .then((response) => {
-                    this.cartItems = [];
-                })
-                .catch((error) => {
-                    console.error("Error clearing the cart:", error);
-                });
+            this.$inertia.post(
+                "/cart/clear",
+                {},
+                {
+                    onSuccess: () => {
+                        this.cartItems = [];
+                    },
+                }
+            );
         },
         updateQuantity(item, newQuantity) {
-            axios
-                .patch(`/cart/item/${item.id}`, { quantity: newQuantity })
-                .then((response) => {
-                    this.fetchCartItems(); // Refresh cart items to reflect the updated quantity
-                })
-                .catch((error) => {
-                    console.error("Error updating item quantity:", error);
-                });
+            this.$inertia.patch(
+                `/cart/item/${item.id}`,
+                { quantity: newQuantity },
+                {
+                    onSuccess: () => {
+                        this.fetchCartItems();
+                    },
+                }
+            );
         },
+
         lockBodyScroll(lock) {
             document.body.style.overflow = lock ? "hidden" : "";
         },

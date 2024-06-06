@@ -73,7 +73,7 @@ Route::prefix('cart')->group(function () {
     Route::post('/', [CartController::class, 'store']);
     Route::delete('/{id}', [CartController::class, 'destroy']);
     Route::post('/clear', [CartController::class, 'clear']);
-    Route::post('/item/{id}', [CartController::class, 'update']);
+    Route::patch('/item/{id}', [CartController::class, 'update']);
 });
 
 Route::prefix('checkout')->group(function () {

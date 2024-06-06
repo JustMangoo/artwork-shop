@@ -454,10 +454,7 @@ export default {
                 });
             }
         },
-        setSystemAlert(message, type = "info") {
-            this.SystemAlert = message;
-            this.messageType = type;
-        },
+
     },
 };
 </script>

@@ -127,7 +127,7 @@ export default {
             this.$emit("removeItem", id);
         },
         clearCart() {
-            if (confirm("Are you sure you want to clear the cart?")) {
+            if (confirm("Vai esat pārliecināts, ka vēlaties notīrīt grozu?")) {
                 this.$emit("clearCart");
             }
         },

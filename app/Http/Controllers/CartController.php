@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+
 class CartController extends Controller
 {
     public function index()
@@ -16,15 +17,10 @@ class CartController extends Controller
         $cart = $this->getCart();
         $cartItems = $cart->cartItems()->with(['product', 'product.images'])->get();
 
-        Log::info('CART index method called');
-
         return response()->json(['cartItems' => $cartItems]);
     }
-
     public function store(Request $request)
     {
-        Log::info('CART store method called');
-
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1'
@@ -36,7 +32,7 @@ class CartController extends Controller
             ['quantity' => $request->quantity]
         );
 
-        return response()->json(['message' => 'Item added to cart successfully.']);
+        return redirect()->back()->with('success', 'Item added to cart successfully.');
     }
 
     public function destroy($id)
@@ -44,14 +40,12 @@ class CartController extends Controller
         $cart = $this->getCart();
         $cartItem = $cart->cartItems()->where('id', $id)->first();
 
-        Log::info('CART destroy method called');
-
         if ($cartItem) {
             $cartItem->delete();
-            return response()->json(['message' => 'Item removed from cart successfully.']);
+            return redirect()->back()->with('success', 'Item removed from cart successfully.');
         }
 
-        return response()->json(['error' => 'Item not found in cart.'], 404);
+        return redirect()->back()->with('error', 'Item not found.');
     }
 
     public function clear()
@@ -59,12 +53,7 @@ class CartController extends Controller
         $cart = $this->getCart();
         $cart->cartItems()->delete();
 
-        return response()->json(['message' => 'Cart cleared successfully.']);
-    }
-
-    private function getCart()
-    {
-        return Cart::firstOrCreate(['user_id' => Auth::id() ?? null]);
+        return redirect()->back()->with('success', 'All items cleared successfully.');
     }
 
     public function update(Request $request, $id)
@@ -81,10 +70,15 @@ class CartController extends Controller
         if ($cartItem) {
             $cartItem->quantity = $request->quantity;
             $cartItem->save();
-            return response()->json(['message' => 'Quantity updated successfully.']);
+            return redirect()->back();
         }
 
-        return response()->json(['error' => 'Item not found in cart.'], 404);
+        return redirect()->back()->with('error', 'Item not found in cart.');
+    }
+
+    private function getCart()
+    {
+        return Cart::firstOrCreate(['user_id' => Auth::id() ?? null]);
     }
 
 }

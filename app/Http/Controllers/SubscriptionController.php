@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         Mail::to($validatedData['email'])->send(new NewsletterSubscription($validatedData));
 
 
-        return redirect()->back()->with('message', 'Subscription successful.');
+        return redirect()->back()->with('success', 'Abonēšana ir veiksmīga.');
     }
 
     public function unsubscribe($email)
@@ -27,6 +27,6 @@ class SubscriptionController extends Controller
         $subscription = Subscription::where('email', $email)->firstOrFail();
         $subscription->delete();
 
-        return redirect()->back()->with('message', 'Unsubscribed successfully.');
+        return redirect()->back()->with('message', 'Veiksmīgi atcelts abonements.');
     }
 }

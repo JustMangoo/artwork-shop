@@ -91,7 +91,7 @@ class ProductController extends Controller
 
         $product->load('category', 'images');
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+        return redirect()->route('products.index')->with('success', 'Produkts ir veiksmīgi izveidots.');
     }
 
     public function show($productId)
@@ -145,7 +145,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Produkts veiksmīgi atjaunināts.');
     }
 
     public function destroy(Product $product)
@@ -165,7 +165,7 @@ class ProductController extends Controller
 
         Log::info('Delete method completed');
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('products.index')->with('success', 'Produkts veiksmīgi izdzēsts.');
     }
 
     public function checkout(Request $request)

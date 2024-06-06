@@ -2,8 +2,6 @@
     <Head title="Users" />
 
     <AdminLayout>
-        <SystemAlert :message="SystemAlert" :type="messageType" />
-
         <div class="container">
             <Modal
                 v-if="isModalOpen"
@@ -161,7 +159,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Modal from "@/Components/Modal.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import SystemAlert from "@/Components/SystemAlert.vue";
+
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 
@@ -172,7 +170,6 @@ export default {
         Modal,
         InputError,
         InputLabel,
-        SystemAlert,
     },
     props: {
         users: Array,
@@ -182,8 +179,6 @@ export default {
         return {
             isModalOpen: false,
             isEditMode: false,
-            SystemAlert: "",
-            messageType: "info",
             showSearch: false,
             isSearchVisible: false,
             searchTerm: "",
@@ -227,12 +222,6 @@ export default {
             this.form[method](url, {
                 onSuccess: () => {
                     this.isModalOpen = false;
-                    this.setSystemAlert(
-                        this.isEditMode
-                            ? "Lietotājs veiksmīgi rediģēts"
-                            : "Lietotājs veiksmīgi pievienots",
-                        "success"
-                    );
                     this.resetForm();
                 },
                 onError: (error) => {
@@ -258,24 +247,10 @@ export default {
         deleteUser(user) {
             if (confirm(`Are you sure you want to delete ${user.name}?`)) {
                 this.$inertia.delete(route("users.destroy", user.id), {
-                    onSuccess: () => {
-                        this.setSystemAlert(
-                            "Lietotājs dzēsts veiksmīgi",
-                            "success"
-                        );
-                    },
-                    onError: (errors) => {
-                        this.setSystemAlert(
-                            "An error occurred while deleting the user",
-                            "error"
-                        );
-                    },
+                    onSuccess: () => {},
+                    onError: (errors) => {},
                 });
             }
-        },
-        setSystemAlert(message, type = "info") {
-            this.SystemAlert = message;
-            this.messageType = type;
         },
     },
 };
