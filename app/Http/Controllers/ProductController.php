@@ -230,6 +230,12 @@ class ProductController extends Controller
 
     public function showCategory($category = null)
     {
+
+        $categories = [
+            'Printets' => 'Printēts',
+            'Kokdarbi' => 'Kokdarbi',
+            'Originals' => 'Origināls',
+        ];
         $query = Product::with('images');
         if ($category) {
             $query->whereHas('category', function ($q) use ($category) {
@@ -237,6 +243,8 @@ class ProductController extends Controller
             });
         }
         $products = $query->get();
+        $categoryName = $category && isset($categories[$category]) ? $categories[$category] : 'Visi Produkti';
+
 
         return Inertia::render('Products', [
             'products' => $products->map(function ($product) {
@@ -250,6 +258,7 @@ class ProductController extends Controller
                     }),
                 ];
             }),
+            'categoryName' => $categoryName,
         ]);
     }
 

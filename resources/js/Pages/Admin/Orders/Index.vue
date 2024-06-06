@@ -349,7 +349,7 @@ export default {
         },
         deleteOrder(orderId) {
             if (confirm("Are you sure you want to delete this order?")) {
-                Inertia.delete(route("orders.destroy", orderId));
+                this.$inertia.delete(route("orders.destroy", orderId));
             }
         },
         showOrderDetails(order) {

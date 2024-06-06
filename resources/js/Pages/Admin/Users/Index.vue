@@ -246,10 +246,7 @@ export default {
         },
         deleteUser(user) {
             if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-                this.$inertia.delete(route("users.destroy", user.id), {
-                    onSuccess: () => {},
-                    onError: (errors) => {},
-                });
+                this.$inertia.delete(route("users.destroy", user.id));
             }
         },
     },

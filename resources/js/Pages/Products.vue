@@ -2,7 +2,7 @@
     <Head title="Produkti" />
     <MainLayout>
         <div class="banner-image">
-            <h1 class="products-title">Visi Produkti</h1>
+            <h1 class="product-title">{{ categoryName }}</h1>
         </div>
         <div class="container">
             <div v-if="products.length === 0" class="no-products">
@@ -47,7 +47,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 
-const { products } = usePage().props;
+const { products, categoryName } = usePage().props;
 const hoveredProduct = ref(null);
 
 const isNewRelease = (dateString) => {

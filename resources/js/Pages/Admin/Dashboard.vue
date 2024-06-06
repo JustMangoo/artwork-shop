@@ -7,7 +7,12 @@
                 <div class="box">
                     <div class="info-text">
                         <span>{{ $page.props.auth.user.name }}</span>
-                        <p>Lietotājs</p>
+                        <p v-if="$page.props.auth.user.role_id === 2">
+                            Administrātors
+                        </p>
+                        <p v-else-if="$page.props.auth.user.role_id === 3">
+                            Moderātors
+                        </p>
                     </div>
                 </div>
                 <div class="box">

@@ -67,7 +67,7 @@
   <div class="content">
     <p>Laipni lūdzam mūsu pastā <strong>{{ $details['email'] }}</strong>. Jūs esat veiksmīgi pierakstījušies, lai saņemtu jaunākās ziņas un ekskluzīvus piedāvājumus tieši savā e-pastā.</p>
     <a href="#" class="button">Apskatīt mūsu vietni</a>
-    <p>If you no longer wish to receive these emails, you can <a href="{{ $unsubscribeLink }}">unsubscribe</a> at any time.</p>
+    <p>Ja vairs nevēlaties saņemt šos e-pasta ziņojumus, jebkurā laikā varat no tiem <a href="{{ $unsubscribeLink }}">atteikties</a>.</p>
   </div>
   <div class="footer">
     &copy; {{ date('Y') }} Artis Daugats. Visas tiesības aizsargātas.
