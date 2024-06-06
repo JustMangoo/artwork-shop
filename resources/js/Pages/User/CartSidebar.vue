@@ -232,7 +232,8 @@ export default {
 
                 .cart-product-image {
                     width: 50px;
-                    height: auto;
+
+                    aspect-ratio: 3/4;
                     margin-right: 10px;
                 }
 
