@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
 use Illuminate\Http\Request;
-use App\Mail\NewsletterSubscription;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\NewsletterSubscription;
 
 class SubscriptionController extends Controller
 {
@@ -15,18 +15,27 @@ class SubscriptionController extends Controller
             'email' => 'required|email|unique:subscriptions,email',
         ]);
 
-        Subscription::create($validatedData);
-        Mail::to($validatedData['email'])->send(new NewsletterSubscription($validatedData));
+        $subscription = Subscription::create($validatedData);
 
+        $unsubscribeToken = Crypt::encryptString($subscription->email);
+        $unsubscribeLink = route('unsubscribe', ['token' => $unsubscribeToken]);
+
+        Mail::to($validatedData['email'])->send(new NewsletterSubscription($validatedData, $unsubscribeLink));
 
         return redirect()->back()->with('success', 'Abonēšana ir veiksmīga.');
     }
 
-    public function unsubscribe($email)
+    public function unsubscribe($token)
     {
-        $subscription = Subscription::where('email', $email)->firstOrFail();
-        $subscription->delete();
+        try {
+            $email = Crypt::decryptString($token);
+            $subscription = Subscription::where('email', $email)->firstOrFail();
+            $subscription->delete();
 
-        return redirect()->back()->with('message', 'Veiksmīgi atcelts abonements.');
+            return redirect()->route('home')->with('message', 'Veiksmīgi atcelts abonements.');
+        } catch (\Exception $e) {
+            return redirect()->route('home')->with('error', 'Neizdevās atcelt abonementu.');
+        }
     }
 }
+

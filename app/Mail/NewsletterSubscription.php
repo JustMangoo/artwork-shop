@@ -11,16 +11,21 @@ class NewsletterSubscription extends Mailable
     use Queueable, SerializesModels;
 
     public $details;
+    public $unsubscribeLink;
 
-    public function __construct($details)
+    public function __construct($details, $unsubscribeLink)
     {
         $this->details = $details;
+        $this->unsubscribeLink = $unsubscribeLink;
     }
 
     public function build()
     {
         return $this->view('mail.newsletter-join')
-            ->with(['details' => $this->details])
-            ->subject('Paldies par pieteikšanos!');
+            ->with([
+                'details' => $this->details,
+                'unsubscribeLink' => $this->unsubscribeLink,
+            ]);
     }
 }
+
