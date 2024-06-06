@@ -86,7 +86,7 @@ const form = useForm({
     "g-recaptcha-response": "",
 });
 
-const recaptchaSiteKey = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 const submit = () => {
     grecaptcha.ready(() => {
