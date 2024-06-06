@@ -14,15 +14,5 @@
     <body>
         @inertia
         <script src="https://js.stripe.com/v3/"></script>
-        <script>
-    window.Laravel = {
-        flashMessages: {
-            success: "{{ session('success') }}",
-            error: "{{ session('error') }}",
-            warning: "{{ session('warning') }}",
-            info: "{{ session('info') }}"
-        }
-    };
-</script>
     </body>
 </html>

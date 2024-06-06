@@ -139,7 +139,10 @@
                                         Profils
                                     </DropdownLink>
                                     <DropdownLink
-                                        v-if="route('customer.orders')"
+                                        v-if="
+                                            route('customer.orders') &&
+                                            $page.props.auth.user.role_id === 1
+                                        "
                                         :href="route('customer.orders')"
                                     >
                                         Pasūtījumi
@@ -204,6 +207,7 @@
                 </div>
             </div>
         </div>
+
         <div
             v-if="
                 $page.props.flash.success ||
@@ -213,27 +217,17 @@
             "
         >
             <SystemAlert
-                v-if="
-                    $page.props.flash.success ||
-                    $page.props.flash.error ||
-                    $page.props.flash.warning ||
-                    $page.props.flash.message
-                "
-                :message="
-                    $page.props.flash.success ||
-                    $page.props.flash.error ||
-                    $page.props.flash.warning ||
-                    $page.props.flash.message
-                "
+                v-if="!flashMessage !== null"
+                :message="getMessageText()"
                 :type="getMessageType()"
-                :uniqueKey="Date.now()"
+                :uniqueKey="getMessageKey()"
             />
         </div>
 
         <CartSidebar
             ref="cartSidebar"
             :cart-items="cartItems"
-            :is-visible="isCartVisible"
+            :is-visible="isCartTrue"
             @close="toggleCart"
             @removeItem="handleRemoveItem"
             @clearCart="handleClearCart"
@@ -274,8 +268,11 @@ export default {
 
     data() {
         return {
+            isCartTrue: false,
             isCartVisible: false,
             cartItems: [],
+            flashMessage: null,
+            flashType: null,
         };
     },
     mounted() {
@@ -288,21 +285,43 @@ export default {
             else if (this.$page.props.flash.warning) return "warning";
             else return "message";
         },
+        getMessageText() {
+            if (this.$page.props.flash.success)
+                return this.$page.props.flash.success.message;
+            else if (this.$page.props.flash.error)
+                return this.$page.props.flash.error.message;
+            else if (this.$page.props.flash.warning)
+                return this.$page.props.flash.warning.message;
+            else return this.$page.props.flash.message.message;
+        },
+        getMessageKey() {
+            if (this.$page.props.flash.success)
+                return this.$page.props.flash.success.uniqueKey;
+            else if (this.$page.props.flash.error)
+                return this.$page.props.flash.error.uniqueKey;
+            else if (this.$page.props.flash.warning)
+                return this.$page.props.flash.warning.uniqueKey;
+            else return this.$page.props.flash.message.uniqueKey;
+        },
         toggleCart(event) {
             if (event) {
                 event.stopPropagation();
             }
-
+            this.clearFlashMessages;
+            this.isCartTrue = !this.isCartTrue;
             this.isCartVisible = !this.isCartVisible;
 
-            if (this.isCartVisible) {
+            if (this.isCartTrue) {
                 document.addEventListener(
                     "click",
                     this.handleClickOutside,
                     true
                 );
+
                 this.fetchCartItems();
+                this.isCartVisible = true;
             } else {
+                this.isCartVisible = false;
                 document.removeEventListener(
                     "click",
                     this.handleClickOutside,
@@ -313,20 +332,22 @@ export default {
             this.lockBodyScroll(this.isCartVisible);
         },
         checkFlashMessages() {
-            const flashMessages = window.Laravel.flashMessages;
-            if (flashMessages.success) {
-                this.showMessage(flashMessages.success, "success");
+            const flash = this.$page.props.flash;
+            if (flash.success) {
+                this.flashMessage = flash.success.message;
+            } else if (flash.error) {
+                this.flashMessage = flash.error.message;
+            } else if (flash.warning) {
+                this.flashMessage = flash.warning.message;
+            } else if (flash.message) {
+                this.flashMessage = flash.message.message;
             }
-            if (flashMessages.error) {
-                this.showMessage(flashMessages.error, "error");
-            }
-            if (flashMessages.warning) {
-                this.showMessage(flashMessages.warning, "warning");
-            }
-            // Similarly for 'warning' and 'info'
+        },
+        clearFlashMessages() {
+            this.flashMessage = null;
+            this.flashType = null;
         },
         showMessage(message, type) {
-            // Show message in your component or store it in data property
             console.log(message, type);
         },
         handleClickOutside(event) {

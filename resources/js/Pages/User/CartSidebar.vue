@@ -231,7 +231,7 @@ export default {
                 padding: 20px;
 
                 .cart-product-image {
-                    width: 50px;
+                    height: 130px;
 
                     aspect-ratio: 3/4;
                     margin-right: 10px;
@@ -240,6 +240,8 @@ export default {
                 .cart-item-info {
                     display: flex;
                     flex-direction: column;
+                    width: 100%;
+                    padding-inline: 8px;
                     .quantity-control {
                         display: flex;
                         align-items: center;

@@ -8,12 +8,18 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 
 class CartController extends Controller
 {
     public function index()
     {
+        Session::forget('message');
+        Session::forget('success');
+        Session::forget('warning');
+        Session::forget('error');
+
         $cart = $this->getCart();
         $cartItems = $cart->cartItems()->with(['product', 'product.images'])->get();
 
@@ -26,13 +32,15 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
+
+
         $cart = $this->getCart();
         $cart->cartItems()->updateOrCreate(
             ['product_id' => $request->product_id],
             ['quantity' => $request->quantity]
         );
 
-        return redirect()->back()->with('success', 'Item added to cart successfully.');
+        return redirect()->back()->with('success', 'Prece veiksmīgi pievienota grozam.');
     }
 
     public function destroy($id)
@@ -40,12 +48,13 @@ class CartController extends Controller
         $cart = $this->getCart();
         $cartItem = $cart->cartItems()->where('id', $id)->first();
 
+
         if ($cartItem) {
             $cartItem->delete();
-            return redirect()->back()->with('success', 'Item removed from cart successfully.');
+            return redirect()->back()->with('success', 'Prece veiksmīgi izņemta no groza.');
         }
 
-        return redirect()->back()->with('error', 'Item not found.');
+        return redirect()->back()->with('error', 'Prece nav atrasta.');
     }
 
     public function clear()
@@ -53,7 +62,9 @@ class CartController extends Controller
         $cart = $this->getCart();
         $cart->cartItems()->delete();
 
-        return redirect()->back()->with('success', 'All items cleared successfully.');
+        $uniqueKey = now()->timestamp;
+
+        return redirect()->back()->with('success', 'Grozs ir veiksmīgi notīrīts.');
     }
 
     public function update(Request $request, $id)
@@ -73,7 +84,7 @@ class CartController extends Controller
             return redirect()->back();
         }
 
-        return redirect()->back()->with('error', 'Item not found in cart.');
+        return redirect()->back()->with('error', 'Prece nav atrasta grozā.');
     }
 
     private function getCart()
