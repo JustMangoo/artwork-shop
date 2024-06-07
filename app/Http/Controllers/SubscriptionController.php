@@ -13,6 +13,8 @@ class SubscriptionController extends Controller
     {
         $validatedData = $request->validate([
             'email' => 'required|email|unique:subscriptions,email',
+        ], [
+            'email.unique' => 'Šis e-pasts ir jau reģistrēts.', // Custom error message for unique constraint
         ]);
 
         $subscription = Subscription::create($validatedData);

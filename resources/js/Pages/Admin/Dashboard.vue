@@ -40,7 +40,7 @@
                 <div class="box">
                     <div class="info-text">
                         <span>{{ subscriptionCount }}</span>
-                        <p>Abonamenti</p>
+                        <p>Abonementi</p>
                     </div>
                     <img
                         src="@/Assets/mail-white.svg"

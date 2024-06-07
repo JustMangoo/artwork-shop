@@ -48,7 +48,7 @@
             </div>
 
             <div class="recources">
-                <h4>Citi Resursi</h4>
+                <h4>Citi resursi</h4>
                 <div class="info">
                     <p>Privātuma politika</p>
                     <a href="/about">Par mani</a>

@@ -172,9 +172,9 @@
                         <thead>
                             <tr>
                                 <th>Nosaukums</th>
-                                <th class="hide-ssmall">raksts</th>
+                                <th class="hide-ssmall">Apraksts</th>
                                 <th>Cena</th>
-                                <th class="hide-ssmall">kategorija</th>
+                                <th class="hide-ssmall">Kategorija</th>
                                 <th>Bilde</th>
                                 <th></th>
                             </tr>
@@ -454,7 +454,6 @@ export default {
                 });
             }
         },
-
     },
 };
 </script>

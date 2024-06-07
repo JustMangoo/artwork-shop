@@ -243,7 +243,7 @@ class ProductController extends Controller
             });
         }
         $products = $query->get();
-        $categoryName = $category && isset($categories[$category]) ? $categories[$category] : 'Visi Produkti';
+        $categoryName = $category && isset($categories[$category]) ? $categories[$category] : 'Visi produkti';
 
 
         return Inertia::render('Products', [
