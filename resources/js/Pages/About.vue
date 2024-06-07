@@ -88,35 +88,29 @@ const form = useForm({
 
 const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
-const submit = () => {
-    grecaptcha.ready(() => {
-        grecaptcha
-            .execute(recaptchaSiteKey, { action: "submit" })
-            .then((token) => {
-                form["g-recaptcha-response"] = token;
-                form.post("/send-message", {
-                    onSuccess: () => {
-                        form.reset();
-                        grecaptcha.reset();
-                    },
-                    onError: () => {
-                        grecaptcha.reset();
-                    },
-                });
-            });
+const submit = async () => {
+    grecaptcha.ready(async () => {
+        const token = await grecaptcha.execute(recaptchaSiteKey, {
+            action: "submit",
+        });
+        console.log("Generated reCAPTCHA token:", token);
+        form["g-recaptcha-response"] = token;
+        form.post("/send-message", {
+            onSuccess: () => {
+                form.reset();
+                grecaptcha.reset();
+            },
+            onError: () => {
+                grecaptcha.reset();
+            },
+        });
     });
-};
-
-// Make the callback function globally accessible
-window.recaptchaCallback = function (token) {
-    form["g-recaptcha-response"] = token;
 };
 
 onMounted(() => {
     if (window.grecaptcha) {
         grecaptcha.render("recaptcha-container", {
             sitekey: recaptchaSiteKey,
-            callback: window.recaptchaCallback, // Ensure callback is globally accessible
         });
     }
 });

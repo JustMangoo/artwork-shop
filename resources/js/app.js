@@ -38,7 +38,7 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
-        app.config.globalProperties.$axios = axios; // Optionally provide Axios globally
+        app.config.globalProperties.$axios = axios;
 
         app.use(plugin).use(ZiggyVue).mount(el);
     },
