@@ -24,7 +24,7 @@
                     <p>
                         voluptates corrupti amet fugit atque harum excepturi!
                         Sapiente iste, eius maxime quas eligendi fuga! Corporis
-                        eaque repellendus odio voluptatem blanditiis ipsum ad
+                        eaque repellendus odifo voluptatem blanditiis ipsum ad
                         commodi nemo quis. Sapiente.
                     </p>
                 </div>
