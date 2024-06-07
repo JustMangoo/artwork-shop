@@ -64,7 +64,7 @@
                 ></textarea>
             </div>
             <div
-                id="recaptcha-container"
+                id="g-recaptcha"
                 class="g-recaptcha"
                 :data-sitekey="recaptchaSiteKey"
             ></div>
@@ -86,7 +86,7 @@ const form = useForm({
     "g-recaptcha-response": "",
 });
 
-const recaptchaSiteKey = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+const recaptchaSiteKey = "6LdC2vIpAAAAAMT7pBiAWBXOSIoZBo46lXjoaVQf";
 
 const submit = () => {
     grecaptcha.ready(() => {
@@ -107,16 +107,11 @@ const submit = () => {
     });
 };
 
-// Make the callback function globally accessible
-window.recaptchaCallback = function (token) {
-    form["g-recaptcha-response"] = token;
-};
-
 onMounted(() => {
     if (window.grecaptcha) {
-        grecaptcha.render("recaptcha-container", {
+        grecaptcha.render("g-recaptcha", {
             sitekey: recaptchaSiteKey,
-            callback: window.recaptchaCallback, // Ensure callback is globally accessible
+            callback: "recaptchaCallback",
         });
     }
 });
