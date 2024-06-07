@@ -26,9 +26,6 @@ html {
 body {
     display: unset;
 }
-.grecaptcha-badge {
-    visibility: hidden !important;
-}
 
 /* ------- Values (Root Variables) ------- */
 

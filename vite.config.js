@@ -17,9 +17,4 @@ export default defineConfig({
             },
         }),
     ],
-    build: {
-        rollupOptions: {
-            external: ["@unhead/vue"], // Add the external dependency here
-        },
-    },
 });
