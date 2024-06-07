@@ -63,18 +63,13 @@
                     placeholder="Ievadiet Savu Ziņu"
                 ></textarea>
             </div>
-            <div
-                id="g-recaptcha"
-                class="g-recaptcha"
-                :data-sitekey="recaptchaSiteKey"
-            ></div>
+            <div class="g-recaptcha" :data-sitekey="recaptchaSiteKey"></div>
             <button class="w-full btn-primary" type="submit">Nosutīt</button>
         </form>
     </MainLayout>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import InputError from "@/Components/InputError.vue";
@@ -89,32 +84,29 @@ const form = useForm({
 const recaptchaSiteKey = "YOUR_SITE_KEY"; // Add your reCAPTCHA site key here
 
 const submit = () => {
-    grecaptcha.ready(() => {
-        grecaptcha
-            .execute(recaptchaSiteKey, { action: "submit" })
-            .then((token) => {
-                form["g-recaptcha-response"] = token;
-                form.post("/send-message", {
-                    onSuccess: () => {
-                        form.reset();
-                        grecaptcha.reset();
-                    },
-                    onError: () => {
-                        grecaptcha.reset();
-                    },
-                });
-            });
+    form.post("/send-message", {
+        onSuccess: () => {
+            form.reset();
+            grecaptcha.reset();
+        },
+        onError: () => {
+            grecaptcha.reset();
+        },
     });
 };
 
-onMounted(() => {
-    if (window.grecaptcha) {
-        grecaptcha.render("g-recaptcha", {
-            sitekey: recaptchaSiteKey,
-            callback: "recaptchaCallback",
-        });
-    }
-});
+// Add this function to handle the reCAPTCHA response
+window.recaptchaCallback = function (token) {
+    form["g-recaptcha-response"] = token;
+};
+
+// Attach the recaptcha callback to the global window object
+window.onload = function () {
+    grecaptcha.render("g-recaptcha", {
+        sitekey: recaptchaSiteKey,
+        callback: "recaptchaCallback",
+    });
+};
 </script>
 
 <style lang="scss" scoped>
