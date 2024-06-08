@@ -234,6 +234,7 @@ export default {
                     height: 130px;
 
                     aspect-ratio: 3/4;
+                    object-fit: cover;
                     margin-right: 10px;
                 }
 
