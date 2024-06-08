@@ -55,7 +55,7 @@ class UserController extends Controller
 
         // Adjusted validation rules
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|alpha:ascii',
             'email' => [
                 'required',
                 'email',
