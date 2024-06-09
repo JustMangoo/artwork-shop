@@ -211,14 +211,12 @@ export default {
             this.searchTerm = "";
             this.performSearch();
         },
+        // Nosūta formu serverim, lai pievienotu vai atjauninātu lietotāju
         submitForm() {
             const method = this.form.id ? "patch" : "post";
             const url = this.form.id
                 ? route("users.update", this.form.id)
                 : route("users.store");
-
-            console.log(this.form);
-
             this.form[method](url, {
                 onSuccess: () => {
                     this.isModalOpen = false;
@@ -229,13 +227,14 @@ export default {
                 },
             });
         },
+        // Atiestata formas laukus un pārslēdz rediģēšanas režīmu
         resetForm() {
             this.form.reset();
             this.isEditMode = false;
         },
+        // Sāk rediģēt lietotāju
         editUser(user) {
             this.isEditMode = true;
-
             this.form.reset();
             this.form.id = user.id;
             this.form.name = user.name;
@@ -244,6 +243,7 @@ export default {
 
             this.isModalOpen = true;
         },
+        // Dzēš lietotāju
         deleteUser(user) {
             if (confirm(`Are you sure you want to delete ${user.name}?`)) {
                 this.$inertia.delete(route("users.destroy", user.id));

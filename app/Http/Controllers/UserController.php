@@ -53,15 +53,16 @@ class UserController extends Controller
     {
         Log::info('Update method called with request data:', $request->all());
 
-        // Adjusted validation rules
         $validatedData = $request->validate([
-            'name' => 'required|max:255|alpha:ascii',
+            'name' => 'required|max:255|regex:/^[a-zA-Z\s]+$/',
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($user->id),
             ],
             'role' => 'required|exists:roles,id',
+        ], [
+            'name.regex' => 'Vārdā drīkst būt tikai burti un atstarpes.',
         ]);
 
         Log::info('Validation completed:', $validatedData);

@@ -350,6 +350,7 @@ export default {
         showMessage(message, type) {
             console.log(message, type);
         },
+        // Apstrādā klikšķi ārpus groza sānjoslas, lai to aizvērtu
         handleClickOutside(event) {
             if (
                 this.$refs.cartSidebar &&
@@ -358,6 +359,7 @@ export default {
                 this.toggleCart();
             }
         },
+        // Iegūst groza preces no servera
         fetchCartItems() {
             axios
                 .get("/cart")
@@ -368,6 +370,7 @@ export default {
                     console.error("Error fetching cart items:", error);
                 });
         },
+        // Apstrādā preces noņemšanu no groza
         handleRemoveItem(id) {
             this.$inertia.delete(`/cart/${id}`, {
                 onSuccess: () => {
@@ -375,25 +378,23 @@ export default {
                 },
             });
         },
-        handleClearCart() {
-            this.$inertia.post(
-                "/cart/clear",
-                {},
-                {
-                    onSuccess: () => {
-                        this.cartItems = [];
-                    },
-                }
-            );
-        },
+        // Atjaunina preces daudzumu grozā
         updateQuantity(item, newQuantity) {
             this.$inertia.patch(
                 `/cart/item/${item.id}`,
                 { quantity: newQuantity },
                 {
-                    onSuccess: () => {
-                        this.fetchCartItems();
-                    },
+                    onSuccess: () => {this.fetchCartItems();},
+                }
+            );
+        },
+        // Apstrādā visa groza notīrīšanu
+        handleClearCart() {
+            this.$inertia.post(
+                "/cart/clear",
+                {},
+                {
+                    onSuccess: () => {this.cartItems = [];},
                 }
             );
         },

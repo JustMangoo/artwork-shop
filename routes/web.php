@@ -35,10 +35,12 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// Informācijas lapas maršruts
 Route::get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
+// Maršruts, lai parādītu produktus pēc kategorijas
 Route::get('/products-customer/{category?}', [ProductController::class, 'showCategory'])
     ->name('products.showCategory');
 
@@ -60,13 +62,10 @@ Route::get('/products-customer', function () {
 
 Route::get('/products-customer/details/{product}', [ProductController::class, 'show'])->name('products.show');
 
-// Email Routes ---------
-
+// E-pasta maršruti
 Route::post('/send-message', [ContactController::class, 'send']);
 Route::post('/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscribe');
 Route::get('/unsubscribe/{token}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
-
-// E-commerce Routes ---------
 
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart');
@@ -82,6 +81,7 @@ Route::prefix('checkout')->group(function () {
     Route::get('/cancel', [ProductController::class, 'cancel'])->name('checkout.cancel');
 });
 
+// Stripe Webhook maršruts norēķinu apstrādei
 Route::post('/stripe-webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 Route::get('/test', function () {
@@ -95,19 +95,22 @@ Route::get('/test-area', function () {
 })->name('test-area');
 
 // Authenticated Routes ---------
-
+// Maršruti, kas pieejami tikai autentificētiem lietotājiem
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // Maršruts klienta pasūtījumiem
     Route::get('/customer/orders', [OrdersController::class, 'customerOrders'])
         ->name('customer.orders')
         ->middleware('customer');
 
+    // Profila pārvaldības maršruti
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+    // Maršruti, kas pieejami tikai administratoriem
     Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

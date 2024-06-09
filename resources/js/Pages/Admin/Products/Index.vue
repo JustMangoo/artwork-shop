@@ -282,19 +282,22 @@ export default {
         return { form };
     },
     methods: {
+        // Pārvalda kategoriju izvēlnes redzamību
         toggleDropdown() {
             this.dropdownActive = !this.dropdownActive;
         },
+        // Izvēlas konkrētu kategoriju filtrēšanai
         selectCategory(category) {
             this.selectedCategory = category.id;
             this.selectedCategoryName = category.name;
             this.dropdownActive = false;
             this.filterByCategory();
         },
+        // Filtrē produktus pēc izvēlētās kategorija
         filterByCategory() {
             this.performSearch();
         },
-
+        // Veic meklēšanu pēc ievadītajiem kritērijiem
         performSearch() {
             this.$inertia.get(
                 route("products.index"),
@@ -309,33 +312,28 @@ export default {
                 }
             );
             this.isSearchVisible = false;
-            setTimeout(() => {
-                this.showSearch = false;
-            }, 300);
         },
-
+        // Atiestata filtrus un veic meklēšanu
         resetFilters() {
             this.searchTerm = "";
             this.selectedCategory = null;
             this.selectedCategoryName = "";
             this.performSearch();
         },
-
+        // Pievieno attēlu formā
         handleImageAdded(imageData) {
-            console.log("Attempting to add image data:", imageData);
             this.form.images.push(imageData.file);
-            console.log("Current form images after pushing:", this.form.images);
         },
-
+        // Noņem attēlu no formas
         handleImageRemoved(imageData) {
-            // If it's a newly added image (not saved), remove it from the array
+            // Ja tas ir jauns attēls (nav saglabāts), noņem to no masīva
             if (!imageData.id) {
                 const index = this.form.images.indexOf(imageData.file);
                 if (index !== -1) {
                     this.form.images.splice(index, 1);
                 }
             } else {
-                // If it's an existing image, mark it for removal
+                // Ja tas ir esošs attēls, atzīmē to noņemšanai
                 this.form.removedImages.push(imageData.id);
             }
         },
