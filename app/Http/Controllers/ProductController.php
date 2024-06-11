@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Order;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -220,12 +222,20 @@ class ProductController extends Controller
     }
     public function success()
     {
+        $cart = $this->getCart();
+        $cart->cartItems()->delete();
+
         return Inertia::render('User/CheckoutSuccess');
     }
 
     public function cancel()
     {
         return Inertia::render('User/CheckoutCancel');
+    }
+
+    private function getCart()
+    {
+        return Cart::firstOrCreate(['user_id' => Auth::id() ?? null]);
     }
 
     public function showCategory($category = null)
