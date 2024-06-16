@@ -81,8 +81,8 @@
                 </button>
             </div>
         </div>
-        <div v-else>
-            <p>Your cart is empty.</p>
+        <div v-else class="cart-content-empty">
+            <p>Jūsu grozs ir tukšs.</p>
         </div>
     </div>
 </template>
@@ -127,9 +127,7 @@ export default {
             this.$emit("removeItem", id);
         },
         clearCart() {
-            if (confirm("Vai esat pārliecināts, ka vēlaties notīrīt grozu?")) {
-                this.$emit("clearCart");
-            }
+            this.$emit("clearCart");
         },
 
         increaseQuantity(item) {
@@ -305,6 +303,13 @@ export default {
             p {
                 font-size: 25px;
             }
+        }
+    }
+    .cart-content-empty {
+        text-align: center;
+
+        p {
+            font-size: 25px;
         }
     }
     .close-btn {

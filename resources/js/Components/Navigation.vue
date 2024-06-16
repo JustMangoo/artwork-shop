@@ -230,9 +230,31 @@
             :is-visible="isCartTrue"
             @close="toggleCart"
             @removeItem="handleRemoveItem"
-            @clearCart="handleClearCart"
+            @clearCart="promptClearCart"
             @updateQuantity="updateQuantity"
         />
+        <Modal
+            v-if="showModal"
+            @close="showModal = false"
+            @save="handleClearCart"
+        >
+            <template #header>
+                <h2>Apstiprināt darbību</h2>
+            </template>
+            <template #content>
+                <p>Vai esat pārliecināts, ka vēlaties atbrīvot grozu?</p>
+            </template>
+            <template #footer>
+                <div class="modal-footer">
+                    <button class="btn-secondary" @click="showModal = false">
+                        Atcelt
+                    </button>
+                    <button class="btn-primary" @click="handleClearCart">
+                        Notīrīt grozu
+                    </button>
+                </div>
+            </template>
+        </Modal>
     </nav>
 </template>
 
@@ -241,6 +263,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import SystemAlert from "@/Components/SystemAlert.vue";
+import Modal from "@/Components/Modal.vue";
 import { Link } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
 
@@ -254,6 +277,7 @@ export default {
         NavLink,
         Link,
         SystemAlert,
+        Modal,
     },
     props: {
         canLogin: {
@@ -270,9 +294,10 @@ export default {
         return {
             isCartTrue: false,
             isCartVisible: false,
-            cartItems: [],
+            cartItems: this.fetchCartItems(),
             flashMessage: null,
             flashType: null,
+            showModal: false,
         };
     },
     mounted() {
@@ -361,14 +386,20 @@ export default {
         },
         // Iegūst groza preces no servera
         fetchCartItems() {
-            axios
-                .get("/cart")
-                .then((response) => {
-                    this.cartItems = response.data.cartItems;
-                })
-                .catch((error) => {
-                    console.error("Error fetching cart items:", error);
-                });
+            if (!this.isLoggedIn()) {
+                this.cartItems =
+                    JSON.parse(localStorage.getItem("cartItems")) || [];
+            } else {
+                // Fetch from server
+                axios
+                    .get("/cart")
+                    .then((response) => {
+                        this.cartItems = response.data.cartItems;
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching cart items:", error);
+                    });
+            }
         },
         // Apstrādā preces noņemšanu no groza
         handleRemoveItem(id) {
@@ -384,23 +415,34 @@ export default {
                 `/cart/item/${item.id}`,
                 { quantity: newQuantity },
                 {
-                    onSuccess: () => {this.fetchCartItems();},
+                    onSuccess: () => {
+                        this.fetchCartItems();
+                    },
                 }
             );
         },
         // Apstrādā visa groza notīrīšanu
+        promptClearCart() {
+            this.showModal = true;
+        },
         handleClearCart() {
             this.$inertia.post(
                 "/cart/clear",
                 {},
                 {
-                    onSuccess: () => {this.cartItems = [];},
+                    onSuccess: () => {
+                        this.cartItems = [];
+                        this.showModal = false;
+                    },
                 }
             );
         },
 
         lockBodyScroll(lock) {
             document.body.style.overflow = lock ? "hidden" : "";
+        },
+        isLoggedIn() {
+            return this.$page.props.auth.user !== null;
         },
     },
     watch: {
@@ -421,6 +463,11 @@ export default {
     position: sticky;
     top: 0;
     z-index: 100;
+    .modal-footer {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
 
     .outer-container {
         margin: 0 auto;

@@ -72,6 +72,9 @@ export default {
                 return imagePath;
             };
         },
+        isLoggedIn() {
+            return this.$page.props.auth.user;
+        },
     },
 
     methods: {
@@ -79,21 +82,45 @@ export default {
             this.selectedImage = this.productImagePath(image);
         },
         addToCart() {
-            this.$inertia.post(
-                "/cart",
-                {
-                    product_id: this.product.id,
-                    quantity: this.quantity,
-                },
-                {
-                    onError: (errors) => {
-                        console.error("Error adding to cart:", errors);
+            if (this.isLoggedIn) {
+                this.$inertia.post(
+                    "/cart",
+                    {
+                        product_id: this.product.id,
+                        quantity: this.quantity,
                     },
-                    onSuccess: () => {
-                        console.log("Added to cart successfully!");
-                    },
+                    {
+                        onError: (errors) => {
+                            console.error("Error adding to cart:", errors);
+                        },
+                        onSuccess: () => {
+                            console.log("Added to cart successfully!");
+                        },
+                    }
+                );
+            } else {
+                let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+                const existingItem = cart.find(
+                    (item) => item.product_id === this.product.id
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += this.quantity; // Update the quantity if item already exists
+                } else {
+                    // Store more detailed product data
+                    cart.push({
+                        product_id: this.product.id,
+                        quantity: this.quantity,
+                        product: {
+                            title: this.product.title,
+                            price: this.product.price,
+                            description: this.product.description,
+                            images: this.product.images,
+                        },
+                    });
                 }
-            );
+                localStorage.setItem("cartItems", JSON.stringify(cart));
+            }
         },
         increaseQuantity() {
             if (this.quantity < 5) this.quantity++;
