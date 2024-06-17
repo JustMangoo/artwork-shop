@@ -84,6 +84,7 @@
         <div v-else class="cart-content-empty">
             <p>Jūsu grozs ir tukšs.</p>
         </div>
+        <p>{{ this.cartItems }}</p>
     </div>
 </template>
 
@@ -109,10 +110,14 @@ export default {
     },
     methods: {
         checkout() {
+            const cartItemsForCheckout = this.cartItems.map((item) => ({
+                product_id: item.product_id || item.product.id,
+                quantity: item.quantity,
+            }));
+
             axios
-                .post(route("checkout"), { cartItems: this.cartItems })
+                .post(route("checkout"), { cartItems: cartItemsForCheckout })
                 .then((response) => {
-                    // Redirect to Stripe checkout page
                     window.location.href = response.data.url;
                 })
                 .catch((error) => {

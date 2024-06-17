@@ -403,39 +403,71 @@ export default {
         },
         // Apstrādā preces noņemšanu no groza
         handleRemoveItem(id) {
-            this.$inertia.delete(`/cart/${id}`, {
-                onSuccess: () => {
-                    this.fetchCartItems();
-                },
-            });
-        },
-        // Atjaunina preces daudzumu grozā
-        updateQuantity(item, newQuantity) {
-            this.$inertia.patch(
-                `/cart/item/${item.id}`,
-                { quantity: newQuantity },
-                {
+            if (!this.isLoggedIn()) {
+                this.cartItems = this.cartItems.filter(
+                    (item) => item.id !== id
+                );
+                localStorage.setItem(
+                    "cartItems",
+                    JSON.stringify(this.cartItems)
+                );
+            } else {
+                this.$inertia.delete(`/cart/${id}`, {
                     onSuccess: () => {
                         this.fetchCartItems();
                     },
+                });
+            }
+        },
+        // Atjaunina preces daudzumu grozā
+        updateQuantity(item, newQuantity) {
+            if (!this.isLoggedIn()) {
+                const itemIndex = this.cartItems.findIndex(
+                    (cartItem) => cartItem.id === item.id
+                );
+                if (itemIndex !== -1) {
+                    this.cartItems[itemIndex].quantity = newQuantity;
+                    localStorage.setItem(
+                        "cartItems",
+                        JSON.stringify(this.cartItems)
+                    );
                 }
-            );
+            } else {
+                this.$inertia.patch(
+                    `/cart/item/${item.id}`,
+                    { quantity: newQuantity },
+                    {
+                        onSuccess: () => {
+                            this.fetchCartItems();
+                        },
+                    }
+                );
+            }
         },
         // Apstrādā visa groza notīrīšanu
         promptClearCart() {
             this.showModal = true;
         },
         handleClearCart() {
-            this.$inertia.post(
-                "/cart/clear",
-                {},
-                {
-                    onSuccess: () => {
-                        this.cartItems = [];
-                        this.showModal = false;
-                    },
-                }
-            );
+            if (!this.isLoggedIn()) {
+                this.cartItems = [];
+                localStorage.setItem(
+                    "cartItems",
+                    JSON.stringify(this.cartItems)
+                );
+                this.showModal = false;
+            } else {
+                this.$inertia.post(
+                    "/cart/clear",
+                    {},
+                    {
+                        onSuccess: () => {
+                            this.cartItems = [];
+                            this.showModal = false;
+                        },
+                    }
+                );
+            }
         },
 
         lockBodyScroll(lock) {

@@ -179,9 +179,9 @@ class ProductController extends Controller
         $totalPrice = 0;
 
         foreach ($cartItems as $item) {
-            $product = Product::find($item['product']['id']);
+            $product = Product::find($item['product_id']);
             if (!$product) {
-                continue; // Skip if product not found
+                continue;
             }
             $totalPrice += $product->price * $item['quantity'];
             $lineItems[] = [
