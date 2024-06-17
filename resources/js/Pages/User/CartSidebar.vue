@@ -84,7 +84,6 @@
         <div v-else class="cart-content-empty">
             <p>Jūsu grozs ir tukšs.</p>
         </div>
-        <p>{{ this.cartItems }}</p>
     </div>
 </template>
 
@@ -113,6 +112,7 @@ export default {
             const cartItemsForCheckout = this.cartItems.map((item) => ({
                 product_id: item.product_id || item.product.id,
                 quantity: item.quantity,
+                product: item.product || null, // Include product data if available
             }));
 
             axios

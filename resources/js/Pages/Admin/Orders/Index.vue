@@ -408,6 +408,7 @@ export default {
                 aspect-ratio: 3/4;
                 height: auto;
                 margin-right: 20px;
+                object-fit: cover;
             }
 
             .product-details {
