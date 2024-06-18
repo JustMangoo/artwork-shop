@@ -18,7 +18,6 @@ class OrdersController extends Controller
 
         $query = Order::query();
 
-        // Apply search filters if a search term is provided
         if (!empty($searchTerm)) {
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('full_name', 'LIKE', "%{$searchTerm}%")
@@ -26,7 +25,6 @@ class OrdersController extends Controller
             });
         }
 
-        // Filter by status if a status is provided
         if (!empty($statusFilter)) {
             $query->where('status', $statusFilter);
         }
@@ -36,7 +34,7 @@ class OrdersController extends Controller
         return Inertia::render('Admin/Orders/Index', [
             'orders' => $orders,
             'searchTerm' => $searchTerm,
-            'selectedStatus' => $statusFilter  // Pass the selected status back to the frontend
+            'selectedStatus' => $statusFilter
         ]);
     }
 

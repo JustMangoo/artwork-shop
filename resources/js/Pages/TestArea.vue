@@ -7,7 +7,6 @@
             type="text/css"
         />
 
-        <!-- change the HEX values here -->
         <div class="section-heading">
             <span>colors</span>
             <div></div>
@@ -26,7 +25,6 @@
             <li class="color-block color-8">--color--error</li>
         </ul>
 
-        <!-- customize these heading descriptions if necessary -->
         <div class="section-heading">
             <span>TYPOGRAPHY</span>
             <div></div>
@@ -41,7 +39,6 @@
             <p>A general paragraph will look like this.</p>
         </div>
 
-        <!-- use these as needed -->
         <div class="section-heading">
             <span>Inline Elements</span>
             <div></div>

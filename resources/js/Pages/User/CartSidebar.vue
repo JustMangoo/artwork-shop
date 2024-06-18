@@ -192,6 +192,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 400px;
+    max-width: 95vw;
     height: 100vh;
     background: white;
     box-shadow: -2px 0 100px rgba(0, 0, 0, 0.1);
@@ -205,8 +206,8 @@ export default {
         transform: translateX(0);
     }
 
-    h2 {
-        margin-bottom: 1rem;
+    h3 {
+        font: 1.954rem;
     }
 
     .cart-heading {

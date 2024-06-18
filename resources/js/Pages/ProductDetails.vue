@@ -153,6 +153,7 @@ export default {
     padding-inline: 0.5rem;
     display: flex;
     justify-content: center;
+
     background-image: linear-gradient(
         90deg,
         var(--color--secondary) 0%,
@@ -160,16 +161,39 @@ export default {
         var(--color--white) 50%,
         var(--color--white) 100%
     );
+
+    @media (max-width: 768px) {
+        background-image: linear-gradient(
+            180deg,
+            var(--color--secondary) 0%,
+            var(--color--secondary) 60%,
+            var(--color--white) 60%,
+            var(--color--white) 100%
+        );
+    }
     .inner-container {
         display: flex;
         justify-content: space-between;
         width: 100%;
+        height: 100%;
         max-width: 75rem;
+
+        @media (max-width: 768px) {
+            /* Adjust layout for smaller screens */
+            flex-direction: column;
+            align-items: center;
+        }
 
         .images-section {
             width: 100%;
+            height: 100%;
             display: flex;
             padding: 96px 96px 96px 0;
+
+            @media (max-width: 1200px) {
+                padding: 20px;
+            }
+
             .thumbnail-images {
                 display: flex;
                 flex-direction: column;
@@ -180,6 +204,10 @@ export default {
                     object-fit: cover;
                     border: 1px solid #ccc;
                     aspect-ratio: 3/4;
+
+                    @media (max-width: 768px) {
+                        width: 40px;
+                    }
                 }
             }
             .main-image-container {
@@ -187,7 +215,6 @@ export default {
                 position: relative;
                 .main-image {
                     width: 100%;
-
                     object-fit: cover;
                     aspect-ratio: 3/4;
                     box-shadow: 0px 20px 40px -35px rgba(0, 0, 0, 0.75);
@@ -199,18 +226,21 @@ export default {
             flex-direction: column;
             gap: 1rem;
             width: 100%;
+            height: 100%;
             padding: 96px;
-            h1 {
-                font-size: 3.5rem;
-            }
 
-            p {
-                font-size: 1.2rem;
-            }
-
-            .price {
-                font-weight: 500;
-                font-size: 2rem;
+            @media (max-width: 768px) {
+                background-color: var(--color--white);
+                padding: 60px 20px;
+                h1 {
+                    font-size: 2.5rem;
+                }
+                p {
+                    font-size: 1rem;
+                }
+                .price {
+                    font-size: 1.5rem;
+                }
             }
 
             .quantity-control {
@@ -234,6 +264,11 @@ export default {
                     &:hover {
                         scale: 1;
                     }
+
+                    @media (max-width: 768px) {
+                        width: 35px;
+                        height: 35px;
+                    }
                 }
                 input {
                     font-size: 1.2rem;
@@ -243,6 +278,11 @@ export default {
                     margin: 0;
                     border: none;
                     outline: none;
+
+                    @media (max-width: 768px) {
+                        width: 40px;
+                        font-size: 1.4rem;
+                    }
                 }
             }
         }

@@ -152,10 +152,8 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Fetch all associated images
         $images = $product->images;
 
-        // Delete the image files from storage
         foreach ($images as $image) {
             if (Storage::exists($image->image)) {
                 Storage::delete($image->image);

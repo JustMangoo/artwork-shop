@@ -23,7 +23,7 @@
                     <div class="line-seperator"></div>
 
                     <!-- Navigation Links -->
-                    <div class="nav-link">
+                    <div class="nav-link" v-show="menuVisible || !isMobile">
                         <NavLink
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
@@ -63,7 +63,7 @@
 
                     <div class="line-seperator"></div>
 
-                    <div class="nav-link">
+                    <div class="nav-link" v-show="menuVisible || !isMobile">
                         <NavLink
                             :href="route('home')"
                             :active="route().current('home')"
@@ -103,6 +103,19 @@
                         </NavLink>
                     </div>
                 </div>
+                <button
+                    @click="toggleMenu"
+                    class="hamburger-menu"
+                    v-if="isMobile"
+                    aria-label="Open navigation menu"
+                    aria-expanded="menuVisible"
+                >
+                    <svg viewBox="0 0 100 80" width="25" height="25">
+                        <rect width="100" height="10"></rect>
+                        <rect y="30" width="100" height="10"></rect>
+                        <rect y="60" width="100" height="10"></rect>
+                    </svg>
+                </button>
 
                 <div v-if="canLogin" class="account-menu">
                     <div class="account-links">
@@ -298,6 +311,8 @@ export default {
             flashMessage: null,
             flashType: null,
             showModal: false,
+            isMobile: false,
+            menuVisible: false,
         };
     },
     mounted() {
@@ -476,14 +491,50 @@ export default {
         isLoggedIn() {
             return this.$page.props.auth.user !== null;
         },
+        toggleMenu() {
+            this.menuVisible = !this.menuVisible;
+
+            if (this.menuVisible) {
+                this.$nextTick(() => {
+                    document.addEventListener(
+                        "click",
+                        this.closeMenuIfOutsideClick
+                    );
+                });
+            } else {
+                document.removeEventListener(
+                    "click",
+                    this.closeMenuIfOutsideClick
+                );
+            }
+        },
+        closeMenuIfOutsideClick(event) {
+            if (this.menuVisible && !this.$el.contains(event.target)) {
+                this.menuVisible = false;
+
+                document.removeEventListener(
+                    "click",
+                    this.closeMenuIfOutsideClick
+                );
+            }
+        },
+        checkViewportSize() {
+            this.isMobile = window.innerWidth < 640;
+        },
     },
     watch: {
         isCartVisible(newValue) {
             this.lockBodyScroll(newValue);
         },
     },
+    mounted() {
+        this.checkViewportSize();
+        window.addEventListener("resize", this.checkViewportSize);
+    },
     beforeUnmount() {
         document.removeEventListener("click", this.handleClickOutside);
+        window.removeEventListener("resize", this.checkViewportSize);
+        document.removeEventListener("click", this.closeMenuIfOutsideClick);
     },
 };
 </script>
@@ -511,6 +562,16 @@ export default {
             display: flex;
             justify-content: space-between;
 
+            .hamburger-menu {
+                background: none;
+                border: none;
+                cursor: pointer;
+
+                svg {
+                    fill: var(--color--dark);
+                }
+            }
+
             .wrapper--logo-links {
                 display: flex;
                 align-items: center;
@@ -536,14 +597,25 @@ export default {
                 }
 
                 .nav-link {
-                    display: none;
+                    display: flex;
+                    gap: 1rem;
+                    margin-top: -1px;
+                    margin-bottom: -1px;
+                    height: 100%;
 
-                    @media (min-width: 640px) {
+                    @media (max-width: 640px) {
                         display: flex;
-                        gap: 1rem;
-                        margin-top: -1px;
-                        margin-bottom: -1px;
-                        height: 100%;
+                        position: absolute;
+                        background-color: var(--color--white);
+                        width: 100%;
+                        height: fit-content;
+                        left: 0;
+                        top: 100%;
+                        z-index: 200;
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                        flex-direction: column;
+                        align-items: start;
+                        padding: 1rem;
                     }
                 }
             }
@@ -554,7 +626,6 @@ export default {
                 gap: 1rem;
 
                 @media (max-width: 640px) {
-                    display: none;
                 }
 
                 .account-links {

@@ -166,6 +166,10 @@ const unhoverImage = (product) => {
     justify-content: center;
     align-items: center;
     h1 {
+        font-size: 4rem;
+        @media (max-width: 768px) {
+            font-size: 3rem;
+        }
     }
 }
 </style>

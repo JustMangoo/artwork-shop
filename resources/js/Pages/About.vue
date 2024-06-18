@@ -98,6 +98,9 @@ const submit = () => {
     z-index: 50;
     -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
+    @media (max-width: 1200px) {
+        top: 310px;
+    }
 }
 
 .brush-stroke-2 {
@@ -178,6 +181,9 @@ const submit = () => {
             text-align: left;
             gap: 16px;
             padding: 96px;
+            @media (max-width: 1200px) {
+                padding: 20px;
+            }
 
             .text-seperator {
                 height: 2px;
@@ -197,6 +203,9 @@ const submit = () => {
             display: flex;
             justify-content: center;
             align-items: center;
+            @media (max-width: 1200px) {
+                padding: 20px;
+            }
 
             img {
                 width: 100%;
@@ -218,6 +227,11 @@ const submit = () => {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
+
+    @media (max-width: 1200px) {
+        width: 100%;
+        padding: 20px;
+    }
 
     h2 {
         text-align: center;
