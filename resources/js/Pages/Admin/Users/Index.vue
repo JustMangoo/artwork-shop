@@ -333,6 +333,10 @@ export default {
         grid-template-columns: 300px 1fr;
         gap: 1rem;
 
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+
         .filters {
             width: 100%;
             height: fit-content;

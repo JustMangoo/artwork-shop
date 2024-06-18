@@ -206,11 +206,15 @@ defineProps({
     justify-content: center;
     align-items: center;
     margin: 7rem 0;
+    @media (max-width: 768px) {
+        height: 100%;
+    }
 
     .product-showcase {
         width: 90%;
         max-width: 75rem;
         height: 100%;
+
         background-color: var(--color--secondary);
         display: flex;
         flex-direction: row;
@@ -257,7 +261,12 @@ defineProps({
         .showcase-images {
             position: relative;
             width: 100%;
-            height: 100%;
+
+            @media (max-width: 768px) {
+                padding: 1rem;
+                height: 50vw;
+            }
+
             img {
                 box-shadow: 0 10px 50px #0000002a;
                 object-fit: cover;
@@ -269,6 +278,10 @@ defineProps({
                 left: 25%;
                 transform: translate(-50%, -50%);
                 z-index: 1;
+
+                @media (max-width: 768px) {
+                    display: none;
+                }
             }
 
             .showcase-image-2 {
@@ -278,6 +291,12 @@ defineProps({
                 left: 50%;
                 transform: translate(-50%, -50%);
                 z-index: 0;
+                @media (max-width: 768px) {
+                    position: static;
+                    transform: none;
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
             .showcase-image-3 {
@@ -287,6 +306,9 @@ defineProps({
                 left: 80%;
                 transform: translate(-50%, -50%);
                 z-index: 1;
+                @media (max-width: 768px) {
+                    display: none;
+                }
             }
         }
     }

@@ -65,9 +65,9 @@
                     <table cellspacing="0" cellpadding="0">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th class="hide-ssmall">ID</th>
                                 <th>Vārds</th>
-                                <th>Epasts</th>
+                                <th class="hide-ssmall">Epasts</th>
                                 <th>Status</th>
                                 <th>Pilna Cena</th>
 
@@ -76,9 +76,9 @@
                         </thead>
                         <tbody>
                             <tr v-for="order in orders" :key="order.id">
-                                <td>{{ order.id }}</td>
+                                <td class="hide-ssmall">{{ order.id }}</td>
                                 <td>{{ order.full_name }}</td>
-                                <td>{{ order.email }}</td>
+                                <td class="hide-ssmall">{{ order.email }}</td>
                                 <td>
                                     <div class="table-badge">
                                         {{ order.status }}
@@ -474,6 +474,9 @@ export default {
         display: grid;
         grid-template-columns: 300px 1fr;
         gap: 1rem;
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
 
         .filters {
             width: 100%;

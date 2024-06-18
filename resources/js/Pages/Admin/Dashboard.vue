@@ -93,6 +93,7 @@ span {
 
 .container {
     max-width: 95rem;
+    width: 100%;
     .quick-info {
         width: 100%;
         padding: 0 0.5rem;
@@ -102,6 +103,9 @@ span {
         grid-column-gap: 1rem;
         grid-row-gap: 1rem;
         margin: 1rem 0;
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
 
         .box {
             padding: 1rem;
@@ -119,6 +123,7 @@ span {
             .info-icon {
                 aspect-ratio: 1/1;
                 width: 20%;
+                min-width: 2.5rem;
                 margin-right: 1rem;
                 background-color: var(--color--primary);
                 padding: 0.5rem;
