@@ -45,24 +45,24 @@
                 <div class="showcase-images">
                     <img
                         class="showcase-image-1"
-                        src="../Assets/Images/foto1.webp"
+                        src="../Assets/Images/Zalo tonu auto.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-2"
-                        src="../Assets/Images/foto2.webp"
+                        src="../Assets/Images/Toskānas Sapņi.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-3"
-                        src="../Assets/Images/foto3.png"
+                        src="../Assets/Images/Zalo tonu koks.webp"
                         alt=""
                     />
                 </div>
             </div>
         </div>
         <div class="banner-image">
-            <img src="@\Assets\Images\Image1.png" alt="hero image" />
+            <img src="@\Assets\Images\Toskānas Sapņi.webp" alt="hero image" />
         </div>
         <div class="originals-showcase-container">
             <h2>Printēti</h2>
@@ -70,17 +70,17 @@
                 <div class="showcase-images">
                     <img
                         class="showcase-image-1"
-                        src="../Assets/Images/foto1.webp"
+                        src="../Assets/Images/Zala Viduslaiku Ciema Centrs.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-2"
-                        src="../Assets/Images/foto2.webp"
+                        src="../Assets/Images/Zalais Kakis.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-3"
-                        src="../Assets/Images/foto3.png"
+                        src="../Assets/Images/Zalo toni suns.webp"
                         alt=""
                     />
                 </div>
@@ -120,7 +120,10 @@
             </div>
         </div>
         <div class="banner-image">
-            <img src="@\Assets\Images\Image1.png" alt="hero image" />
+            <img
+                src="@\Assets\Images\Zala Viduslaiku Ciema Centrs.webp"
+                alt="hero image"
+            />
         </div>
         <div class="originals-showcase-container">
             <h2>Kokdarbi</h2>
@@ -162,17 +165,17 @@
                 <div class="showcase-images">
                     <img
                         class="showcase-image-1"
-                        src="../Assets/Images/foto1.webp"
+                        src="../Assets/Images/A wooden nightstand with its drawer open.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-2"
-                        src="../Assets/Images/foto2.webp"
+                        src="../Assets/Images/crafted wooden nightstand.webp"
                         alt=""
                     />
                     <img
                         class="showcase-image-3"
-                        src="../Assets/Images/foto3.png"
+                        src="../Assets/Images/nightstand with a natural finish .webp"
                         alt=""
                     />
                 </div>
@@ -270,6 +273,7 @@ defineProps({
             img {
                 box-shadow: 0 10px 50px #0000002a;
                 object-fit: cover;
+                aspect-ratio: 3/4;
             }
             .showcase-image-1 {
                 height: 10em;
@@ -317,6 +321,7 @@ defineProps({
 .banner-image {
     width: 100%;
     height: 45rem;
+    filter: brightness(85%);
 
     img {
         object-fit: cover;

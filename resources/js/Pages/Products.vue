@@ -158,7 +158,7 @@ const unhoverImage = (product) => {
 .banner-image {
     width: 100%;
     height: 25rem;
-    background-image: url("@/Assets/Images/Image1.png");
+    background-image: url("@/Assets/Images/landscape-7283516_1280.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

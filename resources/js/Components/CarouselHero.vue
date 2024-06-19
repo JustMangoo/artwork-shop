@@ -126,10 +126,22 @@ export default {
         }
 
         &.slide-2 {
-            background-image: url("@/Assets/Images/Image2.png");
+            background-image: linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.3),
+                    rgba(0, 0, 0, 0.3)
+                ),
+                url("@/Assets/Images/art-1840481_1280.jpg");
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
+            h1 {
+                color: var(--color--light);
+            }
+
+            p {
+                color: var(--color--light);
+            }
         }
     }
 }
