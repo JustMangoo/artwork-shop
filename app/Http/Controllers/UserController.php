@@ -54,7 +54,7 @@ class UserController extends Controller
         Log::info('Update method called with request data:', $request->all());
 
         $validatedData = $request->validate([
-            'name' => 'required|max:255|regex:/^[a-zA-Z\s]+$/',
+            'name' => 'required|max:255|regex:/^[\p{L}\s]+$/u',
             'email' => [
                 'required',
                 'email',
